@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260327-create-users-table">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="seq_users_id">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cnp" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="registration_number" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="faculty" type="VARCHAR(100)"/>
+            <column name="study_year" type="INTEGER"/>
+            <column name="semester" type="INTEGER"/>
+            <column name="group_name" type="VARCHAR(20)"/>
+            <column name="specialization" type="VARCHAR(100)"/>
+            <column name="phone_number" type="VARCHAR(20)"/>
+            <column name="date_of_birth" type="DATE"/>
+            <column name="avatar_initials" type="VARCHAR(5)"/>
+            <column name="streak_days" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="total_hours" type="DECIMAL(6,1)" defaultValueNumeric="0"/>
+            <column name="average_grade" type="DECIMAL(4,2)" defaultValueNumeric="0"/>
+            <column name="credit_points" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="email_confirmed" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="NOW()"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="last_login" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,29 @@
+decizie pe promovare
+decizie pe burse
+decizie pe ajutorul sau oferirea de mai multe materiale
+
+Motor de recomandare cursuri (RECOMANDAT)
+Userul introduce:
+nivel (beginner / intermediate / advanced)
+timp disponibil pe săptămână
+domeniu (AI, Web, Cybersecurity)
+obiectiv (job, examen, hobby)
+scor la un test inițial
+
+Drools decide:
+ce cursuri să recomande
+în ce ordine
+intensitatea
+dacă trebuie recapitulare
+
+Evaluare automată profil student
+Drools clasifică studentul:
+“Performer”
+“Procrastinator”
+“Consistent”
+“At Risk”
+
+Pe baza:
+timp studiu
+scoruri
+deadline-uri

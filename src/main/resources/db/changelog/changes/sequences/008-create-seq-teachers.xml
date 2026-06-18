@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260328-create-seq-teachers">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="seq_teachers_id"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="seq_teachers_id"
+                        startValue="1"
+                        incrementBy="1"
+                        minValue="1"
+                        cacheSize="1"/>
+    </changeSet>
+
+</databaseChangeLog>

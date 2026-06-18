@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260328-update-courses-fk-teacher">
+
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="fk_courses_professor"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint
+                baseTableName="courses"
+                constraintName="fk_courses_professor"/>
+
+        <addForeignKeyConstraint
+                baseTableName="courses"
+                baseColumnNames="professor_id"
+                referencedTableName="teachers"
+                referencedColumnNames="id"
+                constraintName="fk_courses_teacher"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+</databaseChangeLog>

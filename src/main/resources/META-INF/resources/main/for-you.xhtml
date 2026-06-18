@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>StudyHub</title>
+    <h:outputStylesheet library="css" name="for-you.css"/>
+</h:head>
+
+<h:body>
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>StudyHub</h1>
+                <span>Learning Platform</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Meniu principal</div>
+                <a class="nav-item active" onclick="showPage('home', this)">
+                    <span class="nav-icon">&#127968;</span>
+                    Acas&#259;
+                </a>
+                <a class="nav-item" onclick="showPage('cursuri', this)">
+                    <span class="nav-icon">&#128218;</span>
+                    Cursurile mele
+                    <span class="nav-badge">4</span>
+                </a>
+                <div class="nav-section-label" style="margin-top:12px;">Instrumente</div>
+                <a class="nav-item" onclick="showPage('calendar', this)">
+                    <span class="nav-icon">&#128197;</span>
+                    Calendar
+                </a>
+                <a class="nav-item" onclick="showPage('note', this)">
+                    <span class="nav-icon">&#128221;</span>
+                    Note
+                </a>
+                <a class="nav-item" onclick="showPage('rapoarte', this)">
+                    <span class="nav-icon">&#128202;</span>
+                    Rapoarte
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user" onclick="showPage('profil', null)">
+                    <div class="user-avatar-small">S</div>
+                    <div class="user-info-small">
+                        <div class="name">Student</div>
+                        <div class="role">Utilizator</div>
+                    </div>
+                    <span>&#9881;</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h2 id="pageTitle">Acas&#259;</h2>
+                    <span id="pageSubtitle">Bun venit &#238;napoi &#128075;</span>
+                </div>
+                <div class="topbar-right">
+                    <div class="icon-btn">&#128276;<span class="dot"></span></div>
+                    <div class="icon-btn">&#128269;</div>
+                    <div style="position:relative;">
+                        <div class="profile-btn" onclick="toggleDropdown()">
+                            <div class="avatar">S</div>
+                            <span>Student</span>
+                            <span class="chevron">&#9660;</span>
+                        </div>
+                        <div class="dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <div class="d-name">Student User</div>
+                                <div class="d-email">student@studyhub.ro</div>
+                            </div>
+                            <div class="dropdown-item" onclick="showPage('profil', null); closeDropdown()">&#128100; Profilul meu</div>
+                            <div class="dropdown-item" onclick="showPage('calendar', null); closeDropdown()">&#128197; Calendar</div>
+                            <div class="dropdown-item" onclick="showPage('note', null); closeDropdown()">&#128221; Note</div>
+                            <div class="dropdown-item" onclick="showPage('rapoarte', null); closeDropdown()">&#128202; Rapoarte</div>
+                            <div class="dropdown-sep"></div>
+                            <div class="dropdown-item danger" onclick="window.location='/logout'">&#128682; Deconectare</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="content">
+
+                <!-- PAGE: ACASA -->
+                <div class="page active" id="page-home">
+                    <div class="greeting">
+                        <h3>Bun&#259; ziua, Student! &#10024;</h3>
+                        <p>Iat&#259; ce mai ai de f&#259;cut azi</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="s-label">Cursuri active</div>
+                            <div class="s-value">4</div>
+                            <div class="s-sub">+1 fa&#355;&#259; de luna trecut&#259;</div>
+                            <div class="s-icon">&#128218;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">Ore studiate</div>
+                            <div class="s-value">38</div>
+                            <div class="s-sub">aceast&#259; s&#259;pt&#259;m&#226;n&#259;</div>
+                            <div class="s-icon">&#9201;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">Progres mediu</div>
+                            <div class="s-value">67%</div>
+                            <div class="s-sub">peste toate cursurile</div>
+                            <div class="s-icon">&#128200;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">Note salvate</div>
+                            <div class="s-value">12</div>
+                            <div class="s-sub">3 ad&#259;ugate recent</div>
+                            <div class="s-icon">&#128221;</div>
+                        </div>
+                    </div>
+                    <div class="two-col">
+                        <div class="card">
+                            <div class="card-title">
+                                Cursuri &#238;n desf&#259;&#351;urare
+                                <a onclick="showPage('cursuri', null)">Vezi toate &#8594;</a>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(108,99,255,0.15)">&#128187;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Programare Java</div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width:78%;background:#6c63ff;"></div></div>
+                                    <div class="c-meta">78% completat · 5 lec&#355;ii r&#259;mase</div>
+                                </div>
+                                <div class="course-pct">78%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(255,101,132,0.15)">&#129518;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Matematic&#259; Discret&#259;</div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width:55%;background:#ff6584;"></div></div>
+                                    <div class="c-meta">55% completat · 9 lec&#355;ii r&#259;mase</div>
+                                </div>
+                                <div class="course-pct">55%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(67,233,123,0.15)">&#127760;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Re&#355;ele de Calculatoare</div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width:30%;background:#43e97b;"></div></div>
+                                    <div class="c-meta">30% completat · 14 lec&#355;ii r&#259;mase</div>
+                                </div>
+                                <div class="course-pct">30%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(255,193,7,0.15)">&#128452;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Baze de Date</div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width:90%;background:#ffc107;"></div></div>
+                                    <div class="c-meta">90% completat · 2 lec&#355;ii r&#259;mase</div>
+                                </div>
+                                <div class="course-pct">90%</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Activitate recent&#259;</div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#6c63ff"></div>
+                                <div>
+                                    <div class="act-text">Ai finalizat lec&#355;ia <strong>OOP &#238;n Java</strong></div>
+                                    <div class="act-time">acum 2 ore</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#43e97b"></div>
+                                <div>
+                                    <div class="act-text">Not&#259; nou&#259;: <strong>Teorema lui Bayes</strong></div>
+                                    <div class="act-time">ieri, 18:30</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#ff6584"></div>
+                                <div>
+                                    <div class="act-text">Test la <strong>Baze de Date</strong> &#8212; 92/100</div>
+                                    <div class="act-time">ieri, 15:00</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#ffc107"></div>
+                                <div>
+                                    <div class="act-text">Curs nou: <strong>Re&#355;ele de Calculatoare</strong></div>
+                                    <div class="act-time">acum 3 zile</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: PROFIL -->
+                <div class="page" id="page-profil">
+                    <div class="profile-hero">
+                        <div class="profile-cover"></div>
+                        <div class="profile-info-bar">
+                            <div class="profile-avatar-wrap">
+                                <div class="profile-avatar">S</div>
+                            </div>
+                            <div class="profile-details">
+                                <h2>Student User</h2>
+                                <p>student@studyhub.ro · Anul II, Informatic&#259;</p>
+                                <div class="profile-tags">
+                                    <span class="tag tag-purple">Java Developer</span>
+                                    <span class="tag tag-green">Active Learner</span>
+                                    <span class="tag tag-pink">Top 10%</span>
+                                </div>
+                            </div>
+                            <button class="edit-btn">&#9998; Editeaz&#259; profilul</button>
+                        </div>
+                    </div>
+                    <div class="profile-grid">
+                        <div class="info-card">
+                            <h4>Informa&#355;ii personale</h4>
+                            <div class="info-row"><span class="label">Nume complet</span><span class="value">Student User</span></div>
+                            <div class="info-row"><span class="label">Email</span><span class="value">student@studyhub.ro</span></div>
+                            <div class="info-row"><span class="label">Facultate</span><span class="value">Informatic&#259;</span></div>
+                            <div class="info-row"><span class="label">An de studiu</span><span class="value">Anul II</span></div>
+                            <div class="info-row"><span class="label">Specializare</span><span class="value">Calculatoare</span></div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Statistici academice</h4>
+                            <div class="info-row"><span class="label">Cursuri &#238;nscrise</span><span class="value">4</span></div>
+                            <div class="info-row"><span class="label">Cursuri finalizate</span><span class="value">2</span></div>
+                            <div class="info-row"><span class="label">Ore totale studiate</span><span class="value">142h</span></div>
+                            <div class="info-row"><span class="label">Medie general&#259;</span><span class="value" style="color:#43e97b">8.75</span></div>
+                            <div class="info-row"><span class="label">Streak actual</span><span class="value" style="color:#ffc107">&#128293; 7 zile</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMING SOON -->
+                <div class="page" id="page-cursuri">
+                    <div class="coming-soon"><div class="icon">&#128218;</div><h3>Cursurile mele</h3><p>&#206;n dezvoltare</p></div>
+                </div>
+                <div class="page" id="page-calendar">
+                    <div class="coming-soon"><div class="icon">&#128197;</div><h3>Calendar</h3><p>&#206;n dezvoltare</p></div>
+                </div>
+                <div class="page" id="page-note">
+                    <div class="coming-soon"><div class="icon">&#128221;</div><h3>Note</h3><p>&#206;n dezvoltare</p></div>
+                </div>
+                <div class="page" id="page-rapoarte">
+                    <div class="coming-soon"><div class="icon">&#128202;</div><h3>Rapoarte</h3><p>&#206;n dezvoltare</p></div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        var pageTitles = {
+            home:     ['Acas\u0103',       'Bun venit \u00EEnapoi \uD83D\uDC4B'],
+            cursuri:  ['Cursurile mele',   'Gestioneaz\u0103-\u021Bi cursurile'],
+            calendar: ['Calendar',         'Planific\u0103-\u021Bi activit\u0103\u021Bile'],
+            note:     ['Note',             'Noti\u021Bele tale salvate'],
+            rapoarte: ['Rapoarte',         'Analiz\u0103 \u015Fi progres'],
+            profil:   ['Profilul meu',     'Set\u0103ri \u015Fi informa\u021Bii personale']
+        };
+
+        function showPage(name, navEl) {
+            document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+            document.getElementById('page-' + name).classList.add('active');
+            if (navEl) {
+                document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+                navEl.classList.add('active');
+            }
+            var info = pageTitles[name] || [name, ''];
+            document.getElementById('pageTitle').textContent = info[0];
+            document.getElementById('pageSubtitle').textContent = info[1];
+            closeDropdown();
+        }
+
+        function toggleDropdown() {
+            document.getElementById('profileDropdown').classList.toggle('open');
+        }
+
+        function closeDropdown() {
+            document.getElementById('profileDropdown').classList.remove('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                closeDropdown();
+            }
+        });
+    </script>
+</h:body>
+</html>

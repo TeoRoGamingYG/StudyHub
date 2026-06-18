@@ -1,0 +1,683 @@
+/* ============================================================
+   REGISTER.CSS — StudyHub Dark Theme
+   Shares CSS variables cu login.css — include ambele sau
+   extrage variabilele intr-un fisier _variables.css separat
+   ============================================================ */
+
+:root {
+    --bg-base:        #0a0b0f;
+    --bg-panel:       #0f1117;
+    --bg-card:        #151821;
+    --bg-input:       #1a1e2a;
+    --bg-input-focus: #1f2436;
+
+    --border-subtle:  #1e2334;
+    --border-normal:  #2a3050;
+    --border-accent:  #4f6ef7;
+
+    --accent-primary: #4f6ef7;
+    --accent-glow:    rgba(79, 110, 247, 0.25);
+    --accent-hover:   #6b85f8;
+    --accent-dim:     rgba(79, 110, 247, 0.12);
+
+    --text-primary:   #eef0f8;
+    --text-secondary: #7c85a8;
+    --text-muted:     #454d6a;
+
+    --error:          #f75f6e;
+
+    --radius-sm:  6px;
+    --radius-md:  12px;
+    --radius-lg:  20px;
+
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* ============================================================
+   WRAPPER
+   ============================================================ */
+
+.register-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-panel);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+/* Language switcher */
+.lang-switcher form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 4px 8px;
+}
+
+.lang-btn,
+.lang-btn.ui-button {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+    box-shadow: none !important;
+}
+
+.lang-btn:hover,
+.lang-btn.ui-button:hover {
+    color: var(--text-primary) !important;
+    background: var(--bg-input) !important;
+}
+
+.lang-btn.active,
+.lang-btn.active.ui-button {
+    background: var(--accent-primary) !important;
+    color: #fff !important;
+}
+
+.lang-divider {
+    color: var(--border-normal);
+    font-size: 0.7rem;
+}
+
+/* ============================================================
+   REGISTER CONTENT
+   ============================================================ */
+
+.register-content {
+    flex: 1;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.register-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.register-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* ============================================================
+   FORM SECTIONS
+   ============================================================ */
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    transition: border-color var(--transition);
+}
+
+.form-section:hover {
+    border-color: var(--border-normal);
+}
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.section-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    color: var(--accent-primary);
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,110,247,0.2);
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+}
+
+.section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   FIELDS GRID
+   ============================================================ */
+
+.fields-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.fields-grid.two-col {
+    grid-template-columns: 1fr 1fr;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.field-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 1;
+    transition: color var(--transition);
+}
+
+.auth-input,
+.auth-input.ui-inputtext,
+.auth-input .ui-inputtext {
+    width: 100% !important;
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+    padding: 12px 14px 12px 42px !important;
+    transition: all var(--transition) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.auth-input:focus,
+.auth-input.ui-inputtext:focus,
+.auth-input .ui-inputtext:focus,
+.ui-inputwrapper-focus .auth-input {
+    background: var(--bg-input-focus) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+.auth-input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Password wrapper */
+.auth-input.ui-password {
+    display: block !important;
+}
+
+.auth-input.ui-password .ui-inputtext {
+    padding-left: 42px !important;
+}
+
+/* ============================================================
+   SELECT
+   ============================================================ */
+
+.select-wrapper {
+    position: relative;
+}
+
+.auth-select,
+.auth-select.ui-selectonemenu {
+    width: 100% !important;
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+    transition: all var(--transition) !important;
+    box-shadow: none !important;
+}
+
+.auth-select .ui-selectonemenu-label {
+    padding: 12px 14px 12px 42px !important;
+    color: var(--text-primary) !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.auth-select .ui-selectonemenu-trigger {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+}
+
+.auth-select:focus,
+.auth-select.ui-state-focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* Dropdown panel */
+.ui-selectonemenu-panel {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-normal) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item {
+    color: var(--text-secondary) !important;
+    padding: 10px 14px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+    transition: all var(--transition) !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item:hover,
+.ui-selectonemenu-panel .ui-selectonemenu-items .ui-selectonemenu-item.ui-state-highlight {
+    background: var(--accent-dim) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* ============================================================
+   SUBMIT ROW
+   ============================================================ */
+
+.submit-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 0.5rem;
+}
+
+.auth-submit-btn,
+.auth-submit-btn.ui-button {
+    width: 100% !important;
+    max-width: 400px !important;
+    background: var(--accent-primary) !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    color: #fff !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    padding: 14px !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 4px 20px var(--accent-glow) !important;
+}
+
+.auth-submit-btn:hover,
+.auth-submit-btn.ui-button:hover {
+    background: var(--accent-hover) !important;
+    box-shadow: 0 6px 28px rgba(79,110,247,0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+.auth-submit-btn:active {
+    transform: translateY(0) !important;
+}
+
+.form-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.switch-link {
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.switch-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+
+.field-error .ui-message {
+    background: transparent !important;
+    border: none !important;
+    color: var(--error) !important;
+    font-size: 0.8rem !important;
+    padding: 0 !important;
+}
+
+.global-error .ui-messages-error {
+    background: rgba(247, 95, 110, 0.1) !important;
+    border: 1px solid rgba(247, 95, 110, 0.3) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--error) !important;
+    padding: 10px 14px !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .top-bar {
+        padding: 1rem 1.5rem;
+    }
+
+    .register-content {
+        padding: 2rem 1.25rem 3rem;
+    }
+
+    .fields-grid.two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .field-group.full-width {
+        grid-column: auto;
+    }
+
+    .form-section {
+        padding: 1.25rem;
+    }
+
+    .register-header h2 {
+        font-size: 1.7rem;
+    }
+}
+
+/* ============================================================
+   DATEPICKER — PrimeFaces p:datePicker
+   ============================================================ */
+
+/* Input wrapper */
+.ui-datepicker-trigger,
+.ui-datepicker-trigger.ui-button {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    position: absolute !important;
+    right: 12px !important;
+    box-shadow: none !important;
+}
+
+/* Panelul calendarului */
+.ui-datepicker {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-normal) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    padding: 1rem !important;
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+/* Header — luna si anul */
+.ui-datepicker .ui-datepicker-header {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    color: var(--text-primary) !important;
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+}
+
+/* Butoane prev/next luna */
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+    background: transparent !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-secondary) !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+    background: var(--accent-dim) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* Zilele saptamanii */
+.ui-datepicker table thead th {
+    color: var(--text-muted) !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 6px 0 !important;
+    text-align: center !important;
+}
+
+/* Celulele cu zile */
+.ui-datepicker table tbody td {
+    padding: 2px !important;
+    text-align: center !important;
+}
+
+.ui-datepicker table tbody td a,
+.ui-datepicker table tbody td span {
+    background: transparent !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-secondary) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    margin: 0 auto !important;
+    font-size: 0.875rem !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+    text-decoration: none !important;
+}
+
+.ui-datepicker table tbody td a:hover {
+    background: var(--bg-input-focus) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ziua selectata */
+.ui-datepicker table tbody td.ui-datepicker-current-day a,
+.ui-datepicker table tbody td a.ui-state-active {
+    background: var(--accent-primary) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+/* Ziua de azi */
+.ui-datepicker table tbody td.ui-datepicker-today a {
+    background: var(--accent-dim) !important;
+    color: var(--accent-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Zile din alta luna */
+.ui-datepicker table tbody td.ui-datepicker-other-month a {
+    color: var(--text-muted) !important;
+}
+
+/* Select pentru luna si an din header */
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.85rem !important;
+    padding: 4px 8px !important;
+    cursor: pointer !important;
+}
+
+/* Butonul Today/Clear daca e activat */
+.ui-datepicker .ui-datepicker-buttonpane {
+    border-top: 1px solid var(--border-subtle) !important;
+    margin-top: 0.75rem !important;
+    padding-top: 0.75rem !important;
+    display: flex !important;
+    gap: 8px !important;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-secondary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button:hover {
+    background: var(--accent-dim) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* ============================================================
+   DATEPICKER INPUT FIELD
+   ============================================================ */
+
+.ui-inputfield.hasDatepicker,
+input.hasDatepicker {
+    width: 100% !important;
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+    padding: 12px 14px 12px 42px !important;
+    transition: all var(--transition) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ui-inputfield.hasDatepicker:focus,
+input.hasDatepicker:focus {
+    background: var(--bg-input-focus) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+.ui-inputfield.hasDatepicker::placeholder,
+input.hasDatepicker::placeholder {
+    color: var(--text-muted) !important;
+}

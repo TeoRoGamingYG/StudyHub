@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260328-create-teachers-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="teachers"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="teachers">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="seq_teachers_id">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="VARCHAR(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="faculty" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

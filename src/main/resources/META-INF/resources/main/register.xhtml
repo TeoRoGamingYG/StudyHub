@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <f:loadBundle basename="messages" var="msg"/>
+        <title>#{msg['register.title']}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="register.css"/>
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+    </h:head>
+
+    <h:body>
+
+        <div class="register-wrapper">
+
+            <!-- Top bar -->
+            <div class="top-bar">
+                <div class="brand-logo">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">StudyHub</span>
+                </div>
+
+                <div class="lang-switcher">
+                    <h:form id="langForm">
+                        <p:commandButton value="RO"
+                                         styleClass="lang-btn #{languageBean.language eq 'ro' ? 'active' : ''}"
+                                         action="#{languageBean.changeLanguage('ro')}"
+                                         ajax="false"/>
+                        <span class="lang-divider">|</span>
+                        <p:commandButton value="EN"
+                                         styleClass="lang-btn #{languageBean.language eq 'en' ? 'active' : ''}"
+                                         action="#{languageBean.changeLanguage('en')}"
+                                         ajax="false"/>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="register-content">
+                <div class="register-header">
+                    <h2>#{msg['register.title']}</h2>
+                    <p>#{msg['register.subtitle']}</p>
+                </div>
+
+                <h:form id="registerForm" styleClass="register-form">
+                    <p:messages globalOnly="true" styleClass="global-error" showDetail="true"/>
+
+                    <!-- SECTION 1: Personal info -->
+                    <div class="form-section">
+                        <div class="section-label">
+                            <span class="section-number">01</span>
+                            <span class="section-title">#{msg['register.section.personal']}</span>
+                        </div>
+
+                        <div class="fields-grid two-col">
+
+                            <div class="field-group">
+                                <label class="field-label" for="firstName">#{msg['register.firstName']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">✦</span>
+                                    <p:inputText id="firstName"
+                                                 value="#{registerBean.firstName}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.firstName.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.firstName.required']}"/>
+                                </div>
+                                <p:message for="firstName" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="lastName">#{msg['register.lastName']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">✦</span>
+                                    <p:inputText id="lastName"
+                                                 value="#{registerBean.lastName}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.lastName.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.lastName.required']}"/>
+                                </div>
+                                <p:message for="lastName" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="cnp">#{msg['register.cnp']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">⊡</span>
+                                    <p:inputText id="cnp"
+                                                 value="#{registerBean.cnp}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.cnp.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.cnp.required']}"
+                                                 maxlength="13"/>
+                                </div>
+                                <p:message for="cnp" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="registrationNumber">#{msg['register.registrationNumber']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">⊟</span>
+                                    <p:inputText id="registrationNumber"
+                                                 value="#{registerBean.registrationNumber}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.registrationNumber.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.registrationNumber.required']}"/>
+                                </div>
+                                <p:message for="registrationNumber" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="dateOfBirth">#{msg['register.dateOfBirth']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">◷</span>
+                                    <p:datePicker id="dateOfBirth"
+                                                  value="#{registerBean.dateOfBirth}"
+                                                  styleClass="auth-input"
+                                                  pattern="dd.MM.yyyy"
+                                                  placeholder="#{msg['register.dateOfBirth.placeholder']}"
+                                                  maxdate="#{registerBean.maxDateOfBirth}"/>
+                                </div>
+                                <p:message for="dateOfBirth" styleClass="field-error"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Contact -->
+                    <div class="form-section">
+                        <div class="section-label">
+                            <span class="section-number">02</span>
+                            <span class="section-title">#{msg['register.section.contact']}</span>
+                        </div>
+
+                        <div class="fields-grid two-col">
+
+                            <div class="field-group full-width">
+                                <label class="field-label" for="email">#{msg['register.email']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">✉</span>
+                                    <p:inputText id="email"
+                                                 value="#{registerBean.email}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.email.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.email.required']}"/>
+                                </div>
+                                <p:message for="email" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="password">#{msg['register.password']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">⚿</span>
+                                    <p:password id="password"
+                                                value="#{registerBean.password}"
+                                                styleClass="auth-input"
+                                                placeholder="#{msg['register.password.placeholder']}"
+                                                feedback="true"
+                                                required="true"
+                                                requiredMessage="#{msg['validation.password.required']}"/>
+                                </div>
+                                <p:message for="password" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="confirmPassword">#{msg['register.confirmPassword']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">⚿</span>
+                                    <p:password id="confirmPassword"
+                                                value="#{registerBean.confirmPassword}"
+                                                styleClass="auth-input"
+                                                placeholder="#{msg['register.confirmPassword.placeholder']}"
+                                                feedback="false"
+                                                required="true"
+                                                requiredMessage="#{msg['validation.confirmPassword.required']}"/>
+                                </div>
+                                <p:message for="confirmPassword" styleClass="field-error"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Academic -->
+                    <div class="form-section">
+                        <div class="section-label">
+                            <span class="section-number">03</span>
+                            <span class="section-title">#{msg['register.section.academic']}</span>
+                        </div>
+
+                        <div class="fields-grid two-col">
+
+                            <div class="field-group full-width">
+                                <label class="field-label" for="faculty">#{msg['register.faculty']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">◫</span>
+                                    <p:inputText id="faculty"
+                                                 value="#{registerBean.faculty}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.faculty.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.faculty.required']}"/>
+                                </div>
+                                <p:message for="faculty" styleClass="field-error"/>
+                            </div>
+
+                            <div class="field-group full-width">
+                                <label class="field-label" for="specialization">#{msg['register.specialization']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">◩</span>
+                                    <p:inputText id="specialization"
+                                                 value="#{registerBean.specialization}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.specialization.placeholder']}"/>
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="studyYear">#{msg['register.studyYear']}</label>
+                                <div class="input-wrapper select-wrapper">
+                                    <span class="input-icon">◎</span>
+                                    <p:selectOneMenu id="studyYear"
+                                                     value="#{registerBean.studyYear}"
+                                                     styleClass="auth-select"
+                                                     required="true"
+                                                     requiredMessage="#{msg['validation.studyYear.required']}">
+                                        <f:selectItem itemLabel="#{msg['register.studyYear.select']}" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg['register.studyYear.1']}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg['register.studyYear.2']}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg['register.studyYear.3']}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{msg['register.studyYear.4']}" itemValue="4"/>
+<!--                                        <f:selectItem itemLabel="#{msg['register.studyYear.5']}" itemValue="5"/>-->
+<!--                                        <f:selectItem itemLabel="#{msg['register.studyYear.6']}" itemValue="6"/>-->
+                                    </p:selectOneMenu>
+                                </div>
+                                <p:message for="studyYear" styleClass="field-error"/>
+                            </div>
+
+<!--                            <div class="field-group">-->
+<!--                                <label class="field-label" for="role">#{msg['register.role']}</label>-->
+<!--                                <div class="input-wrapper select-wrapper">-->
+<!--                                    <span class="input-icon">◑</span>-->
+<!--                                    <p:selectOneMenu id="role"-->
+<!--                                                     value="#{registerBean.role}"-->
+<!--                                                     styleClass="auth-select"-->
+<!--                                                     required="true"-->
+<!--                                                     requiredMessage="#{msg['validation.role.required']}">-->
+<!--                                        <f:selectItem itemLabel="#{msg['register.role.select']}" itemValue=""/>-->
+<!--                                        <f:selectItem itemLabel="#{msg['register.role.student']}" itemValue="STUDENT"/>-->
+<!--                                        <f:selectItem itemLabel="#{msg['register.role.professor']}" itemValue="PROFESSOR"/>-->
+<!--                                    </p:selectOneMenu>-->
+<!--                                </div>-->
+<!--                                <p:message for="role" styleClass="field-error"/>-->
+<!--                            </div>-->
+
+                            <div class="field-group">
+                                <label class="field-label" for="groupName">#{msg['register.groupName']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">◐</span>
+                                    <p:inputText id="groupName"
+                                                 value="#{registerBean.groupName}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.groupName.placeholder']}"/>
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="semester">#{msg['register.semester']}</label>
+                                <div class="input-wrapper select-wrapper">
+                                    <span class="input-icon">◎</span>
+                                    <p:selectOneMenu id="semester"
+                                                     value="#{registerBean.semester}"
+                                                     styleClass="auth-select">
+                                        <f:selectItem itemLabel="#{msg['register.semester.select']}" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg['register.semester.1']}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg['register.semester.2']}" itemValue="2"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="submit-row">
+                        <p:commandButton value="#{msg['register.submit']}"
+                                         styleClass="auth-submit-btn"
+                                         action="#{registerBean.register}"
+                                         ajax="false"/>
+
+                        <div class="form-footer">
+                            <span>#{msg['register.hasAccount']}</span>
+                            <h:outputLink value="#{request.contextPath}/main/login.xhtml" styleClass="switch-link">
+                                #{msg['register.login']}
+                            </h:outputLink>
+                        </div>
+                    </div>
+
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <f:loadBundle basename="messages" var="msg"/>
+        <title>#{msg['login.title']}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="login.css"/>
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+    </h:head>
+
+    <h:body>
+
+        <div class="auth-wrapper">
+
+            <div class="brand-panel">
+                <div class="brand-content">
+                    <div class="brand-logo">
+                        <span class="logo-icon">◈</span>
+                        <span class="logo-text">StudyHub</span>
+                    </div>
+                    <div class="brand-tagline">
+                        <h1>#{msg['brand.headline']}</h1>
+                        <p>#{msg['brand.subheadline']}</p>
+                    </div>
+                    <div class="brand-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">12k+</span>
+                            <span class="stat-label">#{msg['brand.stat.students']}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">340+</span>
+                            <span class="stat-label">#{msg['brand.stat.courses']}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">#{msg['brand.stat.satisfaction']}</span>
+                        </div>
+                    </div>
+                    <div class="brand-orb orb-1"></div>
+                    <div class="brand-orb orb-2"></div>
+                </div>
+            </div>
+
+            <div class="form-panel">
+
+                <div class="lang-switcher">
+                    <h:form id="langForm">
+                        <p:commandButton value="RO"
+                                         styleClass="lang-btn #{languageBean.language eq 'ro' ? 'active' : ''}"
+                                         action="#{languageBean.changeLanguage('ro')}"
+                                         ajax="false"/>
+                        <span class="lang-divider">|</span>
+                        <p:commandButton value="EN"
+                                         styleClass="lang-btn #{languageBean.language eq 'en' ? 'active' : ''}"
+                                         action="#{languageBean.changeLanguage('en')}"
+                                         ajax="false"/>
+                    </h:form>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>#{msg['login.welcome']}</h2>
+                        <p>#{msg['login.subtitle']}</p>
+                    </div>
+
+                    <h:panelGroup rendered="#{not empty param['error']}">
+                        <div class="global-error-banner">
+                            #{msg['login.error.invalid']}
+                        </div>
+                    </h:panelGroup>
+
+                    <h:form id="loginForm" styleClass="auth-form">
+
+                        <div class="field-group">
+                            <label class="field-label" for="loginForm:username">#{msg['login.email']}</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">✉</span>
+                                <p:inputText id="username"
+                                             value="#{loginBean.email}"
+                                             styleClass="auth-input"
+                                             placeholder="#{msg['login.email.placeholder']}"
+                                             required="true"/>
+                            </div>
+                            <p:message for="username" styleClass="field-error"/>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="loginForm:password">#{msg['login.password']}</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">⚿</span>
+                                <p:password id="password"
+                                            value="#{loginBean.password}"
+                                            styleClass="auth-input"
+                                            placeholder="#{msg['login.password.placeholder']}"
+                                            feedback="false"
+                                            required="true"/>
+                            </div>
+                            <p:message for="password" styleClass="field-error"/>
+                        </div>
+
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <p:selectBooleanCheckbox id="rememberMe"
+                                                         value="#{loginBean.rememberMe}"
+                                                         styleClass="auth-checkbox"/>
+                                <label for="loginForm:rememberMe" class="checkbox-label">
+                                    #{msg['login.rememberMe']}
+                                </label>
+                            </div>
+                            <h:outputLink value="#{request.contextPath}/main/forgot-password.xhtml"
+                                          styleClass="forgot-link">
+                                #{msg['login.forgotPassword']}
+                            </h:outputLink>
+                        </div>
+
+                        <p:messages globalOnly="true" styleClass="global-error" showDetail="true"/>
+
+                        <p:commandButton value="#{msg['login.submit']}"
+                                         styleClass="auth-submit-btn"
+                                         action="#{loginBean.login}"
+                                         ajax="false"/>
+
+
+
+                        <div class="form-footer">
+                            <span>#{msg['login.noAccount']}</span>
+                            <h:outputLink value="#{request.contextPath}/main/register.xhtml"
+                                          styleClass="switch-link">
+                                #{msg['login.register']}
+                            </h:outputLink>
+                        </div>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</f:view>
+</html>
