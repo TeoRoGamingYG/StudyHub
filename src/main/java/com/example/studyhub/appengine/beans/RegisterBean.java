@@ -59,12 +59,15 @@ public class RegisterBean implements Serializable {
             user.setSpecialization(specialization);
             user.setStudyYear(studyYear);
             user.setRole(role);
+            user.setGroupName(groupName);
+            user.setSemester(semester);
+            user.setDateOfBirth(dateOfBirth);
 
             userService.register(user);
 
             context.getExternalContext()
                     .getFlash().put("registerSuccess", true);
-            return "/main/login.xhtml?faces-redirect=true";
+            return "/main/login.xhtml?faces-redirect=true&justRegistered=true";
 
         } catch (IllegalArgumentException e) {
             context.addMessage(null, new FacesMessage(

@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 "/main/register.xhtml",
                                 "/main/forgot-password.xhtml",
                                 "/jakarta.faces.resource/**",
-                                "/javax.faces.resource/**"
+                                "/javax.faces.resource/**",
+                                "/verify"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

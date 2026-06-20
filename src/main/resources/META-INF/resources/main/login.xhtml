@@ -13,6 +13,50 @@
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
     </h:head>
 
+    <h:form id="dialogsForm">
+        <p:dialog header="Verifică emailul!"
+                  widgetVar="checkEmailDialog"
+                  modal="true" closable="true" width="400">
+            <p style="padding: 1rem;">
+                Ți-am trimis un email de verificare.
+                Apasă linkul din email pentru a-ți activa contul.
+            </p>
+        </p:dialog>
+
+        <p:dialog header="✓ Email verificat!"
+                  widgetVar="emailVerifiedDialog"
+                  modal="true" closable="true" width="400">
+            <p style="padding: 1rem;">
+                Contul tău a fost activat cu succes! Te poți loga acum.
+            </p>
+        </p:dialog>
+
+        <p:dialog header="Eroare"
+                  widgetVar="verifyErrorDialog"
+                  modal="true" closable="true" width="400">
+            <p style="padding: 1rem;">
+                Linkul de verificare este invalid sau a expirat.
+            </p>
+        </p:dialog>
+    </h:form>
+
+    <h:outputScript target="body">
+        window.addEventListener('load', function() {
+        setTimeout(function() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('justRegistered') === 'true') {
+        PF('checkEmailDialog').show();
+        }
+        if (params.get('verified') === 'true') {
+        PF('emailVerifiedDialog').show();
+        }
+        if (params.get('verified') === 'false') {
+        PF('verifyErrorDialog').show();
+        }
+        }, 300);
+        });
+    </h:outputScript>
+
     <h:body>
 
         <div class="auth-wrapper">
