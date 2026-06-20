@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class UserService {
 
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Transactional
     public UsersEntity register(UsersEntity user) {
@@ -39,7 +41,12 @@ public class UserService {
         user.setStreakDays(0);
         user.setCreditPoints(0);
 
-        return usersRepository.save(user);
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+
+        UsersEntity saved = usersRepository.save(user);
+        emailService.sendVerificationEmail(saved.getEmail(), token);
+        return saved;
     }
 
     @Transactional
@@ -63,5 +70,17 @@ public class UserService {
             user.setUpdatedAt(LocalDateTime.now());
             usersRepository.save(user);
         }
+    }
+
+    @Transactional
+    public boolean verifyEmail(String token) {
+        return usersRepository.findByVerificationToken(token).map(user -> {
+            user.setEmailConfirmed(true);
+            user.setActive(true);
+            user.setVerificationToken(null);
+            user.setUpdatedAt(LocalDateTime.now());
+            usersRepository.save(user);
+            return true;
+        }).orElse(false);
     }
 }

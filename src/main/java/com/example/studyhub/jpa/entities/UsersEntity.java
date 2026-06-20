@@ -93,6 +93,9 @@ public class UsersEntity {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Column(name = "verification_token")
+    private String verificationToken;
+
     // RELATIONS
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
