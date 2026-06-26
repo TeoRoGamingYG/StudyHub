@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+
+<ui:composition>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <h1>StudyHub</h1>
+            <span>Learning Platform</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Meniu principal</div>
+            <h:outputLink value="#{request.contextPath}/main/for-you.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('for-you') ? 'active' : ''}">
+                <span class="nav-icon">&#127968;</span>
+                Acasă
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/student/cursuri.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('cursuri') ? 'active' : ''}">
+                <span class="nav-icon">&#128218;</span>
+                Cursurile mele
+                <span class="nav-badge">4</span>
+            </h:outputLink>
+
+            <div class="nav-section-label" style="margin-top:12px;">Instrumente</div>
+            <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('calendar') ? 'active' : ''}">
+                <span class="nav-icon">&#128197;</span>
+                Calendar
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('note') ? 'active' : ''}">
+                <span class="nav-icon">&#128221;</span>
+                Note
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('rapoarte') ? 'active' : ''}">
+                <span class="nav-icon">&#128202;</span>
+                Rapoarte
+            </h:outputLink>
+        </nav>
+        <div class="sidebar-footer">
+            <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
+                          styleClass="sidebar-user">
+                <div class="user-avatar-small">#{sessionBean.userInitials}</div>
+                <div class="user-info-small">
+                    <div class="name">#{sessionBean.fullName}</div>
+                    <div class="role">#{sessionBean.role}</div>
+                </div>
+                <span>&#9881;</span>
+            </h:outputLink>
+        </div>
+    </aside>
+</ui:composition>
+</html>
