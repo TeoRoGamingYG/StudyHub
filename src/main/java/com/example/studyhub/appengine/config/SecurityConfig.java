@@ -21,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final StudyHubUserDetailsService userDetailsService;
+    private final LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,7 +42,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("loginForm:username")
                         .passwordParameter("loginForm:password")
-                        .defaultSuccessUrl("/main/for-you.xhtml", true)
+                        .successHandler(loginSuccessHandler)
                         .failureUrl("/main/login.xhtml?error=true")
                         .permitAll()
                 )

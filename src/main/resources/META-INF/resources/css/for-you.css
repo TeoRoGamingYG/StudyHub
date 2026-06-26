@@ -330,3 +330,34 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .coming-soon .icon { font-size: 48px; }
 .coming-soon h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
 .coming-soon p { color: var(--muted); font-size: 14px; }
+
+.dropdown .dropdown-item {
+    text-decoration: none !important;
+    color: inherit;
+    display: block;
+}
+
+.dropdown .dropdown-item:visited {
+    color: inherit;
+}
+
+.dropdown .dropdown-item.danger {
+    color: #ff6584 !important;
+}
+
+.sidebar-nav .nav-item,
+.sidebar-footer .sidebar-user {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.sidebar-nav .nav-item:visited,
+.sidebar-footer .sidebar-user:visited {
+    color: inherit;
+}
+
+.sidebar-footer .sidebar-user {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
