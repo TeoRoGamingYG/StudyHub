@@ -129,6 +129,20 @@
                                 <p:message for="dateOfBirth" styleClass="field-error"/>
                             </div>
 
+                            <div class="field-group">
+                                <label class="field-label" for="phoneNumber">#{msg['register.phoneNumber']}</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">⊟</span>
+                                    <p:inputText id="phoneNumber"
+                                                 value="#{registerBean.phoneNumber}"
+                                                 styleClass="auth-input"
+                                                 placeholder="#{msg['register.phoneNumber.placeholder']}"
+                                                 required="true"
+                                                 requiredMessage="#{msg['validation.phoneNumber.required']}"/>
+                                </div>
+                                <p:message for="phoneNumber" styleClass="field-error"/>
+                            </div>
+
                         </div>
                     </div>
 

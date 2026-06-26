@@ -29,6 +29,7 @@ public class RegisterBean implements Serializable {
     private String confirmPassword;
     private String cnp;
     private String registrationNumber;
+    private String phoneNumber;
     private String faculty;
     private String specialization;
     private Integer studyYear;
@@ -55,6 +56,7 @@ public class RegisterBean implements Serializable {
             user.setPassword(password);
             user.setCnp(cnp);
             user.setRegistrationNumber(registrationNumber);
+            user.setPhoneNumber(phoneNumber);
             user.setFaculty(faculty);
             user.setSpecialization(specialization);
             user.setStudyYear(studyYear);
