@@ -2,14 +2,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
     <aside class="sidebar">
+        <h:outputStylesheet library="css" name="common.css"/>
         <div class="sidebar-logo">
             <h1>StudyHub</h1>
             <span>Learning Platform</span>
         </div>
+
         <nav class="sidebar-nav">
             <div class="nav-section-label">Meniu principal</div>
             <h:outputLink value="#{request.contextPath}/main/for-you.xhtml"
@@ -41,6 +44,22 @@
                 Rapoarte
             </h:outputLink>
         </nav>
+
+        <!-- LANGUAGE SWITCHER -->
+        <div class="lang-switcher">
+            <h:form id="langForm">
+                <p:commandButton value="RO"
+                                 styleClass="lang-btn #{languageBean.language eq 'ro' ? 'active' : ''}"
+                                 action="#{languageBean.changeLanguage('ro')}"
+                                 ajax="false"/>
+                <span class="lang-divider">|</span>
+                <p:commandButton value="EN"
+                                 styleClass="lang-btn #{languageBean.language eq 'en' ? 'active' : ''}"
+                                 action="#{languageBean.changeLanguage('en')}"
+                                 ajax="false"/>
+            </h:form>
+        </div>
+
         <div class="sidebar-footer">
             <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
                           styleClass="sidebar-user">

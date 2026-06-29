@@ -12,13 +12,27 @@ public class LanguageBean implements Serializable {
 
     private String language = "ro";
 
-    public String changeLanguage(String lang) {
+//    public String changeLanguage(String lang) {
+//        this.language = lang;
+//
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        context.getViewRoot().setLocale(new Locale(lang));
+//
+//        return null;
+//    }
+
+    public void changeLanguage(String lang) {
         this.language = lang;
-
+        // redirect la pagina curentă
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getViewRoot().setLocale(new Locale(lang));
-
-        return null;
+        String currentPage = context.getViewRoot().getViewId();
+        try {
+            context.getExternalContext().redirect(
+                    context.getExternalContext().getRequestContextPath() + currentPage
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getLanguage() {

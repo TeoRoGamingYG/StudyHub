@@ -6,211 +6,209 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-    <title>Acasă - StudyHub</title>
-    <h:outputStylesheet library="css" name="for-you.css"/>
-</h:head>
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>#{msg['foryou.title']}</title>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+    </h:head>
 
-<h:body>
-    <div class="app">
+    <h:body>
+        <div class="app">
 
-        <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+            <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
 
-        <div class="main">
+            <div class="main">
 
-            <!-- TOPBAR -->
-            <header class="topbar">
-                <div class="topbar-left">
-                    <h2>Acasă</h2>
-                    <span>Bun venit înapoi 👋</span>
-                </div>
-                <div class="topbar-right">
-                    <div class="icon-btn">&#128276;<span class="dot"></span></div>
-                    <div class="icon-btn">&#128269;</div>
-                    <div style="position:relative;">
-                        <div class="profile-btn" onclick="toggleDropdown()">
-                            <div class="avatar">#{sessionBean.userInitials}</div>
-                            <span>#{sessionBean.firstName}</span>
-                            <span class="chevron">&#9660;</span>
-                        </div>
-                        <div class="dropdown" id="profileDropdown">
-                            <div class="dropdown-header">
-                                <div class="d-name">#{sessionBean.fullName}</div>
-                                <div class="d-email">#{sessionBean.email}</div>
+                <!-- TOPBAR -->
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>#{msg['foryou.topbar.title']}</h2>
+                        <span>#{msg['foryou.topbar.salute']}</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+                        <div class="icon-btn">&#128269;</div>
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128100; Profilul meu
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128197; Calendar
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128221; Note
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128202; Rapoarte
-                            </h:outputLink>
-                            <div class="dropdown-sep"></div>
-                            <h:outputLink value="#{request.contextPath}/logout"
-                                          styleClass="dropdown-item danger">
-                                &#128682; Deconectare
-                            </h:outputLink>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- CONTENT -->
-            <main class="content">
-
-                <!-- GREETING -->
-                <div class="greeting">
-                    <h3>Bună ziua, #{sessionBean.firstName}! ✨</h3>
-                    <p>Iată ce mai ai de făcut azi</p>
-                </div>
-
-                <!-- STATS -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="s-label">Cursuri active</div>
-                        <div class="s-value">4</div>
-                        <div class="s-sub">+1 față de luna trecută</div>
-                        <div class="s-icon">&#128218;</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="s-label">Ore studiate</div>
-                        <div class="s-value">#{sessionBean.totalHours}</div>
-                        <div class="s-sub">această săptămână</div>
-                        <div class="s-icon">&#9201;</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="s-label">Medie generală</div>
-                        <div class="s-value">#{sessionBean.averageGrade}</div>
-                        <div class="s-sub">peste toate cursurile</div>
-                        <div class="s-icon">&#128200;</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="s-label">Streak</div>
-                        <div class="s-value">#{sessionBean.streakDays}</div>
-                        <div class="s-sub">zile consecutive</div>
-                        <div class="s-icon">&#128293;</div>
-                    </div>
-                </div>
-
-                <!-- TWO COL -->
-                <div class="two-col">
-
-                    <!-- Cursuri în desfășurare -->
-                    <div class="card">
-                        <div class="card-title">
-                            Cursuri în desfășurare
-                            <h:outputLink value="#{request.contextPath}/pages/student/cursuri.xhtml">
-                                Vezi toate →
-                            </h:outputLink>
-                        </div>
-                        <div class="course-item">
-                            <div class="course-dot" style="background:rgba(108,99,255,0.15)">&#128187;</div>
-                            <div class="course-info">
-                                <div class="c-name">Programare Java</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:78%;background:#6c63ff;"></div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
                                 </div>
-                                <div class="c-meta">78% completat · 5 lecții rămase</div>
-                            </div>
-                            <div class="course-pct">78%</div>
-                        </div>
-                        <div class="course-item">
-                            <div class="course-dot" style="background:rgba(255,101,132,0.15)">&#129518;</div>
-                            <div class="course-info">
-                                <div class="c-name">Matematică Discretă</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:55%;background:#ff6584;"></div>
-                                </div>
-                                <div class="c-meta">55% completat · 9 lecții rămase</div>
-                            </div>
-                            <div class="course-pct">55%</div>
-                        </div>
-                        <div class="course-item">
-                            <div class="course-dot" style="background:rgba(67,233,123,0.15)">&#127760;</div>
-                            <div class="course-info">
-                                <div class="c-name">Rețele de Calculatoare</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:30%;background:#43e97b;"></div>
-                                </div>
-                                <div class="c-meta">30% completat · 14 lecții rămase</div>
-                            </div>
-                            <div class="course-pct">30%</div>
-                        </div>
-                        <div class="course-item">
-                            <div class="course-dot" style="background:rgba(255,193,7,0.15)">&#128452;</div>
-                            <div class="course-info">
-                                <div class="c-name">Baze de Date</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:90%;background:#ffc107;"></div>
-                                </div>
-                                <div class="c-meta">90% completat · 2 lecții rămase</div>
-                            </div>
-                            <div class="course-pct">90%</div>
-                        </div>
-                    </div>
-
-                    <!-- Activitate recentă -->
-                    <div class="card">
-                        <div class="card-title">Activitate recentă</div>
-                        <div class="activity-item">
-                            <div class="act-dot" style="background:#6c63ff"></div>
-                            <div>
-                                <div class="act-text">Ai finalizat lecția <strong>OOP în Java</strong></div>
-                                <div class="act-time">acum 2 ore</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="act-dot" style="background:#43e97b"></div>
-                            <div>
-                                <div class="act-text">Notă nouă: <strong>Teorema lui Bayes</strong></div>
-                                <div class="act-time">ieri, 18:30</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="act-dot" style="background:#ff6584"></div>
-                            <div>
-                                <div class="act-text">Test la <strong>Baze de Date</strong> — 92/100</div>
-                                <div class="act-time">ieri, 15:00</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="act-dot" style="background:#ffc107"></div>
-                            <div>
-                                <div class="act-text">Curs nou: <strong>Rețele de Calculatoare</strong></div>
-                                <div class="act-time">acum 3 zile</div>
+                                <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128100; #{msg['dp.profile']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128197; #{msg['dp.calendar']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128221; #{msg['dp.grades']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128202; #{msg['dp.reports']}
+                                </h:outputLink>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; #{msg['dp.disconnect']}
+                                </h:outputLink>
                             </div>
                         </div>
                     </div>
+                </header>
 
-                </div>
-            </main>
+                <!-- CONTENT -->
+                <main class="content">
+
+                    <!-- GREETING -->
+                    <div class="greeting">
+                        <h3>#{msg['foryou.greeting']}, #{sessionBean.firstName}! ✨</h3>
+                        <p>#{msg['foryou.due']}</p>
+                    </div>
+
+                    <!-- STATS -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="s-label">#{msg['foryou.active.courses']}</div>
+                            <div class="s-value">4</div>
+                            <div class="s-icon">&#128218;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">#{msg['foryou.study.hours']}</div>
+                            <div class="s-value">#{sessionBean.totalHours}</div>
+                            <div class="s-icon">&#9201;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">#{msg['foryou.general.avg']}</div>
+                            <div class="s-value">#{sessionBean.averageGrade}</div>
+                            <div class="s-icon">&#128200;</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="s-label">Streak</div>
+                            <div class="s-value">#{sessionBean.streakDays}</div>
+                            <div class="s-icon">&#128293;</div>
+                        </div>
+                    </div>
+
+                    <!-- TWO COL -->
+                    <div class="two-col">
+
+                        <!-- Cursuri în desfășurare -->
+                        <div class="card">
+                            <div class="card-title">
+                                Cursuri în desfășurare
+                                <h:outputLink value="#{request.contextPath}/pages/student/cursuri.xhtml">
+                                    Vezi toate →
+                                </h:outputLink>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(108,99,255,0.15)">&#128187;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Programare Java</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:78%;background:#6c63ff;"></div>
+                                    </div>
+                                    <div class="c-meta">78% completat · 5 lecții rămase</div>
+                                </div>
+                                <div class="course-pct">78%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(255,101,132,0.15)">&#129518;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Matematică Discretă</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:55%;background:#ff6584;"></div>
+                                    </div>
+                                    <div class="c-meta">55% completat · 9 lecții rămase</div>
+                                </div>
+                                <div class="course-pct">55%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(67,233,123,0.15)">&#127760;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Rețele de Calculatoare</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:30%;background:#43e97b;"></div>
+                                    </div>
+                                    <div class="c-meta">30% completat · 14 lecții rămase</div>
+                                </div>
+                                <div class="course-pct">30%</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-dot" style="background:rgba(255,193,7,0.15)">&#128452;</div>
+                                <div class="course-info">
+                                    <div class="c-name">Baze de Date</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width:90%;background:#ffc107;"></div>
+                                    </div>
+                                    <div class="c-meta">90% completat · 2 lecții rămase</div>
+                                </div>
+                                <div class="course-pct">90%</div>
+                            </div>
+                        </div>
+
+                        <!-- Activitate recentă -->
+                        <div class="card">
+                            <div class="card-title">Activitate recentă</div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#6c63ff"></div>
+                                <div>
+                                    <div class="act-text">Ai finalizat lecția <strong>OOP în Java</strong></div>
+                                    <div class="act-time">acum 2 ore</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#43e97b"></div>
+                                <div>
+                                    <div class="act-text">Notă nouă: <strong>Teorema lui Bayes</strong></div>
+                                    <div class="act-time">ieri, 18:30</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#ff6584"></div>
+                                <div>
+                                    <div class="act-text">Test la <strong>Baze de Date</strong> — 92/100</div>
+                                    <div class="act-time">ieri, 15:00</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="act-dot" style="background:#ffc107"></div>
+                                <div>
+                                    <div class="act-text">Curs nou: <strong>Rețele de Calculatoare</strong></div>
+                                    <div class="act-time">acum 3 zile</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+            </div>
         </div>
-    </div>
 
-    <script>
-        function toggleDropdown() {
-            document.getElementById('profileDropdown').classList.toggle('open');
-        }
-
-        function closeDropdown() {
-            document.getElementById('profileDropdown').classList.remove('open');
-        }
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
-                closeDropdown();
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
             }
-        });
-    </script>
 
-</h:body>
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+
+    </h:body>
+</f:view>
 </html>
