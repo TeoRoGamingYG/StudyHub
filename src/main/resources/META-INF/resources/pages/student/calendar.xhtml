@@ -2,87 +2,90 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
 
-<h:head>
-    <title>Calendar - StudyHub</title>
-    <h:outputStylesheet library="css" name="for-you.css"/>
-</h:head>
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>#{msg['calendar.title']}</title>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+    </h:head>
 
-<h:body>
-    <div class="app">
-        <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
 
-        <div class="main">
-            <!-- TOPBAR -->
-            <header class="topbar">
-                <div class="topbar-left">
-                    <h2>Calendar</h2>
-                    <span>Planifică-ți activitățile</span>
-                </div>
-                <div class="topbar-right">
-                    <div class="icon-btn">&#128276;<span class="dot"></span></div>
-                    <div class="icon-btn">&#128269;</div>
-                    <div style="position:relative;">
-                        <div class="profile-btn" onclick="toggleDropdown()">
-                            <div class="avatar">#{sessionBean.userInitials}</div>
-                            <span>#{sessionBean.firstName}</span>
-                            <span class="chevron">&#9660;</span>
-                        </div>
-                        <div class="dropdown" id="profileDropdown">
-                            <div class="dropdown-header">
-                                <div class="d-name">#{sessionBean.fullName}</div>
-                                <div class="d-email">#{sessionBean.email}</div>
+            <div class="main">
+                <!-- TOPBAR -->
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Calendar</h2>
+                        <span>#{msg['calendar.planning']}</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+                        <div class="icon-btn">&#128269;</div>
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
                             </div>
-                            <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128100; Profilul meu
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128197; Calendar
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128221; Note
-                            </h:outputLink>
-                            <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
-                                          styleClass="dropdown-item">
-                                &#128202; Rapoarte
-                            </h:outputLink>
-                            <div class="dropdown-sep"></div>
-                            <h:outputLink value="#{request.contextPath}/logout"
-                                          styleClass="dropdown-item danger">
-                                &#128682; Deconectare
-                            </h:outputLink>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128100; #{msg['dp.profile']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128197; #{msg['dp.calendar']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128221; #{msg['dp.grades']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128202; #{msg['dp.reports']}
+                                </h:outputLink>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; #{msg['dp.disconnect']}
+                                </h:outputLink>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </header>
-            <main class="content">
-                <div class="coming-soon">
-                    <div class="icon">&#128197;</div>
-                    <h3>Calendar</h3>
-                    <p>În dezvoltare</p>
-                </div>
-            </main>
+                </header>
+                <main class="content">
+                    <div class="coming-soon">
+                        <div class="icon">&#128197;</div>
+                        <h3>Calendar</h3>
+                        <p>În dezvoltare</p>
+                    </div>
+                </main>
+            </div>
         </div>
-    </div>
 
-    <script>
-        function toggleDropdown() {
-            document.getElementById('profileDropdown').classList.toggle('open');
-        }
-
-        function closeDropdown() {
-            document.getElementById('profileDropdown').classList.remove('open');
-        }
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
-                closeDropdown();
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
             }
-        });
-    </script>
-</h:body>
+
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
 </html>

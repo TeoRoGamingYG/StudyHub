@@ -14,28 +14,27 @@
     </h:head>
 
     <h:form id="dialogsForm">
-        <p:dialog header="Verifică emailul!"
+        <p:dialog header="#{msg['login.verify']}"
                   widgetVar="checkEmailDialog"
                   modal="true" closable="true" width="400">
             <p style="padding: 1rem;">
-                Ți-am trimis un email de verificare.
-                Apasă linkul din email pentru a-ți activa contul.
+                #{msg['login.email.sent']}
             </p>
         </p:dialog>
 
-        <p:dialog header="✓ Email verificat!"
+        <p:dialog header="#{msg['login.verified']}"
                   widgetVar="emailVerifiedDialog"
                   modal="true" closable="true" width="400">
             <p style="padding: 1rem;">
-                Contul tău a fost activat cu succes! Te poți loga acum.
+                #{msg['login.accepted']}
             </p>
         </p:dialog>
 
-        <p:dialog header="Eroare"
+        <p:dialog header="#{msg['login.error']}"
                   widgetVar="verifyErrorDialog"
                   modal="true" closable="true" width="400">
             <p style="padding: 1rem;">
-                Linkul de verificare este invalid sau a expirat.
+                #{msg['login.link.error']}
             </p>
         </p:dialog>
     </h:form>

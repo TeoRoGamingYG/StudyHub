@@ -1,0 +1,98 @@
+/* ============================================================
+   COMMON.CSS — StudyHub shared styles
+   ============================================================ */
+
+/* CSS Variables - folosite peste tot */
+:root {
+    --bg-base:        #0a0b0f;
+    --bg-panel:       #0f1117;
+    --bg-card:        #151821;
+    --bg-input:       #1a1e2a;
+    --bg-input-focus: #1f2436;
+
+    --border-subtle:  #1e2334;
+    --border-normal:  #2a3050;
+    --border-accent:  #4f6ef7;
+
+    --accent-primary: #4f6ef7;
+    --accent-glow:    rgba(79, 110, 247, 0.25);
+    --accent-hover:   #6b85f8;
+
+    --text-primary:   #eef0f8;
+    --text-secondary: #7c85a8;
+    --text-muted:     #454d6a;
+
+    --error:          #f75f6e;
+    --success:        #4fd1a5;
+
+    --radius-sm:  6px;
+    --radius-md:  12px;
+    --radius-lg:  20px;
+
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Language switcher */
+.lang-switcher {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.5rem 2rem 0;
+    align-items: center;
+}
+
+.lang-switcher form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 4px 8px;
+}
+
+.lang-btn,
+.lang-btn.ui-button {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+    box-shadow: none !important;
+}
+
+.lang-btn:hover,
+.lang-btn.ui-button:hover {
+    color: var(--text-primary) !important;
+    background: var(--bg-input) !important;
+}
+
+.lang-btn.active,
+.lang-btn.active.ui-button {
+    background: var(--accent-primary) !important;
+    color: #fff !important;
+}
+
+.lang-divider {
+    color: var(--border-normal);
+    font-size: 0.7rem;
+}
