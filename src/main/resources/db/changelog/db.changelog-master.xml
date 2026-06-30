@@ -30,6 +30,13 @@
     <!-- Updates -->
 
 <!--    <include relativeToChangelogFile="true" file="changes/updates/001-update-courses-teacher-constraints.xml"/>-->
-    <include relativeToChangelogFile="true" file="changes/updates/002-update-users-verifytoken.xml"/>
+<!--    <include relativeToChangelogFile="true" file="changes/updates/002-update-users-verifytoken.xml"/>-->
+<!--    <include relativeToChangelogFile="true" file="changes/updates/003-update-course.xml"/>-->
+<!--    <include relativeToChangelogFile="true" file="changes/updates/004-update-courses-cleanup.xml"/>-->
+
+    <!-- Data -->
+
+<!--    <include relativeToChangelogFile="true" file="changes/data/001-teachers-data.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/data/002-courses-data.xml"/>
 
 </databaseChangeLog>

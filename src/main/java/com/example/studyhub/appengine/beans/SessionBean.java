@@ -22,6 +22,7 @@ public class SessionBean implements Serializable {
     private String faculty;
     private String specialization;
     private Integer studyYear;
+    private Integer semester;
     private String userInitials;
     private Integer streakDays = 0;
     private BigDecimal totalHours = BigDecimal.ZERO;
@@ -37,6 +38,7 @@ public class SessionBean implements Serializable {
         this.faculty = user.getFaculty();
         this.specialization = user.getSpecialization();
         this.studyYear = user.getStudyYear();
+        this.semester = user.getSemester();
         this.userInitials = user.getAvatarInitials();
         this.streakDays = user.getStreakDays() != null ? user.getStreakDays() : 0;
         this.totalHours = user.getTotalHours() != null ? user.getTotalHours() : BigDecimal.ZERO;
@@ -57,6 +59,7 @@ public class SessionBean implements Serializable {
         faculty = null;
         specialization = null;
         studyYear = null;
+        semester = null;
         userInitials = null;
         streakDays = 0;
         totalHours = BigDecimal.ZERO;
