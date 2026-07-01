@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+    <changeSet author="dev.team" id="20260630-populate-courses-full">
+        <insert tableName='courses'>
+            <column name='name' value="Tehnici Web"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='1'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Arhitectura Sistemelor de Calcul"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='4'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Structuri Algebrice In Informatica"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='3'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Programarea Algoritmilor"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='5'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Calcul Diferential si Integral"/>
+            <column name='credits' valueNumeric='6'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='7'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Instrumente si Tehnici de Baza in Informatica"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='6'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Baze de Date"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='31'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Limbaje Formale si Automate"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='32'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Structuri de Date"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='14'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Geometrie si Algebra Liniara"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='33'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Logica Matematica si Computationala"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='34'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Programare Orientata pe Obiecte"/>
+            <column name='credits' valueNumeric='6'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='35'/>
+            <column name='study_year' valueNumeric='1'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Programare Functionala"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='6'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Probabilitati si Statistica"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='9'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Sisteme de Gestiune a Bazelor de Date"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='10'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Sisteme de Operare"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='11'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Algoritmi Fundamentali"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='12'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Dezvoltarea Aplicatiilor Web in Django"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='15'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Fundamentele Limbajelor de Programare"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='8'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Metode de Dezvoltare Software"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='36'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Programare Avansata pe Obiecte Java"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='5'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Algoritmi Avansati"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='19'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Inteligenta Artificiala"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='23'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Retele de Calculatoare"/>
+            <column name='credits' valueNumeric='4'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='29'/>
+            <column name='study_year' valueNumeric='2'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Dezvoltarea Jocurilor 3D in U5"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='15'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Blockchain"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='16'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Tehnici de Simulare"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='17'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Grafica pe Calculator"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='18'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Introducere in Programarea Jocurilor pe Calculator"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='19'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="AI in Educatie"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='12'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Sisteme Distribuite"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='20'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="DOD in Dezvoltarea Jocurilor"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='21'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="CoAplInVedArtif"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='22'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Prelucrarea Semnalelor"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='4'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="IntrReinfLearn"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='24'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Managementul Amenintarilor Cibernetice"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='25'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="BDNoSQLVectorDBs"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='37'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Introducere in Robotica"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='26'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="TehCloudCompAplML"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='27'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Implementarea Concurentei in Limbaje de Programare"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='28'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="CalcNumInfo"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='20'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Arhitectura Masinilor Inteligente"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='29'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="RPA UiPath"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='30'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Inginerie Software"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='13'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Calculabilitate si Complexitate"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='1'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='14'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Tehnologii New Media"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='8'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Testarea Sistemelor Software"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='37'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Introducere in Prelucrarea Limbajelor Naturale"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='38'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Tehnici de Optimizare"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='20'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Dezvoltarea Aplicatiilor Software Securizate"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='39'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="FunProiCompil"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='40'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Metode Formale in Ingineria Software"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='41'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Programarea Aplicatiilor de Simulare"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='42'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Protocoale Criptografice"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='43'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="SecAutomRetPtIntrep"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='25'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="IntrEvalPerfSistInfo"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='17'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Sistemul de Operare Linux"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='44'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Strategii de Planificare ale Echipelor de Roboti"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='45'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Introducere in Cercetare si BioInformatica"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='32'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+        <insert tableName='courses'>
+            <column name='name' value="Securitatea Sistemelor Informatice"/>
+            <column name='credits' valueNumeric='5'/>
+            <column name='semester' valueNumeric='2'/>
+            <column name='is_active' valueBoolean='true'/>
+            <column name='professor_id' valueNumeric='46'/>
+            <column name='study_year' valueNumeric='3'/>
+            <column name='specialization' value='Informatica'/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

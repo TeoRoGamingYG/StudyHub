@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260630-update-courses-add-studyyear-specialization">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="courses"/>
+
+            <not>
+                <columnExists tableName="courses" columnName="study_year"/>
+            </not>
+
+            <not>
+                <columnExists tableName="courses" columnName="specialization"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="courses">
+            <column name="study_year" type="INTEGER"/>
+            <column name="specialization" type="VARCHAR(100)"/>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

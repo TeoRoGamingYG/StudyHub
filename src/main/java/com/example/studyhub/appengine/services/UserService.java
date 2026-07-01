@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,10 @@ public class UserService {
         if (user.getLastName() != null && !user.getLastName().isEmpty())
             initials += user.getLastName().charAt(0);
         user.setAvatarInitials(initials.toUpperCase());
+
+        if (LocalDateTime.now().isAfter(LocalDateTime.of(LocalDateTime.now().getYear(), Month.OCTOBER, 1, 0, 0)) &&
+        LocalDateTime.now().isBefore(LocalDateTime.of(LocalDateTime.now().getYear(), Month.FEBRUARY, 22, 0, 0))) user.setSemester(1);
+        else user.setSemester(2);
 
         user.setCreatedAt(LocalDateTime.now());
         user.setActive(false);

@@ -62,10 +62,48 @@
                     </div>
                 </header>
                 <main class="content">
-                    <div class="coming-soon">
-                        <div class="icon">&#128218;</div>
+                    <div class="courses-header">
                         <h3>#{msg['course.sub']}</h3>
-                        <p>În dezvoltare</p>
+                        <span class="courses-meta">
+                            #{sessionBean.faculty} · #{sessionBean.specialization} ·
+                            #{msg['course.year']} #{sessionBean.studyYear} · #{msg['course.semester']} #{sessionBean.semester}
+                        </span>
+                    </div>
+
+                    <div class="courses-grid">
+                        <ui:repeat value="#{courseBean.courses}" var="course">
+                            <div class="course-card">
+                                <div class="course-card-header">
+                                    <div class="course-icon">&#128218;</div>
+                                    <div class="course-credits">#{course.credits} #{msg['course.credits']}</div>
+                                </div>
+                                <div class="course-card-body">
+                                    <h4 class="course-name">#{course.name}</h4>
+                                    <div class="course-info-row">
+                                        <span class="course-label">#{msg['course.teacher']}</span>
+                                        <span class="course-value">
+                                            #{course.professor != null ?
+                                            course.professor.fullName : 'Nealocat'}
+                                        </span>
+                                    </div>
+                                    <div class="course-info-row">
+                                        <span class="course-label">#{msg['course.semester']}</span>
+                                        <span class="course-value">#{course.semester}</span>
+                                    </div>
+                                </div>
+                                <div class="course-card-footer">
+                                    <span class="course-status active">#{msg['course.active']}</span>
+                                </div>
+                            </div>
+                        </ui:repeat>
+
+                        <h:panelGroup rendered="#{empty courseBean.courses}">
+                            <div class="coming-soon">
+                                <div class="icon">&#128218;</div>
+                                <h3>#{msg['course.feedback1']}</h3>
+                                <p>#{msg['course.feedback2']}</p>
+                            </div>
+                        </h:panelGroup>
                     </div>
                 </main>
             </div>
