@@ -21,14 +21,14 @@ public class CoursesEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(length = 10)
-    private String icon;
-
-    @Column(length = 20)
-    private String color;
+//    @Column(columnDefinition = "TEXT")
+//    private String description;
+//
+//    @Column(length = 10)
+//    private String icon;
+//
+    @Column(name = "specialization", length = 100)
+    private String specialization;
 
     @Column(nullable = false)
     private Integer credits;
@@ -36,8 +36,8 @@ public class CoursesEntity {
     @Column
     private Integer semester;
 
-    @Column(name = "max_students")
-    private Integer maxStudents;
+    @Column(name = "study_year")
+    private Integer studyYear;
 
     @Column(name = "is_active")
     private Boolean isActive = true;
