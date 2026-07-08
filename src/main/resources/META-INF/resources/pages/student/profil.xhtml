@@ -66,7 +66,7 @@
 
                             <h:form id="teamBtnForm">
                                 <p:commandButton
-                                        value="&#127775; Vino în echipa noastră"
+                                        value="&#127775; #{msg['profile.team']}"
                                         styleClass="join-team-btn"
                                         actionListener="#{teamAppBean.init()}"
                                         oncomplete="PF('teamDialog').show()"
@@ -93,7 +93,7 @@
                             </div>
                             <div class="info-row">
                                 <span class="label">#{msg['profile.study.year']}</span>
-                                <span class="value">Anul #{sessionBean.studyYear}</span>
+                                <span class="value">#{msg['profile.year']} #{sessionBean.studyYear}</span>
                             </div>
                             <div class="info-row">
                                 <span class="label">#{msg['profile.specialization']}</span>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="info-row">
                                 <span class="label">Streak</span>
-                                <span class="value" style="color:#ffc107">🔥 #{sessionBean.streakDays} zile</span>
+                                <span class="value" style="color:#ffc107">🔥 #{sessionBean.streakDays} #{msg['profile.days']}</span>
                             </div>
                             <div class="info-row">
                                 <span class="label">#{msg['profile.credit.points']}</span>
@@ -139,56 +139,51 @@
                 <div class="team-dialog-inner">
                     <div class="team-dialog-header">
                         <div class="team-dialog-icon">&#127775;</div>
-                        <h3>Vino în echipa StudyHub</h3>
-                        <p>
-                            Ești pasionat de educație și vrei să ajuți alți studenți?
-                            Ca contributor StudyHub poți adăuga materiale de studiu,
-                            rezumate, exerciții și multe altele. Completează formularul
-                            de mai jos și te vom contacta în cel mai scurt timp!
-                        </p>
+                        <h3>#{msg['profile.form.header']}</h3>
+                        <p>${msg['profile.form.p']}</p>
                     </div>
 
                     <div class="team-form">
                         <div class="team-field">
-                            <label class="team-label">Nume complet</label>
+                            <label class="team-label">#{msg['profile.fullname']}</label>
                             <p:inputText value="#{teamAppBean.fullName}"
                                          styleClass="team-input"
-                                         placeholder="Numele tău complet"
+                                         placeholder="#{msg['profile.fullname.placeholder']}"
                                          required="true"/>
                         </div>
 
                         <div class="team-field">
-                            <label class="team-label">An de studiu</label>
+                            <label class="team-label">#{msg['profile.study.year']}</label>
                             <p:inputText value="#{teamAppBean.studyYear}"
                                          styleClass="team-input"
-                                         placeholder="ex: Anul 2"/>
+                                         placeholder="#{msg['profile.study.year.placeholder']}"/>
                         </div>
 
                         <div class="team-field">
-                            <label class="team-label">Specializare</label>
+                            <label class="team-label">#{msg['profile.specialization']}</label>
                             <p:inputText value="#{teamAppBean.specialization}"
                                          styleClass="team-input"
-                                         placeholder="ex: Informatică"/>
+                                         placeholder="#{msg['profile.specialization.placeholder']}"/>
                         </div>
 
                         <div class="team-field">
-                            <label class="team-label">Spune-ne ceva despre tine</label>
+                            <label class="team-label">#{msg['profile.form.mess']}</label>
                             <p:inputTextarea value="#{teamAppBean.message}"
                                              styleClass="team-textarea"
-                                             placeholder="De ce vrei să te alături echipei? Ce poți contribui?"
+                                             placeholder="#{msg['profile.form.mess.placeholder']}"
                                              rows="4"
                                              required="true"/>
                         </div>
 
                         <h:panelGroup rendered="#{teamAppBean.error}">
                             <div class="team-error">
-                                A apărut o eroare. Te rugăm să încerci din nou.
+                                #{msg['profile.form.error']}
                             </div>
                         </h:panelGroup>
 
                         <div class="team-actions">
                             <p:commandButton
-                                    value="Trimite cererea"
+                                    value="#{msg['profile.form.send']}"
                                     styleClass="team-submit-btn"
                                     action="#{teamAppBean.submit()}"
                                     update="teamDialogForm successDialogForm"
@@ -196,7 +191,7 @@
                                     ajax="true"
                                     process="teamDialogForm"/>
                             <p:commandButton
-                                    value="Anulează"
+                                    value="#{msg['profile.form.cancel']}"
                                     styleClass="team-cancel-btn"
                                     onclick="PF('teamDialog').hide(); return false;"
                                     ajax="false"/>
@@ -217,14 +212,14 @@
                 <div class="team-dialog-inner">
                     <div class="team-success">
                         <div class="team-success-icon">&#10003;</div>
-                        <h3>Cerere trimisă!</h3>
+                        <h3>#{msg['profile.form.sent']}</h3>
                         <p>
-                            Îți mulțumim pentru interes, <strong>#{teamAppBean.fullName}</strong>!
-                            Am primit cererea ta și te vom contacta în curând la adresa
+                            #{msg['profile.form.accept1']}, <strong>#{teamAppBean.fullName}</strong>!
+                            #{msg['profile.form.accept2']}
                             <strong>#{sessionBean.email}</strong>.
                         </p>
                         <p:commandButton
-                                value="Închide"
+                                value="#{msg['profile.form.close']}"
                                 styleClass="team-submit-btn"
                                 onclick="PF('successDialog').hide(); return false;"
                                 ajax="false"/>
