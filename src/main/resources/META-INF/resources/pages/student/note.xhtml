@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
@@ -16,7 +17,6 @@
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
 
             <div class="main">
-                <!-- TOPBAR -->
                 <header class="topbar">
                     <div class="topbar-left">
                         <h2>#{msg['grade.sub']}</h2>
@@ -37,36 +37,145 @@
                                     <div class="d-email">#{sessionBean.email}</div>
                                 </div>
                                 <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128100; #{msg['dp.profile']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128100; #{msg['dp.profile']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128197; #{msg['dp.calendar']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128197; #{msg['dp.calendar']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128221; #{msg['dp.grades']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128221; #{msg['dp.grades']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128202; #{msg['dp.reports']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128202; #{msg['dp.reports']}</h:outputLink>
                                 <div class="dropdown-sep"></div>
                                 <h:outputLink value="#{request.contextPath}/logout"
-                                              styleClass="dropdown-item danger">
-                                    &#128682; #{msg['dp.disconnect']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item danger">&#128682; #{msg['dp.disconnect']}</h:outputLink>
                             </div>
                         </div>
                     </div>
                 </header>
+
                 <main class="content">
-                    <div class="coming-soon">
-                        <div class="icon">&#128221;</div>
-                        <h3>#{msg['grade.sub']}</h3>
-                        <p>În dezvoltare</p>
-                    </div>
+
+                    <!-- SUMMARY CARDS -->
+                    <p:outputPanel id="summarySection" styleClass="grades-summary">
+                        <div class="summary-card">
+                            <div class="s-icon">&#127775;</div>
+                            <div class="s-body">
+                                <div class="s-label">Medie generală</div>
+                                <div class="s-value">#{gradeBean.averageFormatted}</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="s-icon">&#127942;</div>
+                            <div class="s-body">
+                                <div class="s-label">Credite acumulate</div>
+                                <div class="s-value">#{gradeBean.totalCredits}</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="s-icon">&#9889;</div>
+                            <div class="s-body">
+                                <div class="s-label">Puncte credit</div>
+                                <div class="s-value">#{gradeBean.totalCreditPoints}</div>
+                            </div>
+                        </div>
+                    </p:outputPanel>
+
+                    <!-- FILTRE -->
+                    <h:form id="filterForm" styleClass="grades-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">An de studiu</label>
+                            <div class="filter-buttons">
+                                <ui:repeat value="#{gradeBean.availableYears}" var="yr">
+                                    <p:commandButton
+                                            value="Anul #{yr}"
+                                            styleClass="filter-btn #{gradeBean.selectedYear == yr ? 'active' : ''}"
+                                            actionListener="#{gradeBean.setSelectedYear(yr)}"
+                                            action="#{gradeBean.loadGrades()}"
+                                            update="filterForm summarySection gradesTable"
+                                            ajax="true"
+                                            process="@form"/>
+                                </ui:repeat>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">Semestru</label>
+                            <div class="filter-buttons">
+                                <p:commandButton
+                                        value="Ambele"
+                                        styleClass="filter-btn #{gradeBean.selectedSemester == 0 ? 'active' : ''}"
+                                        actionListener="#{gradeBean.setSelectedSemester(0)}"
+                                        action="#{gradeBean.loadGrades()}"
+                                        update="filterForm summarySection gradesTable"
+                                        ajax="true"
+                                        process="@form"/>
+                                <p:commandButton
+                                        value="Semestrul 1"
+                                        styleClass="filter-btn #{gradeBean.selectedSemester == 1 ? 'active' : ''}"
+                                        actionListener="#{gradeBean.setSelectedSemester(1)}"
+                                        action="#{gradeBean.loadGrades()}"
+                                        update="filterForm summarySection gradesTable"
+                                        ajax="true"
+                                        process="@form"/>
+                                <p:commandButton
+                                        value="Semestrul 2"
+                                        styleClass="filter-btn #{gradeBean.selectedSemester == 2 ? 'active' : ''}"
+                                        actionListener="#{gradeBean.setSelectedSemester(2)}"
+                                        action="#{gradeBean.loadGrades()}"
+                                        update="filterForm summarySection gradesTable"
+                                        ajax="true"
+                                        process="@form"/>
+                            </div>
+                        </div>
+                    </h:form>
+
+                    <!-- TABEL NOTE -->
+                    <p:outputPanel id="gradesTable" styleClass="grades-table-wrap">
+                        <h:panelGroup rendered="#{not empty gradeBean.grades}">
+                            <table class="grades-table">
+                                <thead>
+                                <tr>
+                                    <th>Materie</th>
+                                    <th>An</th>
+                                    <th>Semestru</th>
+                                    <th>Credite</th>
+                                    <th>Notă</th>
+                                    <th>Puncte credit</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{gradeBean.grades}" var="grade">
+                                    <tr class="#{gradeBean.isPromoted(grade) ? '' : 'row-fail'}">
+                                        <td class="course-name-cell">#{grade.course.name}</td>
+                                        <td>Anul #{grade.course.studyYear}</td>
+                                        <td>Semestrul #{grade.course.semester}</td>
+                                        <td>#{grade.course.credits}</td>
+                                        <td>
+                                <span class="grade-badge #{gradeBean.isPromoted(grade) ? 'pass' : 'fail'}">
+                                    #{grade.grade}
+                                </span>
+                                        </td>
+                                        <td>#{gradeBean.getCreditPointsForGrade(grade)}</td>
+                                        <td>
+                                <span class="status-badge #{gradeBean.isPromoted(grade) ? 'promoted' : 'failed'}">
+                                    #{gradeBean.isPromoted(grade) ? 'Promovat' : 'Nepromovat'}
+                                </span>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{empty gradeBean.grades}">
+                            <div class="coming-soon">
+                                <div class="icon">&#128221;</div>
+                                <h3>Nicio notă găsită</h3>
+                                <p>Nu există note pentru filtrele selectate.</p>
+                            </div>
+                        </h:panelGroup>
+                    </p:outputPanel>
+
                 </main>
             </div>
         </div>
@@ -75,11 +184,9 @@
             function toggleDropdown() {
                 document.getElementById('profileDropdown').classList.toggle('open');
             }
-
             function closeDropdown() {
                 document.getElementById('profileDropdown').classList.remove('open');
             }
-
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
                     closeDropdown();

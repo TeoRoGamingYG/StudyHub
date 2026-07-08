@@ -37,6 +37,7 @@
     <!-- Data -->
 
 <!--    <include relativeToChangelogFile="true" file="changes/data/001-teachers-data.xml"/>-->
-    <include relativeToChangelogFile="true" file="changes/data/002-courses-data.xml"/>
+<!--    <include relativeToChangelogFile="true" file="changes/data/002-courses-data.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/data/003-grades-data.xml"/>
 
 </databaseChangeLog>
