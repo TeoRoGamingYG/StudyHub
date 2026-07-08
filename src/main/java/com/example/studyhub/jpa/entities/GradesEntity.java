@@ -3,7 +3,6 @@ package com.example.studyhub.jpa.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,27 +15,27 @@ public class GradesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_grades_id")
-    @SequenceGenerator(name = "seq_grades_id", sequenceName = "seq_grades_id", allocationSize = 1)
+    @SequenceGenerator(
+            name = "seq_grades_id",
+            sequenceName = "seq_grades_id",
+            allocationSize = 1)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     private UsersEntity student;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     private CoursesEntity course;
 
-    @Column(nullable = false, precision = 4, scale = 2)
-    private BigDecimal grade;
+    @Column(name = "grade", nullable = false)
+    private Integer grade;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "graded_by")
-    private UsersEntity gradedBy;
+    private TeachersEntity gradedBy;
 
     @Column(name = "graded_at")
-    private LocalDateTime gradedAt = LocalDateTime.now();
-
-    @Column(columnDefinition = "TEXT")
-    private String notes;
+    private LocalDateTime gradedAt;
 }

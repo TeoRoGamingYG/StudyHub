@@ -48,6 +48,20 @@ public class RegisterBean implements Serializable {
             return null;
         }
 
+        if (password.length() < 8) {
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Parola trebuie să aibă minim 8 caractere", null));
+            return null;
+        }
+
+        if (email == null || !email.contains("@")) {
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
+                    "Email invalid", null));
+            return null;
+        }
+
         try {
             UsersEntity user = new UsersEntity();
             user.setFirstName(firstName);

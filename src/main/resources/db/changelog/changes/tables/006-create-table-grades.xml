@@ -23,12 +23,11 @@
             <column name="course_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="grade" type="DECIMAL(4,2)">
+            <column name="grade" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="graded_by" type="BIGINT"/>
             <column name="graded_at" type="TIMESTAMP" defaultValueComputed="NOW()"/>
-            <column name="notes" type="TEXT"/>
         </createTable>
 
         <addForeignKeyConstraint
@@ -50,7 +49,7 @@
         <addForeignKeyConstraint
                 baseTableName="grades"
                 baseColumnNames="graded_by"
-                referencedTableName="users"
+                referencedTableName="teachers"
                 referencedColumnNames="id"
                 constraintName="fk_grades_professor"
                 onDelete="SET NULL"/>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260707-populate-grades">
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="1"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="2"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="3"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="4"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="5"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="7"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="6"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="6"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="7"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="31"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="8"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="32"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="9"/>
+            <column name="grade" valueNumeric="7"/>
+            <column name="graded_by" valueNumeric="14"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="10"/>
+            <column name="grade" valueNumeric="8"/>
+            <column name="graded_by" valueNumeric="33"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="11"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="34"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="12"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="35"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="13"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="6"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="14"/>
+            <column name="grade" valueNumeric="8"/>
+            <column name="graded_by" valueNumeric="9"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="15"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="10"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="16"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="11"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="17"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="12"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="18"/>
+            <column name="grade" valueNumeric="10"/>
+            <column name="graded_by" valueNumeric="15"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="19"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="8"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="20"/>
+            <column name="grade" valueNumeric="8"/>
+            <column name="graded_by" valueNumeric="36"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="21"/>
+            <column name="grade" valueNumeric="8"/>
+            <column name="graded_by" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="22"/>
+            <column name="grade" valueNumeric="7"/>
+            <column name="graded_by" valueNumeric="19"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="23"/>
+            <column name="grade" valueNumeric="5"/>
+            <column name="graded_by" valueNumeric="23"/>
+        </insert>
+
+        <insert tableName="grades">
+            <column name="student_id" valueNumeric="7"/>
+            <column name="course_id" valueNumeric="24"/>
+            <column name="grade" valueNumeric="6"/>
+            <column name="graded_by" valueNumeric="29"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

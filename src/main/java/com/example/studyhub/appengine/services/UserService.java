@@ -22,7 +22,19 @@ public class UserService {
     @Transactional
     public UsersEntity register(UsersEntity user) {
         if (usersRepository.findByEmail(user.getEmail()) != null) {
-            throw new IllegalArgumentException("Email deja folosit");
+            throw new IllegalArgumentException("Email-ul este deja folosit");
+        }
+
+        if (usersRepository.findByCnp(user.getCnp()) != null) {
+            throw new IllegalArgumentException("CNP-ul este deja înregistrat");
+        }
+
+        if (usersRepository.findByRegistrationNumber(user.getRegistrationNumber()) != null) {
+            throw new IllegalArgumentException("Numărul matricol este deja înregistrat");
+        }
+
+        if (user.getPassword() == null || user.getPassword().length() < 8) {
+            throw new IllegalArgumentException("Parola trebuie să aibă minim 8 caractere");
         }
 
         // Encode parola
