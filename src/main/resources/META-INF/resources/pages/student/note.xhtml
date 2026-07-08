@@ -59,21 +59,21 @@
                         <div class="summary-card">
                             <div class="s-icon">&#127775;</div>
                             <div class="s-body">
-                                <div class="s-label">Medie generală</div>
+                                <div class="s-label">#{msg['grade.average']}</div>
                                 <div class="s-value">#{gradeBean.averageFormatted}</div>
                             </div>
                         </div>
                         <div class="summary-card">
                             <div class="s-icon">&#127942;</div>
                             <div class="s-body">
-                                <div class="s-label">Credite acumulate</div>
+                                <div class="s-label">#{msg['grade.credits']}</div>
                                 <div class="s-value">#{gradeBean.totalCredits}</div>
                             </div>
                         </div>
                         <div class="summary-card">
                             <div class="s-icon">&#9889;</div>
                             <div class="s-body">
-                                <div class="s-label">Puncte credit</div>
+                                <div class="s-label">#{msg['grade.creditp']}</div>
                                 <div class="s-value">#{gradeBean.totalCreditPoints}</div>
                             </div>
                         </div>
@@ -82,11 +82,11 @@
                     <!-- FILTRE -->
                     <h:form id="filterForm" styleClass="grades-filters">
                         <div class="filter-group">
-                            <label class="filter-label">An de studiu</label>
+                            <label class="filter-label">#{msg['grade.studyyear']}</label>
                             <div class="filter-buttons">
                                 <ui:repeat value="#{gradeBean.availableYears}" var="yr">
                                     <p:commandButton
-                                            value="Anul #{yr}"
+                                            value="#{msg['grade.table.year']} #{yr}"
                                             styleClass="filter-btn #{gradeBean.selectedYear == yr ? 'active' : ''}"
                                             actionListener="#{gradeBean.setSelectedYear(yr)}"
                                             action="#{gradeBean.loadGrades()}"
@@ -98,10 +98,10 @@
                         </div>
 
                         <div class="filter-group">
-                            <label class="filter-label">Semestru</label>
+                            <label class="filter-label">#{msg['grade.semester']}</label>
                             <div class="filter-buttons">
                                 <p:commandButton
-                                        value="Ambele"
+                                        value="#{msg['grade.commb.both']}"
                                         styleClass="filter-btn #{gradeBean.selectedSemester == 0 ? 'active' : ''}"
                                         actionListener="#{gradeBean.setSelectedSemester(0)}"
                                         action="#{gradeBean.loadGrades()}"
@@ -109,7 +109,7 @@
                                         ajax="true"
                                         process="@form"/>
                                 <p:commandButton
-                                        value="Semestrul 1"
+                                        value="#{msg['grade.commb.sem1']}"
                                         styleClass="filter-btn #{gradeBean.selectedSemester == 1 ? 'active' : ''}"
                                         actionListener="#{gradeBean.setSelectedSemester(1)}"
                                         action="#{gradeBean.loadGrades()}"
@@ -117,7 +117,7 @@
                                         ajax="true"
                                         process="@form"/>
                                 <p:commandButton
-                                        value="Semestrul 2"
+                                        value="#{msg['grade.commb.sem2']}"
                                         styleClass="filter-btn #{gradeBean.selectedSemester == 2 ? 'active' : ''}"
                                         actionListener="#{gradeBean.setSelectedSemester(2)}"
                                         action="#{gradeBean.loadGrades()}"
@@ -134,21 +134,21 @@
                             <table class="grades-table">
                                 <thead>
                                 <tr>
-                                    <th>Materie</th>
-                                    <th>An</th>
-                                    <th>Semestru</th>
-                                    <th>Credite</th>
-                                    <th>Notă</th>
-                                    <th>Puncte credit</th>
-                                    <th>Status</th>
+                                    <th>#{msg['grade.table.course']}</th>
+                                    <th>#{msg['grade.table.year']}</th>
+                                    <th>#{msg['grade.table.semester']}</th>
+                                    <th>#{msg['grade.table.credits']}</th>
+                                    <th>#{msg['grade.table.grade']}</th>
+                                    <th>#{msg['grade.table.creditp']}</th>
+                                    <th>#{msg['grade.table.status']}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <ui:repeat value="#{gradeBean.grades}" var="grade">
                                     <tr class="#{gradeBean.isPromoted(grade) ? '' : 'row-fail'}">
                                         <td class="course-name-cell">#{grade.course.name}</td>
-                                        <td>Anul #{grade.course.studyYear}</td>
-                                        <td>Semestrul #{grade.course.semester}</td>
+                                        <td>#{msg['grade.table.year']} #{grade.course.studyYear}</td>
+                                        <td>#{msg['grade.table.semester']} #{grade.course.semester}</td>
                                         <td>#{grade.course.credits}</td>
                                         <td>
                                 <span class="grade-badge #{gradeBean.isPromoted(grade) ? 'pass' : 'fail'}">
@@ -158,7 +158,7 @@
                                         <td>#{gradeBean.getCreditPointsForGrade(grade)}</td>
                                         <td>
                                 <span class="status-badge #{gradeBean.isPromoted(grade) ? 'promoted' : 'failed'}">
-                                    #{gradeBean.isPromoted(grade) ? 'Promovat' : 'Nepromovat'}
+                                    #{gradeBean.isPromoted(grade) ? 'Promoted' : 'Failed'}
                                 </span>
                                         </td>
                                     </tr>
@@ -170,8 +170,8 @@
                         <h:panelGroup rendered="#{empty gradeBean.grades}">
                             <div class="coming-soon">
                                 <div class="icon">&#128221;</div>
-                                <h3>Nicio notă găsită</h3>
-                                <p>Nu există note pentru filtrele selectate.</p>
+                                <h3>#{msg['grade.nograde']}</h3>
+                                <p>#{msg['grade.nograde.filter']}</p>
                             </div>
                         </h:panelGroup>
                     </p:outputPanel>

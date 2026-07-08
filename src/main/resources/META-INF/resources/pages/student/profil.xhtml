@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
@@ -16,7 +17,6 @@
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
 
             <div class="main">
-                <!-- TOPBAR -->
                 <header class="topbar">
                     <div class="topbar-left">
                         <h2>#{msg['profile.sub']}</h2>
@@ -37,30 +37,21 @@
                                     <div class="d-email">#{sessionBean.email}</div>
                                 </div>
                                 <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128100; #{msg['dp.profile']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128100; #{msg['dp.profile']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128197; #{msg['dp.calendar']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128197; #{msg['dp.calendar']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128221; #{msg['dp.grades']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128221; #{msg['dp.grades']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128202; #{msg['dp.reports']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128202; #{msg['dp.reports']}</h:outputLink>
                                 <div class="dropdown-sep"></div>
                                 <h:outputLink value="#{request.contextPath}/logout"
-                                              styleClass="dropdown-item danger">
-                                    &#128682; #{msg['dp.disconnect']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item danger">&#128682; #{msg['dp.disconnect']}</h:outputLink>
                             </div>
                         </div>
                     </div>
                 </header>
+
                 <main class="content">
                     <div class="profile-hero">
                         <div class="profile-cover"></div>
@@ -72,9 +63,19 @@
                                 <h2>#{sessionBean.fullName}</h2>
                                 <p>#{sessionBean.email} · #{sessionBean.faculty}</p>
                             </div>
-                            <button class="edit-btn">✎ #{msg['profile.edit']}</button>
+
+                            <h:form id="teamBtnForm">
+                                <p:commandButton
+                                        value="&#127775; Vino în echipa noastră"
+                                        styleClass="join-team-btn"
+                                        actionListener="#{teamAppBean.init()}"
+                                        oncomplete="PF('teamDialog').show()"
+                                        update="teamDialogForm"
+                                        ajax="true"/>
+                            </h:form>
                         </div>
                     </div>
+
                     <div class="profile-grid">
                         <div class="info-card">
                             <h4>#{msg['profile.personal.info']}</h4>
@@ -127,15 +128,118 @@
             </div>
         </div>
 
+        <h:form id="teamDialogForm">
+            <p:dialog widgetVar="teamDialog"
+                      modal="true"
+                      closable="true"
+                      closeOnEscape="true"
+                      width="560"
+                      styleClass="team-dialog">
+
+                <div class="team-dialog-inner">
+                    <div class="team-dialog-header">
+                        <div class="team-dialog-icon">&#127775;</div>
+                        <h3>Vino în echipa StudyHub</h3>
+                        <p>
+                            Ești pasionat de educație și vrei să ajuți alți studenți?
+                            Ca contributor StudyHub poți adăuga materiale de studiu,
+                            rezumate, exerciții și multe altele. Completează formularul
+                            de mai jos și te vom contacta în cel mai scurt timp!
+                        </p>
+                    </div>
+
+                    <div class="team-form">
+                        <div class="team-field">
+                            <label class="team-label">Nume complet</label>
+                            <p:inputText value="#{teamAppBean.fullName}"
+                                         styleClass="team-input"
+                                         placeholder="Numele tău complet"
+                                         required="true"/>
+                        </div>
+
+                        <div class="team-field">
+                            <label class="team-label">An de studiu</label>
+                            <p:inputText value="#{teamAppBean.studyYear}"
+                                         styleClass="team-input"
+                                         placeholder="ex: Anul 2"/>
+                        </div>
+
+                        <div class="team-field">
+                            <label class="team-label">Specializare</label>
+                            <p:inputText value="#{teamAppBean.specialization}"
+                                         styleClass="team-input"
+                                         placeholder="ex: Informatică"/>
+                        </div>
+
+                        <div class="team-field">
+                            <label class="team-label">Spune-ne ceva despre tine</label>
+                            <p:inputTextarea value="#{teamAppBean.message}"
+                                             styleClass="team-textarea"
+                                             placeholder="De ce vrei să te alături echipei? Ce poți contribui?"
+                                             rows="4"
+                                             required="true"/>
+                        </div>
+
+                        <h:panelGroup rendered="#{teamAppBean.error}">
+                            <div class="team-error">
+                                A apărut o eroare. Te rugăm să încerci din nou.
+                            </div>
+                        </h:panelGroup>
+
+                        <div class="team-actions">
+                            <p:commandButton
+                                    value="Trimite cererea"
+                                    styleClass="team-submit-btn"
+                                    action="#{teamAppBean.submit()}"
+                                    update="teamDialogForm successDialogForm"
+                                    oncomplete="if (!args.validationFailed &amp;&amp; !#{teamAppBean.error}) { PF('teamDialog').hide(); PF('successDialog').show(); }"
+                                    ajax="true"
+                                    process="teamDialogForm"/>
+                            <p:commandButton
+                                    value="Anulează"
+                                    styleClass="team-cancel-btn"
+                                    onclick="PF('teamDialog').hide(); return false;"
+                                    ajax="false"/>
+                        </div>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="successDialogForm">
+            <p:dialog widgetVar="successDialog"
+                      modal="true"
+                      closable="true"
+                      closeOnEscape="true"
+                      width="500"
+                      styleClass="team-dialog">
+
+                <div class="team-dialog-inner">
+                    <div class="team-success">
+                        <div class="team-success-icon">&#10003;</div>
+                        <h3>Cerere trimisă!</h3>
+                        <p>
+                            Îți mulțumim pentru interes, <strong>#{teamAppBean.fullName}</strong>!
+                            Am primit cererea ta și te vom contacta în curând la adresa
+                            <strong>#{sessionBean.email}</strong>.
+                        </p>
+                        <p:commandButton
+                                value="Închide"
+                                styleClass="team-submit-btn"
+                                onclick="PF('successDialog').hide(); return false;"
+                                ajax="false"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+
         <script>
             function toggleDropdown() {
                 document.getElementById('profileDropdown').classList.toggle('open');
             }
-
             function closeDropdown() {
                 document.getElementById('profileDropdown').classList.remove('open');
             }
-
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
                     closeDropdown();
