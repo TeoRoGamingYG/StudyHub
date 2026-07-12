@@ -3,12 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
-        <title>#{msg['calendar.title']}</title>
+        <title>Calendar - StudyHub</title>
         <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="calendar.css"/>
     </h:head>
 
     <h:body>
@@ -16,7 +18,6 @@
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
 
             <div class="main">
-                <!-- TOPBAR -->
                 <header class="topbar">
                     <div class="topbar-left">
                         <h2>Calendar</h2>
@@ -37,36 +38,198 @@
                                     <div class="d-email">#{sessionBean.email}</div>
                                 </div>
                                 <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128100; #{msg['dp.profile']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128100; #{msg['dp.profile']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128197; #{msg['dp.calendar']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128197; #{msg['dp.calendar']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128221; #{msg['dp.grades']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128221; #{msg['dp.grades']}</h:outputLink>
                                 <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
-                                              styleClass="dropdown-item">
-                                    &#128202; #{msg['dp.reports']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item">&#128202; #{msg['dp.reports']}</h:outputLink>
                                 <div class="dropdown-sep"></div>
                                 <h:outputLink value="#{request.contextPath}/logout"
-                                              styleClass="dropdown-item danger">
-                                    &#128682; #{msg['dp.disconnect']}
-                                </h:outputLink>
+                                              styleClass="dropdown-item danger">&#128682; #{msg['dp.disconnect']}</h:outputLink>
                             </div>
                         </div>
                     </div>
                 </header>
+
                 <main class="content">
-                    <div class="coming-soon">
-                        <div class="icon">&#128197;</div>
-                        <h3>Calendar</h3>
-                        <p>În dezvoltare</p>
-                    </div>
+                    <h:form id="calendarForm">
+
+                        <!-- Buton adaugă eveniment -->
+                        <div class="calendar-toolbar">
+                            <p:commandButton
+                                    value="+ Eveniment nou"
+                                    styleClass="add-event-btn"
+                                    actionListener="#{calendarBean.resetForm()}"
+                                    oncomplete="PF('addEventDialog').show()"
+                                    update="addEventForm"
+                                    ajax="true"/>
+                        </div>
+
+                        <!-- CALENDAR -->
+                        <div class="calendar-wrap">
+                            <p:schedule id="schedule"
+                                        value="#{calendarBean.scheduleModel}"
+                                        widgetVar="schedule"
+                                        styleClass="studyhub-calendar"
+                                        locale="ro"
+                                        initialView="dayGridMonth"
+                                        leftHeaderTemplate="prev,next today"
+                                        centerHeaderTemplate="title"
+                                        rightHeaderTemplate="dayGridMonth,timeGridWeek,timeGridDay"
+                                        timeZone="Europe/Bucharest"
+                                        height="parent">
+                                <p:ajax event="eventSelect"
+                                        listener="#{calendarBean.onEventSelect}"
+                                        update="eventDetailForm"
+                                        oncomplete="PF('eventDetailDialog').show()"/>
+                                <p:ajax event="dateSelect"
+                                        listener="#{calendarBean.onDateSelect}"
+                                        update="addEventForm"
+                                        oncomplete="PF('addEventDialog').show()"/>
+                            </p:schedule>
+                        </div>
+                    </h:form>
+
+                    <!-- DIALOG: ADAUGĂ EVENIMENT -->
+                    <h:form id="addEventForm">
+                        <p:dialog widgetVar="addEventDialog"
+                                  header="Eveniment nou"
+                                  modal="true"
+                                  closable="true"
+                                  width="480"
+                                  styleClass="cal-dialog">
+
+                            <div class="cal-form">
+                                <div class="cal-field">
+                                    <label class="cal-label">Titlu *</label>
+                                    <p:inputText value="#{calendarBean.eventTitle}"
+                                                 styleClass="cal-input"
+                                                 placeholder="ex: Examen Matematică"
+                                                 required="true"/>
+                                </div>
+
+                                <div class="cal-field">
+                                    <label class="cal-label">Descriere</label>
+                                    <p:inputTextarea value="#{calendarBean.eventDescription}"
+                                                     styleClass="cal-textarea"
+                                                     placeholder="Detalii despre eveniment..."
+                                                     rows="3"/>
+                                </div>
+
+                                <div class="cal-row">
+                                    <div class="cal-field">
+                                        <label class="cal-label">Data început *</label>
+                                        <p:datePicker value="#{calendarBean.eventStart}"
+                                                      styleClass="cal-input cal-input-sm"
+                                                      showTime="true"
+                                                      hourFormat="24"
+                                                      pattern="dd/MM/yyyy HH:mm"
+                                                      required="true"/>
+                                    </div>
+                                    <div class="cal-field">
+                                        <label class="cal-label">Data sfârșit</label>
+                                        <p:datePicker value="#{calendarBean.eventEnd}"
+                                                      styleClass="cal-input cal-input-sm"
+                                                      showTime="true"
+                                                      hourFormat="24"
+                                                      pattern="dd/MM/yyyy HH:mm"/>
+                                    </div>
+                                </div>
+
+                                <div class="cal-field">
+                                    <label class="cal-label">Culoare</label>
+                                    <div class="color-picker">
+                                        <ui:repeat value="#{calendarBean.colorOptions}" var="color">
+                                            <div class="color-swatch #{calendarBean.eventColor eq color ? 'selected' : ''}"
+                                                 style="background: #{color}; cursor:pointer;"
+                                                 onclick="selectColor('#{color}', this)">
+                                            </div>
+                                        </ui:repeat>
+                                        <h:inputHidden id="selectedColor" value="#{calendarBean.eventColor}"/>
+                                    </div>
+                                </div>
+
+                                <div class="cal-field cal-checkbox-row">
+                                    <p:selectBooleanCheckbox value="#{calendarBean.eventAllDay}"
+                                                             styleClass="cal-checkbox"/>
+                                    <label class="cal-checkbox-label">Toată ziua</label>
+                                </div>
+
+                                <div class="cal-field cal-checkbox-row">
+                                    <p:selectBooleanCheckbox value="#{calendarBean.eventPublic}"
+                                                             styleClass="cal-checkbox"/>
+                                    <label class="cal-checkbox-label">Vizibil pentru toți studenții</label>
+                                </div>
+
+                                <div class="cal-actions">
+                                    <p:commandButton
+                                            value="Salvează"
+                                            styleClass="cal-save-btn"
+                                            action="#{calendarBean.saveEvent()}"
+                                            update="calendarForm addEventForm"
+                                            oncomplete="PF('addEventDialog').hide()"
+                                            process="addEventForm"
+                                            ajax="true"/>
+                                    <p:commandButton
+                                            value="Anulează"
+                                            styleClass="cal-cancel-btn"
+                                            onclick="PF('addEventDialog').hide(); return false;"
+                                            ajax="false"/>
+                                </div>
+                            </div>
+                        </p:dialog>
+                    </h:form>
+
+                    <!-- DIALOG: DETALII EVENIMENT -->
+                    <h:form id="eventDetailForm">
+                        <p:dialog widgetVar="eventDetailDialog"
+                                  header="#{calendarBean.selectedEvent.title}"
+                                  modal="true"
+                                  closable="true"
+                                  width="420"
+                                  styleClass="cal-dialog">
+
+                            <h:panelGroup rendered="#{calendarBean.selectedEvent != null}">
+                                <div class="event-detail">
+                                    <div class="event-detail-row">
+                                        <span class="event-detail-icon">&#128197;</span>
+                                        <span>#{calendarBean.selectedEvent.startDate}</span>
+                                    </div>
+                                    <h:panelGroup rendered="#{not empty calendarBean.selectedEvent.description}">
+                                        <div class="event-detail-row">
+                                            <span class="event-detail-icon">&#128221;</span>
+                                            <span>#{calendarBean.selectedEvent.description}</span>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <div class="event-detail-actions">
+                                        <h:panelGroup rendered="#{calendarBean.canDeleteSelected}">
+                                            <p:commandButton
+                                                    value="&#128465; Șterge"
+                                                    styleClass="cal-delete-btn"
+                                                    action="#{calendarBean.deleteEvent()}"
+                                                    update="calendarForm eventDetailForm"
+                                                    oncomplete="PF('eventDetailDialog').hide()"
+                                                    ajax="true">
+                                                <p:confirm header="Confirmare"
+                                                           message="Ești sigur că vrei să ștergi acest eveniment?"
+                                                           icon="pi pi-exclamation-triangle"/>
+                                            </p:commandButton>
+                                        </h:panelGroup>
+                                        <p:commandButton
+                                                value="Închide"
+                                                styleClass="cal-cancel-btn"
+                                                onclick="PF('eventDetailDialog').hide(); return false;"
+                                                ajax="false"/>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </p:dialog>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"/>
+                    </h:form>
+
                 </main>
             </div>
         </div>
@@ -75,17 +238,27 @@
             function toggleDropdown() {
                 document.getElementById('profileDropdown').classList.toggle('open');
             }
-
             function closeDropdown() {
                 document.getElementById('profileDropdown').classList.remove('open');
             }
-
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
                     closeDropdown();
                 }
             });
         </script>
+        <h:outputScript target="body">
+            function selectColor(color, el) {
+            document.querySelectorAll('.color-swatch').forEach(function(s) {
+            s.classList.remove('selected');
+            });
+            el.classList.add('selected');
+
+            var form = el.closest('form');
+            var hidden = form.querySelector('[id$="selectedColor"]');
+            if (hidden) hidden.value = color;
+            }
+        </h:outputScript>
     </h:body>
 </f:view>
 </html>

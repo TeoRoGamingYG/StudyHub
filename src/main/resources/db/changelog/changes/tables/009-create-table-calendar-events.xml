@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260712-create-calendar-events-table">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="calendar_events"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="calendar_events">
+
+            <column name="id" type="BIGINT" defaultValueSequenceNext="seq_calendar_events_id">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="TEXT"/>
+
+            <column name="start_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="end_time" type="TIMESTAMP"/>
+
+            <column name="all_day" type="BOOLEAN" defaultValueBoolean="false"/>
+
+            <column name="color" type="VARCHAR(20)" defaultValue="#4f6ef7"/>
+
+            <column name="created_by" type="BIGINT"/>
+
+            <column name="is_public" type="BOOLEAN" defaultValueBoolean="true"/>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="NOW()"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="calendar_events"
+                baseColumnNames="created_by"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_calendar_events_user"
+                onDelete="SET NULL"/>
+
+    </changeSet>
+
+</databaseChangeLog>

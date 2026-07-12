@@ -15,6 +15,7 @@
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/006-create-seq-grades.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/007-create-seq-notifications.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/008-create-seq-teachers.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/sequences/009-create-seq-calendar-events.xml"/>
 
     <!-- Tables -->
 
@@ -26,6 +27,7 @@
 <!--    <include relativeToChangelogFile="true" file="changes/tables/006-create-table-grades.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/tables/007-create-table-notifications.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/tables/008-create-table-teachers.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/tables/009-create-table-calendar-events.xml"/>
 
     <!-- Updates -->
 
@@ -38,6 +40,6 @@
 
 <!--    <include relativeToChangelogFile="true" file="changes/data/001-teachers-data.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/data/002-courses-data.xml"/>-->
-    <include relativeToChangelogFile="true" file="changes/data/003-grades-data.xml"/>
+<!--    <include relativeToChangelogFile="true" file="changes/data/003-grades-data.xml"/>-->
 
 </databaseChangeLog>
