@@ -528,3 +528,299 @@
     padding: 4px 4px !important;
     font-size: 0.8rem !important;
 }
+
+/* ============================================================
+   FIX SĂPTĂMÂNĂ & ZI — Zone albe
+   ============================================================ */
+
+/* Colțul stânga-sus (pătratul alb) */
+.studyhub-calendar .fc-timegrid-axis {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Zona "Toată ziua" — header și celule */
+.studyhub-calendar .fc-timegrid-all-day,
+.studyhub-calendar .fc-timegrid-all-day-frame,
+.studyhub-calendar .fc-daygrid-body,
+.studyhub-calendar .fc-timegrid-axis-frame {
+    background: var(--bg-card) !important;
+}
+
+.studyhub-calendar .fc-timegrid-slot-label {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Header zilelor (LUN. 29.06 etc.) */
+.studyhub-calendar .fc-timegrid-col-header-cell,
+.studyhub-calendar .fc-col-header-cell {
+    background: var(--bg-input) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Coloanele zilelor */
+.studyhub-calendar .fc-timegrid-col {
+    background: transparent !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Liniile orare */
+.studyhub-calendar .fc-timegrid-slot {
+    border-color: var(--border-subtle) !important;
+    height: 40px !important;
+}
+
+.studyhub-calendar .fc-timegrid-slot-minor {
+    border-color: var(--border-subtle) !important;
+    opacity: 0.4;
+}
+
+/* Zona "Toată ziua" rând */
+.studyhub-calendar .fc-timegrid-all-day-events,
+.studyhub-calendar tr.fc-scrollgrid-section-all-day td {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Fix pentru celula din stânga la "Toată ziua" */
+.studyhub-calendar td.fc-timegrid-axis {
+    background: var(--bg-card) !important;
+}
+
+/* ============================================================
+   SCROLLBAR CUSTOM — să se potrivească cu tema
+   ============================================================ */
+
+/* Scrollbar pentru întreaga pagină calendar */
+.studyhub-calendar .fc-scroller::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.studyhub-calendar .fc-scroller::-webkit-scrollbar-track {
+    background: var(--bg-card) !important;
+    border-radius: 999px !important;
+}
+
+.studyhub-calendar .fc-scroller::-webkit-scrollbar-thumb {
+    background: var(--border-normal) !important;
+    border-radius: 999px !important;
+}
+
+.studyhub-calendar .fc-scroller::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary) !important;
+}
+
+/* Forțează scrollbar-ul să nu apară alb */
+.studyhub-calendar .fc-scroller {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--border-normal) var(--bg-card) !important;
+}
+
+/* ============================================================
+   FIX DUNGI DREAPTA/JOS (linia albă de 1-2px)
+   ============================================================ */
+
+/* Elimină bordura dreaptă de pe ultimul th/td */
+.studyhub-calendar .fc-scrollgrid-section-header th:last-child,
+.studyhub-calendar .fc-scrollgrid-section-body td:last-child,
+.studyhub-calendar .fc-scrollgrid-section-footer td:last-child {
+    border-right: none !important;
+}
+
+/* Elimină bordura de jos de pe ultimul rând */
+.studyhub-calendar .fc-scrollgrid-section-body:last-child > td {
+    border-bottom: none !important;
+}
+
+/* Ascunde scrollbar-ul vertical drept (cel alb nativ) */
+.studyhub-calendar .fc-scroller-harness-liquid {
+    overflow: hidden !important;
+}
+
+/* Dar păstrează scroll funcțional pe zona de ore */
+.studyhub-calendar .fc-scroller-liquid-absolute {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* ============================================================
+   FIX ARROWS SCROLL (săgețile albe din dreapta)
+   ============================================================ */
+
+.studyhub-calendar .fc-timegrid-more-link,
+.studyhub-calendar .fc-more-link {
+    color: var(--accent-primary) !important;
+    background: var(--bg-input) !important;
+}
+
+/* Elimină resize handle alb */
+.studyhub-calendar .fc-event-resizer {
+    display: none !important;
+}
+
+/* ============================================================
+   INDICATOR ORA CURENTĂ
+   ============================================================ */
+
+.studyhub-calendar .fc-timegrid-now-indicator-line {
+    border-color: var(--accent-primary) !important;
+    border-width: 2px !important;
+}
+
+.studyhub-calendar .fc-timegrid-now-indicator-arrow {
+    border-top-color: var(--accent-primary) !important;
+    border-bottom-color: var(--accent-primary) !important;
+}
+
+/* ============================================================
+   SĂGEȚILE DE SCROLL (cele două mici din dreapta sus)
+   ============================================================ */
+
+/* Ascunde săgețile native de scroll ale FullCalendar */
+.studyhub-calendar .fc-resource-timeline-divider,
+.studyhub-calendar [class*="fc-scroller"] > .fc-scroller-clip {
+    background: transparent !important;
+}
+
+/* Fix culoare pentru săgețile de expandare "Toată ziua" */
+.studyhub-calendar .fc-timegrid-all-day-expander {
+    background: var(--bg-card) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+.studyhub-calendar .fc-timegrid-all-day-expander:hover {
+    color: var(--accent-primary) !important;
+}
+
+/* Nuclear option — orice element neacoperit */
+.studyhub-calendar * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-normal) var(--bg-card);
+}
+
+.studyhub-calendar td,
+.studyhub-calendar th {
+    border-color: var(--border-subtle) !important;
+}
+
+/* Orice fundal alb rezidual */
+.studyhub-calendar .fc-bg-event,
+.studyhub-calendar .fc-non-business {
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Pătratul alb din colțul stânga-sus */
+.studyhub-calendar .fc-timegrid-axis-chunk,
+.studyhub-calendar .fc-timegrid-axis-frame,
+.studyhub-calendar th.fc-timegrid-axis,
+.studyhub-calendar td.fc-timegrid-axis,
+.studyhub-calendar .fc-timegrid-slot-label-frame,
+.studyhub-calendar .fc-scroller-harness > .fc-scroller,
+.studyhub-calendar .fc-daygrid-day-frame {
+    background: var(--bg-card) !important;
+}
+
+/* Targetează direct primul th din header (colțul) */
+.studyhub-calendar .fc-col-header tr th:first-child {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Zona "Toată ziua" — rândul întreg inclusiv label-ul */
+.studyhub-calendar .fc-timegrid-section-all-day,
+.studyhub-calendar tr[class*="all-day"] td,
+.studyhub-calendar tr[class*="all-day"] th {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Fix prin inspecție directă a structurii FullCalendar */
+.fc .fc-timegrid-axis-cushion {
+    background: var(--bg-card) !important;
+}
+
+.fc .fc-scrollgrid-shrink-frame,
+.fc .fc-scrollgrid-shrink {
+    background: var(--bg-card) !important;
+}
+
+/* ============================================================
+   CONFIRM DIALOG
+   ============================================================ */
+
+.cal-confirm-dialog .ui-dialog-content {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    padding: 1.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    text-align: center !important;
+}
+
+.cal-confirm-dialog .ui-dialog-titlebar {
+    background: var(--bg-input) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+.cal-confirm-dialog .ui-dialog-titlebar-close {
+    color: var(--text-muted) !important;
+}
+
+.cal-confirm-dialog .ui-confirm-dialog-message {
+    color: var(--text-secondary) !important;
+    font-size: 0.95rem !important;
+    margin-left: 0 !important;
+}
+
+.cal-confirm-dialog .ui-confirm-dialog-severity {
+    color: var(--error) !important;
+    font-size: 1.5rem !important;
+}
+
+.cal-confirm-dialog .ui-dialog-footer {
+    background: var(--bg-card) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 1rem 1.5rem !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 0.75rem !important;
+}
+
+.delete-confirm-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.delete-confirm-icon {
+    font-size: 2.5rem;
+    color: var(--error);
+}
+
+.delete-confirm-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.delete-confirm-text strong {
+    color: var(--text-primary);
+}
+
+.delete-confirm-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
