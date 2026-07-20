@@ -13,7 +13,6 @@ import org.primefaces.model.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -106,7 +105,8 @@ public class CalendarBean implements Serializable {
         eventEnd = null;
         eventAllDay = false;
         eventColor = "#4f6ef7";
-        eventPublic = true;
+        // Doar HIGHERSTUD poate crea evenimente publice
+        eventPublic = "HIGHERSTUD".equals(sessionBean.getRole());
         editMode = false;
     }
 
