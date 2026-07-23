@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <h:outputText value="#{sessionInitBean}" style="display:none"/>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <h1>StudyHub</h1>
+            <span>Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">General</div>
+            <h:outputLink value="#{request.contextPath}/pages/admin/dashboard.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('dashboard') ? 'active' : ''}">
+                <span class="nav-icon">&#128200;</span>
+                Dashboard
+            </h:outputLink>
+
+            <div class="nav-section-label" style="margin-top:12px;">Gestionare</div>
+            <h:outputLink value="#{request.contextPath}/pages/admin/users.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('users') ? 'active' : ''}">
+                <span class="nav-icon">&#128100;</span>
+                Utilizatori
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/admin/courses.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('courses') ? 'active' : ''}">
+                <span class="nav-icon">&#128218;</span>
+                Cursuri
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/admin/grades-import.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('grades-import') ? 'active' : ''}">
+                <span class="nav-icon">&#128202;</span>
+                Import Note
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/admin/files.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('files') ? 'active' : ''}">
+                <span class="nav-icon">&#128196;</span>
+                Fișiere
+            </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/admin/contributors.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('contributors') ? 'active' : ''}">
+                <span class="nav-icon">&#127775;</span>
+                Cereri Contributor
+                <h:panelGroup rendered="#{contributorBean.pendingCount > 0}">
+                    <span class="nav-badge" style="background: #f75f6e;">
+                        #{contributorBean.pendingCount}
+                    </span>
+                </h:panelGroup>
+            </h:outputLink>
+        </nav>
+
+        <!-- Language switcher -->
+        <div class="lang-switcher">
+            <h:form id="adminLangForm">
+                <p:commandButton value="RO"
+                                 styleClass="lang-btn #{languageBean.language eq 'ro' ? 'active' : ''}"
+                                 action="#{languageBean.changeLanguage('ro')}"
+                                 ajax="false"/>
+                <span class="lang-divider">|</span>
+                <p:commandButton value="EN"
+                                 styleClass="lang-btn #{languageBean.language eq 'en' ? 'active' : ''}"
+                                 action="#{languageBean.changeLanguage('en')}"
+                                 ajax="false"/>
+            </h:form>
+        </div>
+
+        <div class="sidebar-footer">
+            <h:outputLink value="#{request.contextPath}/logout"
+                          styleClass="sidebar-user">
+                <div class="user-avatar-small">#{sessionBean.userInitials}</div>
+                <div class="user-info-small">
+                    <div class="name">#{sessionBean.fullName}</div>
+                    <div class="role" style="color: #f75f6e;">Administrator</div>
+                </div>
+                <span>&#128682;</span>
+            </h:outputLink>
+        </div>
+    </aside>
+</ui:composition>
+</html>

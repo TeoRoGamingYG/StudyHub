@@ -26,23 +26,27 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication)
             throws IOException {
 
-        UsersEntity user =
-                usersRepository.findByEmail(authentication.getName());
-
-        if (user != null) {
-            sessionBean.populateFromEntity(user);
-
-            user.setLastLogin(LocalDateTime.now());
-            usersRepository.save(user);
-        }
+        UsersEntity user = usersRepository.findByEmail(authentication.getName());
 
         if (user != null) {
             user.setLastLogin(LocalDateTime.now());
             usersRepository.save(user);
-
             sessionBean.populateFromEntity(user);
         }
 
-        response.sendRedirect(request.getContextPath() + "/main/for-you.xhtml");
+        String redirectUrl = resolveRedirectUrl(request, user);
+        response.sendRedirect(redirectUrl);
+    }
+
+    private String resolveRedirectUrl(HttpServletRequest request, UsersEntity user) {
+        if (user == null) {
+            return request.getContextPath() + "/main/login.xhtml?error=true";
+        }
+
+        return switch (user.getRole()) {
+            case "ADMIN" -> request.getContextPath() + "/pages/admin/dashboard.xhtml";
+            case "HIGHERSTUD" -> request.getContextPath() + "/main/for-you.xhtml";
+            default -> request.getContextPath() + "/main/for-you.xhtml";
+        };
     }
 }

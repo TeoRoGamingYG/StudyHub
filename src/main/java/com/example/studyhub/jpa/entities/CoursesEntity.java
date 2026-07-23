@@ -30,6 +30,9 @@ public class CoursesEntity {
     @Column(name = "specialization", length = 100)
     private String specialization;
 
+    @Column(name = "faculty", length = 100)
+    private String faculty;
+
     @Column(nullable = false)
     private Integer credits;
 
