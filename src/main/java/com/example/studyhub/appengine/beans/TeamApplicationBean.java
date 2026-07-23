@@ -44,12 +44,21 @@ public class TeamApplicationBean implements Serializable {
                     studyYear,
                     specialization,
                     message,
-                    sessionBean.getEmail()
+                    sessionBean.getEmail(),
+                    sessionBean.getUserId()
             );
             submitted = true;
             error = false;
+            errorMessage = null;
+        } catch (IllegalStateException e) {
+            error = true;
+            errorMessage = e.getMessage();
         } catch (Exception e) {
             error = true;
+            errorMessage = "A apărut o eroare. Încearcă din nou.";
         }
     }
+
+    // Adaugă câmp pentru mesaj eroare
+    private String errorMessage;
 }

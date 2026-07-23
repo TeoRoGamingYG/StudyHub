@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Utilizatori - Admin StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar-admin.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Utilizatori</h2>
+                        <span>Gestionează utilizatorii platformei</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; Deconectare
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="usersForm">
+
+                        <p:messages globalOnly="true" styleClass="admin-messages"
+                                    showDetail="false" closable="true"/>
+
+                        <!-- FILTRE -->
+                        <div class="admin-card" style="margin-bottom: 1rem;">
+                            <div class="admin-filters">
+                                <div class="admin-filter-field">
+                                    <label class="admin-filter-label">Caută</label>
+                                    <p:inputText value="#{adminUserBean.searchQuery}"
+                                                 styleClass="admin-filter-input"
+                                                 placeholder="Nume, email, nr. matricol..."
+                                                 onkeyup="if(event.key === 'Enter') searchUsers()"/>
+                                </div>
+                                <div class="admin-filter-field">
+                                    <label class="admin-filter-label">Rol</label>
+                                    <p:selectOneMenu value="#{adminUserBean.filterRole}"
+                                                     styleClass="admin-filter-select">
+                                        <f:selectItem itemValue="" itemLabel="Toate rolurile"/>
+                                        <f:selectItems value="#{adminUserBean.availableRoles}"
+                                                       var="role"
+                                                       itemValue="#{role}"
+                                                       itemLabel="#{role}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="admin-filter-field">
+                                    <label class="admin-filter-label">Facultate</label>
+                                    <p:selectOneMenu value="#{adminUserBean.filterFaculty}"
+                                                     styleClass="admin-filter-select">
+                                        <f:selectItem itemValue="" itemLabel="Toate facultățile"/>
+                                        <f:selectItems value="#{adminUserBean.availableFaculties}"
+                                                       var="fac"
+                                                       itemValue="#{fac}"
+                                                       itemLabel="#{fac}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="admin-filter-actions">
+                                    <p:commandButton
+                                            value="&#128269; Caută"
+                                            styleClass="admin-search-btn"
+                                            action="#{adminUserBean.loadUsers}"
+                                            update="usersForm"
+                                            process="usersForm"
+                                            ajax="true"/>
+                                    <p:commandButton
+                                            value="&#10006; Reset"
+                                            styleClass="admin-reset-btn"
+                                            action="#{adminUserBean.resetFilters}"
+                                            update="usersForm"
+                                            process="@this"
+                                            ajax="true"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TABEL UTILIZATORI -->
+                        <div class="admin-card">
+                            <div class="admin-card-title">
+                                Utilizatori (#{adminUserBean.users.size()})
+                            </div>
+
+                            <p:dataTable id="usersTable"
+                                         value="#{adminUserBean.users}"
+                                         var="user"
+                                         styleClass="admin-table"
+                                         paginator="true"
+                                         rows="15"
+                                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                         emptyMessage="Nu există utilizatori.">
+
+                                <p:column headerText="Utilizator" style="width: 220px;">
+                                    <div class="user-cell">
+                                        <div class="user-avatar-sm">#{user.avatarInitials}</div>
+                                        <div>
+                                            <div class="user-name">#{user.firstName} #{user.lastName}</div>
+                                            <div class="user-email">#{user.email}</div>
+                                        </div>
+                                    </div>
+                                </p:column>
+
+                                <p:column headerText="Rol" style="width: 120px;">
+                                    <span class="role-badge role-#{user.role.toLowerCase()}">
+                                        #{user.role}
+                                    </span>
+                                </p:column>
+
+                                <p:column headerText="Facultate">
+                                    <h:outputText value="#{user.faculty}"/>
+                                </p:column>
+
+                                <p:column headerText="An / Sem." style="width: 90px; text-align:center;">
+                                    <h:outputText value="#{user.studyYear}/#{user.semester}"
+                                                  rendered="#{user.studyYear != null}"/>
+                                </p:column>
+
+                                <p:column headerText="Status" style="width: 100px; text-align:center;">
+                                    <span class="status-badge #{user.active ? 'promoted' : 'failed'}">
+                                        #{user.active ? 'Activ' : 'Inactiv'}
+                                    </span>
+                                </p:column>
+
+                                <p:column headerText="Email conf." style="width: 110px; text-align:center;">
+                                    <span class="status-badge #{user.emailConfirmed ? 'promoted' : 'failed'}">
+                                        #{user.emailConfirmed ? 'Da' : 'Nu'}
+                                    </span>
+                                </p:column>
+
+                                <p:column headerText="Înregistrat" style="width: 110px;">
+                                    <h:outputText value="#{user.createdAt}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Acțiuni" style="width: 160px; text-align:center;">
+                                    <div class="action-buttons">
+                                        <!-- Editare -->
+                                        <p:commandButton
+                                                icon="pi pi-pencil"
+                                                styleClass="action-btn edit-btn-sm"
+                                                title="Editează"
+                                                actionListener="#{adminUserBean.selectUser(user)}"
+                                                oncomplete="PF('editUserDialog').show()"
+                                                update="editUserForm"
+                                                ajax="true"/>
+
+                                        <!-- Toggle activ/inactiv -->
+                                        <p:commandButton
+                                                icon="#{user.active ? 'pi pi-ban' : 'pi pi-check'}"
+                                                styleClass="action-btn #{user.active ? 'deactivate-btn-sm' : 'activate-btn-sm'}"
+                                                title="#{user.active ? 'Dezactivează' : 'Activează'}"
+                                                action="#{adminUserBean.toggleActive(user)}"
+                                                update="usersForm"
+                                                ajax="true">
+                                            <p:confirm header="Confirmare"
+                                                       message="Sigur vrei să modifici statusul acestui utilizator?"/>
+                                        </p:commandButton>
+
+                                        <!-- Reset parolă -->
+                                        <p:commandButton
+                                                icon="pi pi-key"
+                                                styleClass="action-btn reset-btn-sm"
+                                                title="Resetează parola"
+                                                action="#{adminUserBean.resetPassword(user)}"
+                                                update="usersForm"
+                                                ajax="true">
+                                            <p:confirm header="Confirmare"
+                                                       message="Sigur vrei să resetezi parola pentru #{user.firstName} #{user.lastName}?"/>
+                                        </p:commandButton>
+
+                                        <!-- Ștergere -->
+                                        <p:commandButton
+                                                icon="pi pi-trash"
+                                                styleClass="action-btn delete-btn-sm"
+                                                title="Șterge"
+                                                action="#{adminUserBean.deleteUser(user)}"
+                                                update="usersForm"
+                                                ajax="true">
+                                            <p:confirm header="Confirmare ștergere"
+                                                       message="Sigur vrei să ștergi utilizatorul #{user.firstName} #{user.lastName}? Această acțiune nu poate fi anulată!"/>
+                                        </p:commandButton>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+
+                        <!-- Confirm dialog global -->
+                        <p:confirmDialog global="true"
+                                         widgetVar="confirmation"
+                                         showEffect="fade"
+                                         hideEffect="fade"
+                                         styleClass="cal-confirm-dialog"
+                                         width="400">
+                            <p:commandButton value="Da, confirmă"
+                                             type="button"
+                                             styleClass="admin-confirm-yes-btn"
+                                             onclick="PF('confirmation').accept()"/>
+                            <p:commandButton value="Anulează"
+                                             type="button"
+                                             styleClass="admin-cancel-btn"
+                                             onclick="PF('confirmation').reject()"/>
+                        </p:confirmDialog>
+
+                    </h:form>
+
+                    <!-- DIALOG EDITARE USER -->
+                    <h:form id="editUserForm">
+                        <p:dialog widgetVar="editUserDialog"
+                                  header="Editează utilizator"
+                                  modal="true"
+                                  closable="true"
+                                  width="560"
+                                  styleClass="cal-dialog">
+
+                            <h:panelGroup rendered="#{adminUserBean.selectedUser != null}">
+                                <div class="edit-user-form">
+
+                                    <div class="edit-user-avatar">
+                                        <div class="profile-avatar">#{adminUserBean.selectedUser.avatarInitials}</div>
+                                        <div>
+                                            <div style="font-family:'Syne',sans-serif; font-weight:700; color:var(--text-primary);">
+                                                #{adminUserBean.selectedUser.firstName} #{adminUserBean.selectedUser.lastName}
+                                            </div>
+                                            <div style="font-size:0.85rem; color:var(--text-muted);">
+                                                #{adminUserBean.selectedUser.email}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="edit-form-grid">
+                                        <div class="cal-field">
+                                            <label class="cal-label">Prenume</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.firstName}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Nume</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.lastName}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Email</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.email}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Rol</label>
+                                            <p:selectOneMenu value="#{adminUserBean.selectedUser.role}"
+                                                             styleClass="cal-input">
+                                                <f:selectItems value="#{adminUserBean.availableRoles}"
+                                                               var="role"
+                                                               itemValue="#{role}"
+                                                               itemLabel="#{role}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Facultate</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.faculty}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Specializare</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.specialization}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">An studiu</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.studyYear}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Semestru</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.semester}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                        <div class="cal-field">
+                                            <label class="cal-label">Grupă</label>
+                                            <p:inputText value="#{adminUserBean.selectedUser.groupName}"
+                                                         styleClass="cal-input"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="cal-actions">
+                                        <p:commandButton
+                                                value="Salvează"
+                                                styleClass="cal-save-btn"
+                                                action="#{adminUserBean.saveUser()}"
+                                                update="usersForm editUserForm"
+                                                oncomplete="if(!args.validationFailed) PF('editUserDialog').hide()"
+                                                process="editUserForm"
+                                                ajax="true"/>
+                                        <p:commandButton
+                                                value="Anulează"
+                                                styleClass="cal-cancel-btn"
+                                                onclick="PF('editUserDialog').hide(); return false;"
+                                                ajax="false"/>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </p:dialog>
+                    </h:form>
+
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>

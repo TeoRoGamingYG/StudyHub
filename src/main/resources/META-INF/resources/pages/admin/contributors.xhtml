@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Cereri Contributor - Admin StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar-admin.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Cereri Contributor</h2>
+                        <span>
+                            #{contributorBean.pendingCount} cereri în așteptare
+                        </span>
+                    </div>
+                    <div class="topbar-right">
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; Deconectare
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="contributorsForm">
+
+                        <p:messages globalOnly="true" styleClass="admin-messages"
+                                    showDetail="false" closable="true"/>
+
+                        <!-- FILTRE STATUS -->
+                        <div class="admin-card" style="margin-bottom:1rem;">
+                            <div class="admin-filters">
+                                <div class="filter-group">
+                                    <label class="filter-label">Filtrează după status</label>
+                                    <div class="filter-buttons">
+                                        <p:commandButton
+                                                value="În așteptare (#{contributorBean.pendingCount})"
+                                                styleClass="filter-btn #{contributorBean.filterStatus eq 'PENDING' ? 'active' : ''}"
+                                                actionListener="#{contributorBean.setFilterStatus('PENDING')}"
+                                                action="#{contributorBean.loadRequests()}"
+                                                update="contributorsForm"
+                                                ajax="true"/>
+                                        <p:commandButton
+                                                value="Toate"
+                                                styleClass="filter-btn #{contributorBean.filterStatus eq 'ALL' ? 'active' : ''}"
+                                                actionListener="#{contributorBean.setFilterStatus('ALL')}"
+                                                action="#{contributorBean.loadRequests()}"
+                                                update="contributorsForm"
+                                                ajax="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TABEL CERERI -->
+                        <div class="admin-card">
+                            <div class="admin-card-title">
+                                Cereri (#{contributorBean.requests.size()})
+                            </div>
+
+                            <p:dataTable id="requestsTable"
+                                         value="#{contributorBean.requests}"
+                                         var="req"
+                                         styleClass="admin-table"
+                                         paginator="true"
+                                         rows="10"
+                                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                         emptyMessage="Nu există cereri.">
+
+                                <p:column headerText="Utilizator" style="width:200px;">
+                                    <div class="user-cell">
+                                        <div class="user-avatar-sm">
+                                            #{req.user.avatarInitials}
+                                        </div>
+                                        <div>
+                                            <div class="user-name">#{req.fullName}</div>
+                                            <div class="user-email">#{req.user.email}</div>
+                                        </div>
+                                    </div>
+                                </p:column>
+
+                                <p:column headerText="An / Specializare">
+                                    <div style="color:var(--text-primary); font-size:0.875rem;">
+                                        #{req.studyYear}
+                                    </div>
+                                    <div style="color:var(--text-muted); font-size:0.78rem;">
+                                        #{req.specialization}
+                                    </div>
+                                </p:column>
+
+                                <p:column headerText="Mesaj">
+                                    <h:outputText value="#{req.message.length() > 80 ?
+                                        req.message.substring(0, 80).concat('...') :
+                                        req.message}"
+                                                  style="color:var(--text-secondary); font-size:0.875rem;"/>
+                                </p:column>
+
+                                <p:column headerText="Data" style="width:100px;">
+                                    <h:outputText value="#{req.createdAt}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Status" style="width:120px; text-align:center;">
+                                    <span class="status-badge #{contributorBean.getStatusClass(req.status)}">
+                                        #{contributorBean.getStatusLabel(req.status)}
+                                    </span>
+                                </p:column>
+
+                                <p:column headerText="Acțiuni" style="width:150px; text-align:center;">
+                                    <div class="action-buttons">
+                                        <!-- Vizualizare + acțiuni -->
+                                        <p:commandButton
+                                                value="&#128065; Vezi"
+                                                styleClass="action-btn-text view-btn"
+                                                actionListener="#{contributorBean.selectRequest(req)}"
+                                                oncomplete="PF('requestDetailDialog').show()"
+                                                update="requestDetailForm"
+                                                ajax="true"
+                                                rendered="#{req.status eq 'PENDING'}"/>
+
+                                        <!-- Aprobare rapidă -->
+                                        <p:commandButton
+                                                icon="pi pi-check"
+                                                styleClass="action-btn activate-btn-sm"
+                                                title="Aprobă"
+                                                actionListener="#{contributorBean.selectRequest(req)}"
+                                                action="#{contributorBean.approve()}"
+                                                update="contributorsForm"
+                                                ajax="true"
+                                                rendered="#{req.status eq 'PENDING'}">
+                                            <p:confirm header="Aprobare cerere"
+                                                       message="Aprobi cererea lui #{req.fullName}? Rolul va fi schimbat în HIGHERSTUD."/>
+                                        </p:commandButton>
+
+                                        <!-- Respingere -->
+                                        <p:commandButton
+                                                icon="pi pi-times"
+                                                styleClass="action-btn deactivate-btn-sm"
+                                                title="Respinge"
+                                                actionListener="#{contributorBean.selectRequest(req)}"
+                                                oncomplete="PF('rejectDialog').show()"
+                                                update="rejectForm"
+                                                ajax="true"
+                                                rendered="#{req.status eq 'PENDING'}"/>
+
+                                        <!-- Status final -->
+                                        <h:outputText
+                                                value="#{contributorBean.getStatusLabel(req.status)}"
+                                                style="color:var(--text-muted); font-size:0.78rem;"
+                                                rendered="#{req.status ne 'PENDING'}"/>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+
+                        <p:confirmDialog global="true"
+                                         widgetVar="confirmation"
+                                         showEffect="fade"
+                                         hideEffect="fade"
+                                         styleClass="cal-confirm-dialog"
+                                         width="420">
+                            <p:commandButton value="Da, confirmă"
+                                             type="button"
+                                             styleClass="admin-confirm-yes-btn"
+                                             onclick="PF('confirmation').accept()"/>
+                            <p:commandButton value="Anulează"
+                                             type="button"
+                                             styleClass="admin-cancel-btn"
+                                             onclick="PF('confirmation').reject()"/>
+                        </p:confirmDialog>
+                    </h:form>
+
+                    <!-- DIALOG DETALII CERERE -->
+                    <h:form id="requestDetailForm">
+                        <p:dialog widgetVar="requestDetailDialog"
+                                  header="Detalii cerere contributor"
+                                  modal="true"
+                                  closable="true"
+                                  width="520"
+                                  styleClass="cal-dialog">
+
+                            <h:panelGroup rendered="#{contributorBean.selectedRequest != null}">
+                                <div class="contributor-detail">
+                                    <div class="contributor-header">
+                                        <div class="profile-avatar">
+                                            #{contributorBean.selectedRequest.user.avatarInitials}
+                                        </div>
+                                        <div>
+                                            <div class="contributor-name">
+                                                #{contributorBean.selectedRequest.fullName}
+                                            </div>
+                                            <div class="contributor-email">
+                                                #{contributorBean.selectedRequest.user.email}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="contributor-info-grid">
+                                        <div class="contributor-info-item">
+                                            <span class="contributor-label">An de studiu</span>
+                                            <span class="contributor-value">
+                                                #{contributorBean.selectedRequest.studyYear}
+                                            </span>
+                                        </div>
+                                        <div class="contributor-info-item">
+                                            <span class="contributor-label">Specializare</span>
+                                            <span class="contributor-value">
+                                                #{contributorBean.selectedRequest.specialization}
+                                            </span>
+                                        </div>
+                                        <div class="contributor-info-item" style="grid-column: span 2;">
+                                            <span class="contributor-label">Mesaj</span>
+                                            <div class="contributor-message">
+                                                #{contributorBean.selectedRequest.message}
+                                            </div>
+                                        </div>
+                                        <div class="contributor-info-item">
+                                            <span class="contributor-label">Data cererii</span>
+                                            <span class="contributor-value">
+                                                <h:outputText value="#{contributorBean.selectedRequest.createdAt}">
+                                                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm" type="localDateTime"/>
+                                                </h:outputText>
+                                            </span>
+                                        </div>
+                                        <div class="contributor-info-item">
+                                            <span class="contributor-label">Status</span>
+                                            <span class="status-badge #{contributorBean.getStatusClass(contributorBean.selectedRequest.status)}">
+                                                #{contributorBean.getStatusLabel(contributorBean.selectedRequest.status)}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <h:panelGroup rendered="#{contributorBean.selectedRequest.status eq 'PENDING'}">
+                                        <div class="contributor-actions">
+                                            <p:commandButton
+                                                    value="✓ Aprobă"
+                                                    styleClass="cal-save-btn"
+                                                    action="#{contributorBean.approve()}"
+                                                    update="contributorsForm requestDetailForm"
+                                                    oncomplete="PF('requestDetailDialog').hide()"
+                                                    ajax="true"/>
+                                            <p:commandButton
+                                                    value="✕ Respinge"
+                                                    styleClass="cal-delete-btn"
+                                                    oncomplete="PF('requestDetailDialog').hide(); PF('rejectDialog').show()"
+                                                    ajax="false"/>
+                                            <p:commandButton
+                                                    value="Închide"
+                                                    styleClass="cal-cancel-btn"
+                                                    onclick="PF('requestDetailDialog').hide(); return false;"
+                                                    ajax="false"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </h:panelGroup>
+                        </p:dialog>
+                    </h:form>
+
+                    <!-- DIALOG RESPINGERE -->
+                    <h:form id="rejectForm">
+                        <p:dialog widgetVar="rejectDialog"
+                                  header="Respinge cererea"
+                                  modal="true"
+                                  closable="true"
+                                  width="420"
+                                  styleClass="cal-dialog">
+
+                            <div class="cal-form">
+                                <div class="cal-field">
+                                    <label class="cal-label">
+                                        Motiv respingere (opțional — va fi trimis utilizatorului)
+                                    </label>
+                                    <p:inputTextarea
+                                            value="#{contributorBean.rejectionReason}"
+                                            styleClass="cal-textarea"
+                                            placeholder="ex: Nu îndeplinești cerințele minime pentru contribuitor..."
+                                            rows="4"/>
+                                </div>
+                                <div class="cal-actions">
+                                    <p:commandButton
+                                            value="Trimite respingerea"
+                                            styleClass="cal-delete-btn"
+                                            action="#{contributorBean.reject()}"
+                                            update="contributorsForm rejectForm"
+                                            oncomplete="PF('rejectDialog').hide()"
+                                            process="rejectForm"
+                                            ajax="true"/>
+                                    <p:commandButton
+                                            value="Anulează"
+                                            styleClass="cal-cancel-btn"
+                                            onclick="PF('rejectDialog').hide(); return false;"
+                                            ajax="false"/>
+                                </div>
+                            </div>
+                        </p:dialog>
+                    </h:form>
+
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>

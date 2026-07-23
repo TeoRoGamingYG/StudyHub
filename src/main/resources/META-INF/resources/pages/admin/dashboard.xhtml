@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Dashboard Admin - StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar-admin.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Dashboard</h2>
+                        <span>Vedere de ansamblu a platformei</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; Deconectare
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="dashboardForm">
+
+                        <!-- STAT CARDS -->
+                        <div class="admin-stats-grid">
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(79,110,247,0.15); color: #4f6ef7;">
+                                    &#128100;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.totalUsers}</div>
+                                    <div class="admin-stat-label">Utilizatori total</div>
+                                </div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(247,95,110,0.15); color: #f75f6e;">
+                                    &#9888;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.unconfirmedUsers}</div>
+                                    <div class="admin-stat-label">Neconfirmați email</div>
+                                </div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(79,209,165,0.15); color: #4fd1a5;">
+                                    &#128218;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.activeCourses}</div>
+                                    <div class="admin-stat-label">Cursuri active</div>
+                                </div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(255,193,7,0.15); color: #ffc107;">
+                                    &#128202;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.totalGrades}</div>
+                                    <div class="admin-stat-label">Note introduse</div>
+                                </div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(108,99,255,0.15); color: #6c63ff;">
+                                    &#128196;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.totalFiles}</div>
+                                    <div class="admin-stat-label">Fișiere încărcate</div>
+                                </div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-icon" style="background: rgba(0,180,216,0.15); color: #00b4d8;">
+                                    &#127775;
+                                </div>
+                                <div class="admin-stat-body">
+                                    <div class="admin-stat-value">#{adminDashboardBean.stats.pendingContributorRequests}</div>
+                                    <div class="admin-stat-label">Cereri contributor</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CHARTS -->
+                        <div class="admin-charts-grid">
+                            <div class="admin-card">
+                                <div class="admin-card-title">Înregistrări lunare utilizatori</div>
+                                <p:barChart model="#{adminDashboardBean.usersChartModel}"
+                                            style="width:100%; height:260px;"/>
+                            </div>
+                            <div class="admin-card">
+                                <div class="admin-card-title">Note introduse lunar</div>
+                                <p:lineChart model="#{adminDashboardBean.gradesChartModel}"
+                                             style="width:100%; height:260px;"/>
+                            </div>
+                        </div>
+
+                        <!-- RECENT ACTIVITY -->
+                        <div class="admin-tables-grid">
+
+                            <!-- Note recente -->
+                            <div class="admin-card">
+                                <div class="admin-card-title">
+                                    Ultimele note introduse
+                                    <h:outputLink value="#{request.contextPath}/pages/admin/grades-import.xhtml"
+                                                  styleClass="admin-card-link">
+                                        Vezi toate →
+                                    </h:outputLink>
+                                </div>
+                                <p:dataTable value="#{adminDashboardBean.stats.recentGrades}"
+                                             var="grade"
+                                             styleClass="admin-table"
+                                             rows="5"
+                                             emptyMessage="Nu există note recente.">
+                                    <p:column headerText="Student">
+                                        <h:outputText value="#{grade.student.firstName} #{grade.student.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Materie">
+                                        <h:outputText value="#{grade.course.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Notă" style="text-align:center; width:70px;">
+                                        <span class="grade-badge #{grade.grade >= 5 ? 'pass' : 'fail'}">
+                                            #{grade.grade}
+                                        </span>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                            <!-- Utilizatori noi -->
+                            <div class="admin-card">
+                                <div class="admin-card-title">
+                                    Utilizatori noi
+                                    <h:outputLink value="#{request.contextPath}/pages/admin/users.xhtml"
+                                                  styleClass="admin-card-link">
+                                        Gestionează →
+                                    </h:outputLink>
+                                </div>
+                                <p:dataTable value="#{adminDashboardBean.stats.newestUsers}"
+                                             var="user"
+                                             styleClass="admin-table"
+                                             rows="5"
+                                             emptyMessage="Nu există utilizatori noi.">
+                                    <p:column headerText="Nume">
+                                        <h:outputText value="#{user.firstName} #{user.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Rol" style="width:110px;">
+                                        <span class="role-badge role-#{user.role.toLowerCase()}">
+                                            #{user.role}
+                                        </span>
+                                    </p:column>
+                                    <p:column headerText="Data" style="width:90px;">
+                                        <h:outputText value="#{user.createdAt}">
+                                            <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                            <!-- Fișiere recente -->
+                            <div class="admin-card">
+                                <div class="admin-card-title">
+                                    Fișiere recente
+                                    <h:outputLink value="#{request.contextPath}/pages/admin/files.xhtml"
+                                                  styleClass="admin-card-link">
+                                        Vezi toate →
+                                    </h:outputLink>
+                                </div>
+                                <p:dataTable value="#{adminDashboardBean.stats.recentFiles}"
+                                             var="file"
+                                             styleClass="admin-table"
+                                             rows="5"
+                                             emptyMessage="Nu există fișiere recente.">
+                                    <p:column headerText="Fișier">
+                                        <span style="margin-right:6px;">&#128196;</span>
+                                        <h:outputText value="#{file.fileName}"/>
+                                    </p:column>
+                                    <p:column headerText="Data" style="width:80px;">
+                                        <h:outputText value="#{file.uploadedAt}">
+                                            <f:convertDateTime pattern="dd.MM" type="localDateTime"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                        </div>
+                    </h:form>
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>

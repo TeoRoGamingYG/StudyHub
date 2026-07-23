@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260723-create-contributor-requests-table">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contributor_requests"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="contributor_requests">
+
+            <column name="id"
+                    type="BIGINT"
+                    defaultValueSequenceNext="seq_contributor_requests_id">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="full_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="study_year" type="VARCHAR(50)"/>
+
+            <column name="specialization" type="VARCHAR(100)"/>
+
+            <column name="message" type="TEXT"/>
+
+            <column name="status"
+                    type="VARCHAR(20)"
+                    defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rejection_reason" type="TEXT"/>
+
+            <column name="created_at"
+                    type="TIMESTAMP"
+                    defaultValueComputed="NOW()"/>
+
+            <column name="reviewed_at"
+                    type="TIMESTAMP"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="contributor_requests"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_contributor_requests_user"
+                onDelete="CASCADE"/>
+
+    </changeSet>
+
+</databaseChangeLog>

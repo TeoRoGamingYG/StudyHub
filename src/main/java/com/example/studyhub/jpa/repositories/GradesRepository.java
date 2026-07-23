@@ -20,4 +20,17 @@ public interface GradesRepository extends JpaRepository<GradesEntity, Long> {
             @Param("studyYear") Integer studyYear,
             @Param("semester") Integer semester
     );
+
+    long count();
+    List<GradesEntity> findTop10ByOrderByGradedAtDesc();
+
+    @Query(value = """
+        SELECT EXTRACT(MONTH FROM graded_at) AS month,
+               COUNT(*) AS total
+        FROM study_hub.grades
+        WHERE EXTRACT(YEAR FROM graded_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+        GROUP BY EXTRACT(MONTH FROM graded_at)
+        ORDER BY EXTRACT(MONTH FROM graded_at)
+        """, nativeQuery = true)
+    List<Object[]> countMonthlyGradesForCurrentYear();
 }

@@ -27,14 +27,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // Resurse publice
                         .requestMatchers(
                                 "/main/login.xhtml",
                                 "/main/register.xhtml",
                                 "/main/forgot-password.xhtml",
+                                "/verify",
                                 "/jakarta.faces.resource/**",
-                                "/javax.faces.resource/**",
-                                "/verify"
+                                "/resources/**",
+                                "/error"
                         ).permitAll()
+                        // Rute admin
+                        .requestMatchers("/pages/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+                        // Rute student
+                        .requestMatchers("/pages/student/**", "/main/for-you.xhtml")
+                        .hasAnyAuthority("STUDENT", "HIGHERSTUD", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

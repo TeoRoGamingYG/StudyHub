@@ -15,7 +15,8 @@
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/006-create-seq-grades.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/007-create-seq-notifications.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/sequences/008-create-seq-teachers.xml"/>-->
-    <include relativeToChangelogFile="true" file="changes/sequences/009-create-seq-calendar-events.xml"/>
+<!--    <include relativeToChangelogFile="true" file="changes/sequences/009-create-seq-calendar-events.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/sequences/010-create-seq-contributor-requests.xml"/>
 
     <!-- Tables -->
 
@@ -27,7 +28,8 @@
 <!--    <include relativeToChangelogFile="true" file="changes/tables/006-create-table-grades.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/tables/007-create-table-notifications.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/tables/008-create-table-teachers.xml"/>-->
-    <include relativeToChangelogFile="true" file="changes/tables/009-create-table-calendar-events.xml"/>
+<!--    <include relativeToChangelogFile="true" file="changes/tables/009-create-table-calendar-events.xml"/>-->
+    <include relativeToChangelogFile="true" file="changes/tables/010-create-table-contributor-requests.xml"/>
 
     <!-- Updates -->
 
@@ -35,6 +37,7 @@
 <!--    <include relativeToChangelogFile="true" file="changes/updates/002-update-users-verifytoken.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/updates/003-update-course.xml"/>-->
 <!--    <include relativeToChangelogFile="true" file="changes/updates/004-update-courses-cleanup.xml"/>-->
+<!--    <include relativeToChangelogFile="true" file="changes/updates/005-update-courses-faculty.xml"/>-->
 
     <!-- Data -->
 
