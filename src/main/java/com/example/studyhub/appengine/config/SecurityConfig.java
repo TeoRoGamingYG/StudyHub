@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/pages/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
                         // Rute student
                         .requestMatchers("/pages/student/**", "/main/for-you.xhtml")
-                        .hasAnyAuthority("STUDENT", "HIGHERSTUD", "ADMIN")
+                        .hasAnyAuthority("STUDENT", "HIGHERSTUD", "ADMIN", "ROLE_STUDENT", "ROLE_HIGHERSTUD", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

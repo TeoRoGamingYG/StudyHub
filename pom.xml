@@ -107,6 +107,33 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.xml.ws</groupId>
+			<artifactId>jakarta.xml.ws-api</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>4.0.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -141,11 +168,88 @@
 				<version>4.25.1</version>
 				<configuration>
 					<changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
-					<url>jdbc:postgresql://localhost:5432/studyhub?currentSchema=study_hub</url>
+					<url>jdbc:postgresql://localhost:5432/StudyHub?currentSchema=study_hub</url>
 					<username>postgres</username>
 					<password>teovoinea2004</password>
 					<defaultSchemaName>study_hub</defaultSchemaName>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>4.0.3</version>
+				<executions>
+					<execution>
+						<id>okm-auth</id>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>
+									http://localhost:8081/OpenKM/services/OKMAuth?wsdl
+								</wsdlUrl>
+							</wsdlUrls>
+
+							<packageName>
+								com.example.studyhub.openkm.auth
+							</packageName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>okm-repository</id>
+
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>
+									http://localhost:8081/OpenKM/services/OKMRepository?wsdl
+								</wsdlUrl>
+							</wsdlUrls>
+
+							<packageName>
+								com.example.studyhub.openkm.repository
+							</packageName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>okm-document</id>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>
+									http://localhost:8081/OpenKM/services/OKMDocument?wsdl
+								</wsdlUrl>
+							</wsdlUrls>
+							<packageName>
+								com.example.studyhub.openkm.document
+							</packageName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>okm-folder</id>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<wsdlUrls>
+								<wsdlUrl>
+									http://localhost:8081/OpenKM/services/OKMFolder?wsdl
+								</wsdlUrl>
+							</wsdlUrls>
+							<packageName>
+								com.example.studyhub.openkm.folder
+							</packageName>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<resources>

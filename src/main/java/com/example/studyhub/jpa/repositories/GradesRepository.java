@@ -33,4 +33,12 @@ public interface GradesRepository extends JpaRepository<GradesEntity, Long> {
         ORDER BY EXTRACT(MONTH FROM graded_at)
         """, nativeQuery = true)
     List<Object[]> countMonthlyGradesForCurrentYear();
+
+    @Query("SELECT COUNT(g) > 0 FROM GradesEntity g " +
+            "WHERE g.student.registrationNumber = :regNum " +
+            "AND g.course.name = :courseName")
+    boolean existsByStudentRegistrationNumberAndCourseName(
+            @Param("regNum") String regNum,
+            @Param("courseName") String courseName
+    );
 }

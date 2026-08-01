@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Fișiere - Admin StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar-admin.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Fișiere</h2>
+                        <span>Gestionează fișierele platformei</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; Deconectare
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="mainForm" enctype="multipart/form-data">
+
+                        <p:messages globalOnly="true" styleClass="admin-messages"
+                                    showDetail="true" closable="true"/>
+
+                        <div class="files-layout">
+
+                            <!-- SIDEBAR CURSURI -->
+                            <div class="files-sidebar">
+                                <div class="admin-card" style="height:100%;">
+                                    <div class="admin-card-title">&#128218; Cursuri</div>
+                                    <div class="course-list">
+                                        <ui:repeat value="#{fileManagementBean.availableCourses}"
+                                                   var="course">
+                                            <div class="course-list-item">
+                                                <p:commandLink styleClass="course-link"
+                                                               actionListener="#{fileManagementBean.selectCourse(course.id)}"
+                                                               ajax="true"
+                                                               process="@this">
+                                                    <div class="course-list-icon">&#128218;</div>
+                                                    <div class="course-list-info">
+                                                        <div class="course-list-name">#{course.name}</div>
+                                                        <div class="course-list-meta">
+                                                            Anul #{course.studyYear} · Sem. #{course.semester}
+                                                        </div>
+                                                    </div>
+                                                </p:commandLink>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CONTINUT FISIERE -->
+                            <div class="files-main">
+
+                                <!-- Upload area -->
+                                <h:panelGroup rendered="#{fileManagementBean.canUpload()}">
+                                    <div class="admin-card" style="margin-bottom:1rem;">
+                                        <div class="admin-card-title">&#128228; Încarcă fișier</div>
+                                        <div class="upload-row">
+                                            <div class="upload-btn-area">
+                                                <p:fileUpload
+                                                        mode="advanced"
+                                                        auto="false"
+                                                        multiple="false"
+                                                        listener="#{fileManagementBean.handleFileUpload}"
+                                                        update="@form"
+                                                        maxFileSize="52428800"
+                                                        chooseLabel="Selectează fișier"
+                                                        uploadLabel="Încarcă"
+                                                        cancelLabel="Anulează"
+                                                        invalidSizeMessage="Fișierul depășește 50MB!" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+
+                                <!-- Lista fisiere - acesta e outputPanel-ul cu id accesibil -->
+                                <p:outputPanel id="filesContent">
+
+                                    <h:panelGroup rendered="#{fileManagementBean.selectedCourseId != null}">
+                                        <div class="admin-card">
+                                            <div class="admin-card-title">
+                                                &#128196; Fișiere curs
+                                                <span style="color:var(--text-muted); font-size:0.8rem; font-weight:400;">
+                                                    #{fileManagementBean.documents.size()} fișiere
+                                                </span>
+                                            </div>
+
+                                            <h:panelGroup rendered="#{empty fileManagementBean.documents}">
+                                                <div class="coming-soon" style="padding:2rem;">
+                                                    <div class="icon">&#128196;</div>
+                                                    <h3>Niciun fișier</h3>
+                                                    <p>Nu există fișiere încărcate pentru acest curs.</p>
+                                                </div>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup rendered="#{not empty fileManagementBean.documents}">
+                                                <div class="files-grid">
+                                                    <ui:repeat value="#{fileManagementBean.documents}"
+                                                               var="doc">
+                                                        <div class="file-card">
+                                                            <div class="file-card-icon">#{doc.fileIcon}</div>
+                                                            <div class="file-card-info">
+                                                                <div class="file-card-name" title="#{doc.name}">
+                                                                    #{doc.name}
+                                                                </div>
+                                                                <div class="file-card-meta">
+                                                                    #{doc.sizeFormatted}
+                                                                    <h:panelGroup rendered="#{not empty doc.author}">
+                                                                        · #{doc.author}
+                                                                    </h:panelGroup>
+                                                                </div>
+                                                            </div>
+                                                            <div class="file-card-actions">
+                                                                <p:commandButton
+                                                                        icon="pi pi-eye"
+                                                                        styleClass="action-btn edit-btn-sm"
+                                                                        title="Preview"
+                                                                        actionListener="#{fileManagementBean.previewDocument(doc)}"
+                                                                        oncomplete="PF('previewDialog').show()"
+                                                                        update="@form"
+                                                                        ajax="true"
+                                                                        process="@this"/>
+                                                                <p:commandButton
+                                                                        icon="pi pi-download"
+                                                                        styleClass="action-btn activate-btn-sm"
+                                                                        title="Descarcă"
+                                                                        ajax="false"
+                                                                        onclick="window.open('#{request.contextPath}/api/files/preview?path=#{doc.path}&amp;inline=false', '_blank'); return false;"/>
+                                                                <p:commandButton
+                                                                        icon="pi pi-trash"
+                                                                        styleClass="action-btn delete-btn-sm"
+                                                                        title="Șterge"
+                                                                        rendered="#{fileManagementBean.admin}"
+                                                                        action="#{fileManagementBean.deleteDocument(doc)}"
+                                                                        update="@form"
+                                                                        ajax="true"
+                                                                        process="@this">
+                                                                    <p:confirm header="Confirmare"
+                                                                               message="Ștergi fișierul #{doc.name}?"/>
+                                                                </p:commandButton>
+                                                            </div>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </h:panelGroup>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{fileManagementBean.selectedCourseId == null}">
+                                        <div class="admin-card">
+                                            <div class="coming-soon" style="padding:3rem;">
+                                                <div class="icon">&#128218;</div>
+                                                <h3>Selectează un curs</h3>
+                                                <p>Alege un curs din lista din stânga pentru a vedea fișierele.</p>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+
+                                </p:outputPanel>
+                            </div>
+                        </div>
+
+                        <!-- Preview panel în același form -->
+                        <p:outputPanel id="previewPanel">
+                            <p:dialog widgetVar="previewDialog"
+                                      header="#{fileManagementBean.selectedDocument != null ?
+                               fileManagementBean.selectedDocument.name : 'Preview'}"
+                                      modal="true"
+                                      closable="true"
+                                      width="850"
+                                      height="620"
+                                      styleClass="cal-dialog preview-dialog">
+
+                                <h:panelGroup rendered="#{fileManagementBean.selectedDocument != null}">
+
+                                    <h:panelGroup rendered="#{fileManagementBean.previewPdf}">
+                                        <iframe
+                                                src="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=true"
+                                                style="width:100%; height:520px; border:none; border-radius:8px;"
+                                                title="PDF Preview"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{fileManagementBean.previewImage}">
+                                        <div style="text-align:center; padding:1rem;">
+                                            <img src="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=true"
+                                                 style="max-width:100%; max-height:500px; border-radius:8px;"
+                                                 alt="#{fileManagementBean.selectedDocument.name}"/>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{!fileManagementBean.previewPdf and !fileManagementBean.previewImage}">
+                                        <div class="no-preview">
+                                            <div style="font-size:3rem; margin-bottom:1rem;">
+                                                #{fileManagementBean.selectedDocument.fileIcon}
+                                            </div>
+                                            <h3>Preview indisponibil</h3>
+                                            <p>Acest tip de fișier nu poate fi previzualizat în browser.</p>
+                                            <p style="margin-top:0.5rem;">
+                                                <a href="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=false"
+                                                   target="_blank"
+                                                   class="admin-card-link">
+                                                    &#11015; Descarcă fișierul
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </h:panelGroup>
+
+                                </h:panelGroup>
+                            </p:dialog>
+                        </p:outputPanel>
+
+                        <p:confirmDialog global="true"
+                                         widgetVar="confirmation"
+                                         showEffect="fade"
+                                         hideEffect="fade"
+                                         styleClass="cal-confirm-dialog"
+                                         width="400">
+                            <p:commandButton value="Da, șterge"
+                                             type="button"
+                                             styleClass="admin-confirm-yes-btn"
+                                             onclick="PF('confirmation').accept()"/>
+                            <p:commandButton value="Anulează"
+                                             type="button"
+                                             styleClass="admin-cancel-btn"
+                                             onclick="PF('confirmation').reject()"/>
+                        </p:confirmDialog>
+
+                    </h:form>
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>
