@@ -39,4 +39,6 @@ public interface CoursesRepository extends JpaRepository<CoursesEntity, Long> {
     @Query("SELECT DISTINCT c.faculty FROM CoursesEntity c " +
             "WHERE c.faculty IS NOT NULL ORDER BY c.faculty")
     List<String> findDistinctFaculties();
+
+    List<CoursesEntity> findByNameIgnoreCase(String name);
 }

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Import Note - Admin StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar-admin.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Import Note</h2>
+                        <span>Importă note din fișiere CSV</span>
+                    </div>
+                    <div class="topbar-right">
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; Deconectare
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="importForm" enctype="multipart/form-data">
+
+                        <p:messages globalOnly="true" styleClass="admin-messages"
+                                    showDetail="false" closable="true"/>
+
+                        <!-- FORMAT INFO -->
+                        <div class="admin-card import-info-card">
+                            <div class="admin-card-title">&#128221; Format fișier CSV</div>
+                            <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">
+                                Fișierul CSV trebuie să conțină 3 coloane separate prin
+                                <strong style="color:var(--text-primary);">virgulă (,)</strong> sau
+                                <strong style="color:var(--text-primary);">punct și virgulă (;)</strong>:
+                            </p>
+                            <div class="csv-example">
+                                <div class="csv-header">nr_matricol,nume_curs,nota</div>
+                                <div class="csv-row">12345,Programare Java,8</div>
+                                <div class="csv-row">12346,Baze de Date,9</div>
+                                <div class="csv-row">12347,Matematică Discretă,7</div>
+                            </div>
+                            <p style="color:var(--text-muted); font-size:0.8rem; margin-top:0.75rem;">
+                                &#9432; Prima linie poate fi header (va fi ignorată automat).
+                                Nota trebuie să fie între 1 și 10.
+                            </p>
+                        </div>
+
+                        <!-- UPLOAD -->
+                        <h:panelGroup rendered="#{!gradeImportBean.previewReady and !gradeImportBean.importDone}">
+                            <div class="admin-card">
+                                <div class="admin-card-title">&#128196; Încarcă fișier CSV</div>
+                                <div class="upload-area">
+                                    <p:fileUpload listener="#{gradeImportBean.handleFileUpload}"
+                                                  mode="advanced"
+                                                  auto="true"
+                                                  allowTypes="/(\.|\/)(csv)$/"
+                                                  maxFileSize="5000000"
+                                                  update="importForm"
+                                                  styleClass="grade-upload"
+                                                  chooseLabel="Selectează fișier CSV"
+                                                  uploadLabel="Încarcă"
+                                                  cancelLabel="Anulează"
+                                                  invalidFileMessage="Doar fișiere CSV sunt acceptate!"
+                                                  invalidSizeMessage="Fișierul depășește 5MB!"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                        <!-- PREVIEW -->
+                        <h:panelGroup rendered="#{gradeImportBean.previewReady}">
+
+                            <!-- Statistici preview -->
+                            <div class="import-stats">
+                                <div class="import-stat-card ok">
+                                    <div class="import-stat-value">#{gradeImportBean.importedCount}</div>
+                                    <div class="import-stat-label">Valide</div>
+                                </div>
+                                <div class="import-stat-card error">
+                                    <div class="import-stat-value">#{gradeImportBean.errorCount}</div>
+                                    <div class="import-stat-label">Erori</div>
+                                </div>
+                                <div class="import-stat-card duplicate">
+                                    <div class="import-stat-value">#{gradeImportBean.duplicateCount}</div>
+                                    <div class="import-stat-label">Duplicate</div>
+                                </div>
+                                <div class="import-stat-card total">
+                                    <div class="import-stat-value">#{gradeImportBean.previewRows.size()}</div>
+                                    <div class="import-stat-label">Total rânduri</div>
+                                </div>
+                            </div>
+
+                            <!-- Tabel preview -->
+                            <div class="admin-card">
+                                <div class="admin-card-title">
+                                    Previzualizare date
+                                    <div style="display:flex; gap:0.5rem;">
+                                        <p:commandButton
+                                                value="✓ Confirmă importul (#{gradeImportBean.importedCount} note)"
+                                                styleClass="cal-save-btn"
+                                                action="#{gradeImportBean.confirmImport()}"
+                                                update="importForm"
+                                                ajax="true"
+                                                disabled="#{!gradeImportBean.hasValidRows()}"/>
+                                        <p:commandButton
+                                                value="✕ Anulează"
+                                                styleClass="cal-cancel-btn"
+                                                action="#{gradeImportBean.reset()}"
+                                                update="importForm"
+                                                ajax="true"/>
+                                    </div>
+                                </div>
+
+                                <p:dataTable value="#{gradeImportBean.previewRows}"
+                                             var="row"
+                                             styleClass="admin-table"
+                                             paginator="true"
+                                             rows="20"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+                                    <p:column headerText="#" style="width:50px; text-align:center;">
+                                        <h:outputText value="#{row.rowNumber}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Nr. Matricol" style="width:130px;">
+                                        <h:outputText value="#{row.registrationNumber}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Student">
+                                        <h:outputText value="#{row.studentName}"
+                                                      rendered="#{not empty row.studentName}"
+                                                      style="color:var(--text-primary);"/>
+                                        <h:outputText value="—"
+                                                      rendered="#{empty row.studentName}"
+                                                      style="color:var(--text-muted);"/>
+                                    </p:column>
+
+                                    <p:column headerText="Curs">
+                                        <h:outputText value="#{row.courseName}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Notă" style="width:70px; text-align:center;">
+                                        <h:outputText value="#{row.grade}"
+                                                      rendered="#{row.grade != null}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Status" style="width:110px; text-align:center;">
+                                        <span class="import-status #{gradeImportBean.getStatusClass(row.status)}">
+                                            #{gradeImportBean.getStatusLabel(row.status)}
+                                        </span>
+                                    </p:column>
+
+                                    <p:column headerText="Detalii eroare">
+                                        <h:outputText value="#{row.errorMessage}"
+                                                      rendered="#{not empty row.errorMessage}"
+                                                      style="color:var(--error); font-size:0.8rem;"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </h:panelGroup>
+
+                        <!-- REZULTAT IMPORT -->
+                        <h:panelGroup rendered="#{gradeImportBean.importDone}">
+                            <div class="admin-card import-success-card">
+                                <div class="import-success-icon">&#10003;</div>
+                                <h3>Import finalizat!</h3>
+                                <p>Au fost importate cu succes
+                                    <strong>#{gradeImportBean.importedCount} note</strong>.
+                                </p>
+                                <p:commandButton
+                                        value="+ Import nou"
+                                        styleClass="cal-save-btn"
+                                        action="#{gradeImportBean.reset()}"
+                                        update="importForm"
+                                        ajax="true"
+                                        style="margin-top:1rem;"/>
+                            </div>
+                        </h:panelGroup>
+
+                    </h:form>
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>
