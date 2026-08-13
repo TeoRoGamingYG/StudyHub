@@ -26,7 +26,6 @@ public class AdminUserBean implements Serializable {
     private List<UsersEntity> users;
     private UsersEntity selectedUser;
 
-    // Filtre
     private String searchQuery = "";
     private String filterRole = "";
     private String filterFaculty = "";
@@ -41,7 +40,6 @@ public class AdminUserBean implements Serializable {
     }
 
     public void selectUser(UsersEntity user) {
-        // Reîncarcă din DB pentru date fresh
         this.selectedUser = adminUserService.findById(user.getId());
     }
 

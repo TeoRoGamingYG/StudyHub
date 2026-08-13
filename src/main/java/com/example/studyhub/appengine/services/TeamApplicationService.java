@@ -30,12 +30,10 @@ public class TeamApplicationService {
                                 String specialization, String message,
                                 String applicantEmail, Long userId) {
 
-        // Verifică dacă există deja o cerere pending
         if (requestRepository.existsByUserIdAndStatus(userId, "PENDING")) {
             throw new IllegalStateException("Ai deja o cerere în așteptare!");
         }
 
-        // Salvează în DB
         UsersEntity user = usersRepository.findById(userId).orElse(null);
         if (user != null) {
             ContributorRequestEntity request = new ContributorRequestEntity();
@@ -48,7 +46,6 @@ public class TeamApplicationService {
             requestRepository.save(request);
         }
 
-        // Trimite email notificare admin
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setFrom(appEmail);
         mail.setReplyTo(applicantEmail);
@@ -73,17 +70,14 @@ public class TeamApplicationService {
         ContributorRequestEntity request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Cerere negăsită"));
 
-        // Schimbă rolul userului
         UsersEntity user = request.getUser();
         user.setRole("HIGHERSTUD");
         usersRepository.save(user);
 
-        // Actualizează cererea
         request.setStatus("APPROVED");
         request.setReviewedAt(java.time.LocalDateTime.now());
         requestRepository.save(request);
 
-        // Trimite email de confirmare utilizatorului
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setFrom(appEmail);
         mail.setTo(user.getEmail());
@@ -107,7 +101,6 @@ public class TeamApplicationService {
         request.setReviewedAt(java.time.LocalDateTime.now());
         requestRepository.save(request);
 
-        // Trimite email de respingere
         UsersEntity user = request.getUser();
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setFrom(appEmail);

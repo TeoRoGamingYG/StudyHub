@@ -29,7 +29,6 @@ public class CalendarService {
     @Transactional
     public void deleteEvent(Long eventId, Long userId) {
         calendarEventRepository.findById(eventId).ifPresent(event -> {
-            // Poate șterge doar dacă e creatorul
             if (event.getCreatedBy() != null &&
                     event.getCreatedBy().getId().equals(userId)) {
                 calendarEventRepository.delete(event);

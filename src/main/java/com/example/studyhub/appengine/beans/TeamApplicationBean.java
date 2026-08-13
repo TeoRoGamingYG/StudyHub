@@ -59,6 +59,5 @@ public class TeamApplicationBean implements Serializable {
         }
     }
 
-    // Adaugă câmp pentru mesaj eroare
     private String errorMessage;
 }

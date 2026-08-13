@@ -8,7 +8,7 @@
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
-        <title>Dashboard Admin - StudyHub</title>
+        <title>#{msg['dashboard.page.title']}</title>
         <f:loadBundle basename="messages" var="msg"/>
         <h:outputStylesheet library="css" name="common.css"/>
         <h:outputStylesheet library="css" name="for-you.css"/>
@@ -22,8 +22,8 @@
             <div class="main">
                 <header class="topbar">
                     <div class="topbar-left">
-                        <h2>Dashboard</h2>
-                        <span>Vedere de ansamblu a platformei</span>
+                        <h2>#{msg['dashboard.title']}</h2>
+                        <span>#{msg['dashboard.subtitle']}</span>
                     </div>
                     <div class="topbar-right">
                         <div style="position:relative;">
@@ -40,7 +40,7 @@
                                 <div class="dropdown-sep"></div>
                                 <h:outputLink value="#{request.contextPath}/logout"
                                               styleClass="dropdown-item danger">
-                                    &#128682; Deconectare
+                                    &#128682; #{msg['common.logout']}
                                 </h:outputLink>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.totalUsers}</div>
-                                    <div class="admin-stat-label">Utilizatori total</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.totalUsers']}</div>
                                 </div>
                             </div>
                             <div class="admin-stat-card">
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.unconfirmedUsers}</div>
-                                    <div class="admin-stat-label">Neconfirmați email</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.unconfirmedUsers']}</div>
                                 </div>
                             </div>
                             <div class="admin-stat-card">
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.activeCourses}</div>
-                                    <div class="admin-stat-label">Cursuri active</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.activeCourses']}</div>
                                 </div>
                             </div>
                             <div class="admin-stat-card">
@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.totalGrades}</div>
-                                    <div class="admin-stat-label">Note introduse</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.totalGrades']}</div>
                                 </div>
                             </div>
                             <div class="admin-stat-card">
@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.totalFiles}</div>
-                                    <div class="admin-stat-label">Fișiere încărcate</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.totalFiles']}</div>
                                 </div>
                             </div>
                             <div class="admin-stat-card">
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="admin-stat-body">
                                     <div class="admin-stat-value">#{adminDashboardBean.stats.pendingContributorRequests}</div>
-                                    <div class="admin-stat-label">Cereri contributor</div>
+                                    <div class="admin-stat-label">#{msg['dashboard.stats.pendingContributorRequests']}</div>
                                 </div>
                             </div>
                         </div>
@@ -111,12 +111,12 @@
                         <!-- CHARTS -->
                         <div class="admin-charts-grid">
                             <div class="admin-card">
-                                <div class="admin-card-title">Înregistrări lunare utilizatori</div>
+                                <div class="admin-card-title">#{msg['dashboard.chart.monthlyRegistrations']}</div>
                                 <p:barChart model="#{adminDashboardBean.usersChartModel}"
                                             style="width:100%; height:260px;"/>
                             </div>
                             <div class="admin-card">
-                                <div class="admin-card-title">Note introduse lunar</div>
+                                <div class="admin-card-title">#{msg['dashboard.stats.totalGrades']} lunar</div>
                                 <p:lineChart model="#{adminDashboardBean.gradesChartModel}"
                                              style="width:100%; height:260px;"/>
                             </div>
@@ -128,24 +128,24 @@
                             <!-- Note recente -->
                             <div class="admin-card">
                                 <div class="admin-card-title">
-                                    Ultimele note introduse
+                                    #{msg['dashboard.recentGrades.title']}
                                     <h:outputLink value="#{request.contextPath}/pages/admin/grades-import.xhtml"
                                                   styleClass="admin-card-link">
-                                        Vezi toate →
+                                        #{msg['dashboard.recentGrades.viewAll']}
                                     </h:outputLink>
                                 </div>
                                 <p:dataTable value="#{adminDashboardBean.stats.recentGrades}"
                                              var="grade"
                                              styleClass="admin-table"
                                              rows="5"
-                                             emptyMessage="Nu există note recente.">
-                                    <p:column headerText="Student">
+                                             emptyMessage="#{msg['dashboard.recentGrades.empty']}">
+                                    <p:column headerText="#{msg['dashboard.recentGrades.student']}">
                                         <h:outputText value="#{grade.student.firstName} #{grade.student.lastName}"/>
                                     </p:column>
-                                    <p:column headerText="Materie">
+                                    <p:column headerText="#{msg['dashboard.recentGrades.subject']}">
                                         <h:outputText value="#{grade.course.name}"/>
                                     </p:column>
-                                    <p:column headerText="Notă" style="text-align:center; width:70px;">
+                                    <p:column headerText="#{msg['dashboard.recentGrades.grade']}" style="text-align:center; width:70px;">
                                         <span class="grade-badge #{grade.grade >= 5 ? 'pass' : 'fail'}">
                                             #{grade.grade}
                                         </span>
@@ -153,29 +153,29 @@
                                 </p:dataTable>
                             </div>
 
-                            <!-- Utilizatori noi -->
+                            <!-- #{msg['dashboard.newUsers.title']} -->
                             <div class="admin-card">
                                 <div class="admin-card-title">
-                                    Utilizatori noi
+                                    #{msg['dashboard.newUsers.title']}
                                     <h:outputLink value="#{request.contextPath}/pages/admin/users.xhtml"
                                                   styleClass="admin-card-link">
-                                        Gestionează →
+                                        #{msg['dashboard.newUsers.manage']}
                                     </h:outputLink>
                                 </div>
                                 <p:dataTable value="#{adminDashboardBean.stats.newestUsers}"
                                              var="user"
                                              styleClass="admin-table"
                                              rows="5"
-                                             emptyMessage="Nu există utilizatori noi.">
-                                    <p:column headerText="Nume">
+                                             emptyMessage="#{msg['dashboard.newUsers.empty']}">
+                                    <p:column headerText="#{msg['dashboard.newUsers.name']}">
                                         <h:outputText value="#{user.firstName} #{user.lastName}"/>
                                     </p:column>
-                                    <p:column headerText="Rol" style="width:110px;">
+                                    <p:column headerText="#{msg['dashboard.newUsers.role']}" style="width:110px;">
                                         <span class="role-badge role-#{user.role.toLowerCase()}">
                                             #{user.role}
                                         </span>
                                     </p:column>
-                                    <p:column headerText="Data" style="width:90px;">
+                                    <p:column headerText="#{msg['dashboard.newUsers.date']}" style="width:90px;">
                                         <h:outputText value="#{user.createdAt}">
                                             <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
                                         </h:outputText>
@@ -183,25 +183,25 @@
                                 </p:dataTable>
                             </div>
 
-                            <!-- Fișiere recente -->
+                            <!-- #{msg['dashboard.recentFiles.title']} -->
                             <div class="admin-card">
                                 <div class="admin-card-title">
-                                    Fișiere recente
+                                    #{msg['dashboard.recentFiles.title']}
                                     <h:outputLink value="#{request.contextPath}/pages/admin/files.xhtml"
                                                   styleClass="admin-card-link">
-                                        Vezi toate →
+                                        #{msg['dashboard.recentGrades.viewAll']}
                                     </h:outputLink>
                                 </div>
                                 <p:dataTable value="#{adminDashboardBean.stats.recentFiles}"
                                              var="file"
                                              styleClass="admin-table"
                                              rows="5"
-                                             emptyMessage="Nu există fișiere recente.">
-                                    <p:column headerText="Fișier">
+                                             emptyMessage="#{msg['dashboard.recentFiles.empty']}">
+                                    <p:column headerText="#{msg['dashboard.recentFiles.file']}">
                                         <span style="margin-right:6px;">&#128196;</span>
                                         <h:outputText value="#{file.fileName}"/>
                                     </p:column>
-                                    <p:column headerText="Data" style="width:80px;">
+                                    <p:column headerText="#{msg['dashboard.newUsers.date']}" style="width:80px;">
                                         <h:outputText value="#{file.uploadedAt}">
                                             <f:convertDateTime pattern="dd.MM" type="localDateTime"/>
                                         </h:outputText>

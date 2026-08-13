@@ -5,13 +5,11 @@ import com.example.studyhub.openkm.auth.OKMAuth_Service;
 import com.example.studyhub.openkm.document.Document;
 import com.example.studyhub.openkm.document.OKMDocument;
 import com.example.studyhub.openkm.document.OKMDocument_Service;
-import com.example.studyhub.openkm.folder.Folder;
 import com.example.studyhub.openkm.folder.OKMFolder;
 import com.example.studyhub.openkm.folder.OKMFolder_Service;
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
 import jakarta.mail.util.ByteArrayDataSource;
-import jakarta.xml.ws.BindingProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -50,15 +48,11 @@ public class OpenKMService {
         folderPort = folderService.getOKMFolderPort();
     }
 
-    /**
-     * Login dacă nu există deja token.
-     */
     private void login() throws Exception {
 
         if (token != null) {
             return;
         }
-
         token = authPort.login(username, password);
     }
 
@@ -75,20 +69,13 @@ public class OpenKMService {
                 courseName.replace(" ", "_");
     }
 
-    /**
-     * Creează folder dacă nu există.
-     */
     public void createFolder(String path) {
 
         try {
-
             login();
-
             folderPort.createSimple(token, path);
 
         } catch (Exception ignored) {
-
-            // există deja
         }
     }
 
@@ -98,16 +85,12 @@ public class OpenKMService {
 
     }
 
-    /**
-     * Upload document.
-     */
     public void uploadDocument(String folderPath,
                                String fileName,
                                byte[] bytes,
                                String mimeType) throws Exception {
 
         login();
-
         Document doc = new Document();
 
         doc.setPath(folderPath + "/" + fileName);
@@ -122,87 +105,53 @@ public class OpenKMService {
         documentPort.create(token, doc, handler);
     }
 
-    /**
-     * Documentele din folder.
-     */
     public List<Document> getDocumentsInFolder(String folderPath) {
 
         try {
-
             login();
-
             return documentPort.getChildren(token, folderPath);
 
         } catch (Exception e) {
-
             return Collections.emptyList();
         }
     }
 
-    /**
-     * Download document.
-     */
     public byte[] downloadDocument(String path) throws Exception {
 
         login();
-
         DataHandler handler =
                 documentPort.getContent(token, path, false);
 
         InputStream in = handler.getInputStream();
-
         return in.readAllBytes();
     }
 
-    /**
-     * Preview = download.
-     */
     public byte[] getDocumentPreview(String path) throws Exception {
 
         return downloadDocument(path);
-
     }
 
-    /**
-     * Ștergere document.
-     */
     public void deleteDocument(String path) throws Exception {
 
         login();
-
         documentPort.delete(token, path);
-
     }
 
-    /**
-     * Proprietăți document.
-     */
     public Document getDocument(String path) throws Exception {
 
         login();
-
         return documentPort.getProperties(token, path);
-
     }
 
-    /**
-     * Logout.
-     */
     public void logout() {
 
         try {
-
             if (token != null) {
-
                 authPort.logout(token);
-
                 token = null;
-
             }
 
         } catch (Exception ignored) {
         }
-
     }
-
 }

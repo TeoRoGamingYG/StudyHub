@@ -25,7 +25,6 @@ public class AdminDashboardService {
     public DashboardStats getDashboard() {
         DashboardStats stats = new DashboardStats();
 
-        // 1. Metricile pentru carduri
         stats.setTotalUsers(usersRepository.count());
         stats.setUnconfirmedUsers(usersRepository.countByEmailConfirmedFalse());
         stats.setProfessorsCount(teachersRepository.count());
@@ -35,7 +34,6 @@ public class AdminDashboardService {
         stats.setTotalFiles(filesRepository.count());
         stats.setPendingContributorRequests((int) contributorRequestRepository.countByStatus("PENDING"));
 
-        // 2. Liste pentru activitate recentă
         stats.setRecentGrades(gradesRepository.findTop10ByOrderByGradedAtDesc());
         stats.setNewestUsers(usersRepository.findTop10ByOrderByCreatedAtDesc());
         stats.setRecentFiles(filesRepository.findTop10ByOrderByUploadedAtDesc());

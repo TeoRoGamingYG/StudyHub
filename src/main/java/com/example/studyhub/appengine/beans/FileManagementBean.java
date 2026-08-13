@@ -43,14 +43,11 @@ public class FileManagementBean implements Serializable {
     @Inject
     private CoursesRepository coursesRepository;
 
-    // Cursuri disponibile
     private List<CoursesEntity> availableCourses;
     private Long selectedCourseId;
 
-    // Documente din folderul selectat
     private List<OkmDocumentDTO> documents = new ArrayList<>();
 
-    // Document selectat pentru preview/detalii
     private OkmDocumentDTO selectedDocument;
     private byte[] previewContent;
     private boolean previewPdf = false;

@@ -8,7 +8,7 @@
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
-        <title>Cereri Contributor - Admin StudyHub</title>
+        <title>#{msg['contributors.title']} - Admin StudyHub</title>
         <f:loadBundle basename="messages" var="msg"/>
         <h:outputStylesheet library="css" name="common.css"/>
         <h:outputStylesheet library="css" name="for-you.css"/>
@@ -22,9 +22,9 @@
             <div class="main">
                 <header class="topbar">
                     <div class="topbar-left">
-                        <h2>Cereri Contributor</h2>
+                        <h2>#{msg['contributors.title']}</h2>
                         <span>
-                            #{contributorBean.pendingCount} cereri în așteptare
+                            #{contributorBean.pendingCount} #{msg['contributors.pending.count']}
                         </span>
                     </div>
                     <div class="topbar-right">
@@ -42,7 +42,7 @@
                                 <div class="dropdown-sep"></div>
                                 <h:outputLink value="#{request.contextPath}/logout"
                                               styleClass="dropdown-item danger">
-                                    &#128682; Deconectare
+                                    &#128682; #{msg['dp.disconnect']}
                                 </h:outputLink>
                             </div>
                         </div>
@@ -59,17 +59,19 @@
                         <div class="admin-card" style="margin-bottom:1rem;">
                             <div class="admin-filters">
                                 <div class="filter-group">
-                                    <label class="filter-label">Filtrează după status</label>
+                                    <label class="filter-label">
+                                        #{msg['contributors.filter.label']}
+                                    </label>
                                     <div class="filter-buttons">
                                         <p:commandButton
-                                                value="În așteptare (#{contributorBean.pendingCount})"
+                                                value="#{msg['contributors.filter.pending']} (#{contributorBean.pendingCount})"
                                                 styleClass="filter-btn #{contributorBean.filterStatus eq 'PENDING' ? 'active' : ''}"
                                                 actionListener="#{contributorBean.setFilterStatus('PENDING')}"
                                                 action="#{contributorBean.loadRequests()}"
                                                 update="contributorsForm"
                                                 ajax="true"/>
                                         <p:commandButton
-                                                value="Toate"
+                                                value="#{msg['contributors.filter.all']}"
                                                 styleClass="filter-btn #{contributorBean.filterStatus eq 'ALL' ? 'active' : ''}"
                                                 actionListener="#{contributorBean.setFilterStatus('ALL')}"
                                                 action="#{contributorBean.loadRequests()}"
@@ -83,7 +85,7 @@
                         <!-- TABEL CERERI -->
                         <div class="admin-card">
                             <div class="admin-card-title">
-                                Cereri (#{contributorBean.requests.size()})
+                                #{msg['contributors.table.title']} (#{contributorBean.requests.size()})
                             </div>
 
                             <p:dataTable id="requestsTable"
@@ -93,9 +95,10 @@
                                          paginator="true"
                                          rows="10"
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                                         emptyMessage="Nu există cereri.">
+                                         emptyMessage="#{msg['contributors.filter.all']}">
 
-                                <p:column headerText="Utilizator" style="width:200px;">
+                                <p:column headerText="#{msg['contributors.col.user']}"
+                                          style="width:200px;">
                                     <div class="user-cell">
                                         <div class="user-avatar-sm">
                                             #{req.user.avatarInitials}
@@ -107,7 +110,7 @@
                                     </div>
                                 </p:column>
 
-                                <p:column headerText="An / Specializare">
+                                <p:column headerText="#{msg['contributors.col.year']}">
                                     <div style="color:var(--text-primary); font-size:0.875rem;">
                                         #{req.studyYear}
                                     </div>
@@ -116,30 +119,32 @@
                                     </div>
                                 </p:column>
 
-                                <p:column headerText="Mesaj">
+                                <p:column headerText="#{msg['contributors.col.message']}">
                                     <h:outputText value="#{req.message.length() > 80 ?
                                         req.message.substring(0, 80).concat('...') :
                                         req.message}"
                                                   style="color:var(--text-secondary); font-size:0.875rem;"/>
                                 </p:column>
 
-                                <p:column headerText="Data" style="width:100px;">
+                                <p:column headerText="#{msg['contributors.col.date']}"
+                                          style="width:100px;">
                                     <h:outputText value="#{req.createdAt}">
                                         <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
                                     </h:outputText>
                                 </p:column>
 
-                                <p:column headerText="Status" style="width:120px; text-align:center;">
+                                <p:column headerText="#{msg['contributors.col.status']}"
+                                          style="width:120px; text-align:center;">
                                     <span class="status-badge #{contributorBean.getStatusClass(req.status)}">
                                         #{contributorBean.getStatusLabel(req.status)}
                                     </span>
                                 </p:column>
 
-                                <p:column headerText="Acțiuni" style="width:150px; text-align:center;">
+                                <p:column headerText="#{msg['contributors.col.actions']}"
+                                          style="width:150px; text-align:center;">
                                     <div class="action-buttons">
-                                        <!-- Vizualizare + acțiuni -->
                                         <p:commandButton
-                                                value="&#128065; Vezi"
+                                                value="#{msg['contributors.btn.view']}"
                                                 styleClass="action-btn-text view-btn"
                                                 actionListener="#{contributorBean.selectRequest(req)}"
                                                 oncomplete="PF('requestDetailDialog').show()"
@@ -147,32 +152,29 @@
                                                 ajax="true"
                                                 rendered="#{req.status eq 'PENDING'}"/>
 
-                                        <!-- Aprobare rapidă -->
                                         <p:commandButton
                                                 icon="pi pi-check"
                                                 styleClass="action-btn activate-btn-sm"
-                                                title="Aprobă"
+                                                title="#{msg['contributors.btn.approve.title']}"
                                                 actionListener="#{contributorBean.selectRequest(req)}"
                                                 action="#{contributorBean.approve()}"
                                                 update="contributorsForm"
                                                 ajax="true"
                                                 rendered="#{req.status eq 'PENDING'}">
-                                            <p:confirm header="Aprobare cerere"
-                                                       message="Aprobi cererea lui #{req.fullName}? Rolul va fi schimbat în HIGHERSTUD."/>
+                                            <p:confirm header="#{msg['contributors.confirm.approve.header']}"
+                                                       message="#{msg['contributors.confirm.approve.message1']} #{req.fullName}#{msg['contributors.confirm.approve.message2']}"/>
                                         </p:commandButton>
 
-                                        <!-- Respingere -->
                                         <p:commandButton
                                                 icon="pi pi-times"
                                                 styleClass="action-btn deactivate-btn-sm"
-                                                title="Respinge"
+                                                title="#{msg['contributors.btn.reject.title']}"
                                                 actionListener="#{contributorBean.selectRequest(req)}"
                                                 oncomplete="PF('rejectDialog').show()"
                                                 update="rejectForm"
                                                 ajax="true"
                                                 rendered="#{req.status eq 'PENDING'}"/>
 
-                                        <!-- Status final -->
                                         <h:outputText
                                                 value="#{contributorBean.getStatusLabel(req.status)}"
                                                 style="color:var(--text-muted); font-size:0.78rem;"
@@ -188,11 +190,11 @@
                                          hideEffect="fade"
                                          styleClass="cal-confirm-dialog"
                                          width="420">
-                            <p:commandButton value="Da, confirmă"
+                            <p:commandButton value="#{msg['contributors.confirm.yes']}"
                                              type="button"
                                              styleClass="admin-confirm-yes-btn"
                                              onclick="PF('confirmation').accept()"/>
-                            <p:commandButton value="Anulează"
+                            <p:commandButton value="#{msg['contributors.confirm.cancel']}"
                                              type="button"
                                              styleClass="admin-cancel-btn"
                                              onclick="PF('confirmation').reject()"/>
@@ -202,7 +204,7 @@
                     <!-- DIALOG DETALII CERERE -->
                     <h:form id="requestDetailForm">
                         <p:dialog widgetVar="requestDetailDialog"
-                                  header="Detalii cerere contributor"
+                                  header="#{msg['contributors.detail.header']}"
                                   modal="true"
                                   closable="true"
                                   width="520"
@@ -226,33 +228,46 @@
 
                                     <div class="contributor-info-grid">
                                         <div class="contributor-info-item">
-                                            <span class="contributor-label">An de studiu</span>
+                                            <span class="contributor-label">
+                                                #{msg['contributors.detail.year']}
+                                            </span>
                                             <span class="contributor-value">
                                                 #{contributorBean.selectedRequest.studyYear}
                                             </span>
                                         </div>
                                         <div class="contributor-info-item">
-                                            <span class="contributor-label">Specializare</span>
+                                            <span class="contributor-label">
+                                                #{msg['contributors.detail.specialization']}
+                                            </span>
                                             <span class="contributor-value">
                                                 #{contributorBean.selectedRequest.specialization}
                                             </span>
                                         </div>
-                                        <div class="contributor-info-item" style="grid-column: span 2;">
-                                            <span class="contributor-label">Mesaj</span>
+                                        <div class="contributor-info-item"
+                                             style="grid-column: span 2;">
+                                            <span class="contributor-label">
+                                                #{msg['contributors.detail.message']}
+                                            </span>
                                             <div class="contributor-message">
                                                 #{contributorBean.selectedRequest.message}
                                             </div>
                                         </div>
                                         <div class="contributor-info-item">
-                                            <span class="contributor-label">Data cererii</span>
+                                            <span class="contributor-label">
+                                                #{msg['contributors.detail.date']}
+                                            </span>
                                             <span class="contributor-value">
-                                                <h:outputText value="#{contributorBean.selectedRequest.createdAt}">
-                                                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm" type="localDateTime"/>
+                                                <h:outputText
+                                                        value="#{contributorBean.selectedRequest.createdAt}">
+                                                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
+                                                                       type="localDateTime"/>
                                                 </h:outputText>
                                             </span>
                                         </div>
                                         <div class="contributor-info-item">
-                                            <span class="contributor-label">Status</span>
+                                            <span class="contributor-label">
+                                                #{msg['contributors.detail.status']}
+                                            </span>
                                             <span class="status-badge #{contributorBean.getStatusClass(contributorBean.selectedRequest.status)}">
                                                 #{contributorBean.getStatusLabel(contributorBean.selectedRequest.status)}
                                             </span>
@@ -262,19 +277,19 @@
                                     <h:panelGroup rendered="#{contributorBean.selectedRequest.status eq 'PENDING'}">
                                         <div class="contributor-actions">
                                             <p:commandButton
-                                                    value="✓ Aprobă"
+                                                    value="#{msg['contributors.btn.approve']}"
                                                     styleClass="cal-save-btn"
                                                     action="#{contributorBean.approve()}"
                                                     update="contributorsForm requestDetailForm"
                                                     oncomplete="PF('requestDetailDialog').hide()"
                                                     ajax="true"/>
                                             <p:commandButton
-                                                    value="✕ Respinge"
+                                                    value="#{msg['contributors.btn.reject']}"
                                                     styleClass="cal-delete-btn"
                                                     oncomplete="PF('requestDetailDialog').hide(); PF('rejectDialog').show()"
                                                     ajax="false"/>
                                             <p:commandButton
-                                                    value="Închide"
+                                                    value="#{msg['contributors.btn.close']}"
                                                     styleClass="cal-cancel-btn"
                                                     onclick="PF('requestDetailDialog').hide(); return false;"
                                                     ajax="false"/>
@@ -288,7 +303,7 @@
                     <!-- DIALOG RESPINGERE -->
                     <h:form id="rejectForm">
                         <p:dialog widgetVar="rejectDialog"
-                                  header="Respinge cererea"
+                                  header="#{msg['contributors.reject.header']}"
                                   modal="true"
                                   closable="true"
                                   width="420"
@@ -297,17 +312,17 @@
                             <div class="cal-form">
                                 <div class="cal-field">
                                     <label class="cal-label">
-                                        Motiv respingere (opțional — va fi trimis utilizatorului)
+                                        #{msg['contributors.reject.reason.label']}
                                     </label>
                                     <p:inputTextarea
                                             value="#{contributorBean.rejectionReason}"
                                             styleClass="cal-textarea"
-                                            placeholder="ex: Nu îndeplinești cerințele minime pentru contribuitor..."
+                                            placeholder="#{msg['contributors.reject.reason.placeholder']}"
                                             rows="4"/>
                                 </div>
                                 <div class="cal-actions">
                                     <p:commandButton
-                                            value="Trimite respingerea"
+                                            value="#{msg['contributors.reject.btn.send']}"
                                             styleClass="cal-delete-btn"
                                             action="#{contributorBean.reject()}"
                                             update="contributorsForm rejectForm"
@@ -315,7 +330,7 @@
                                             process="rejectForm"
                                             ajax="true"/>
                                     <p:commandButton
-                                            value="Anulează"
+                                            value="#{msg['contributors.reject.btn.cancel']}"
                                             styleClass="cal-cancel-btn"
                                             onclick="PF('rejectDialog').hide(); return false;"
                                             ajax="false"/>

@@ -35,7 +35,6 @@ public class CalendarBean implements Serializable {
 
     private ScheduleModel scheduleModel;
 
-    // Form pentru eveniment nou/edit
     private String eventTitle;
     private String eventDescription;
     private Date eventStart;
@@ -44,12 +43,10 @@ public class CalendarBean implements Serializable {
     private String eventColor = "#4f6ef7";
     private boolean eventPublic = true;
 
-    // Evenimentul selectat pentru vizualizare/ștergere
     private DefaultScheduleEvent<?> selectedEvent;
     private Long selectedEventId;
     private boolean canDeleteSelected = false;
 
-    // Dialog mode
     private boolean editMode = false;
 
     @PostConstruct
@@ -91,7 +88,6 @@ public class CalendarBean implements Serializable {
     }
 
     public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
-        // Deschide dialogul de creare cu data pre-selectată
         resetForm();
         eventStart = toDate(selectEvent.getObject());
         eventEnd = toDate(selectEvent.getObject().plusHours(1));
@@ -105,7 +101,6 @@ public class CalendarBean implements Serializable {
         eventEnd = null;
         eventAllDay = false;
         eventColor = "#4f6ef7";
-        // Doar HIGHERSTUD poate crea evenimente publice
         eventPublic = "HIGHERSTUD".equals(sessionBean.getRole());
         editMode = false;
     }
@@ -135,7 +130,6 @@ public class CalendarBean implements Serializable {
         }
     }
 
-    // Culori predefinite pentru picker
     public List<String> getColorOptions() {
         return List.of(
                 "#4f6ef7", "#6c63ff", "#43e97b", "#ff6584",
@@ -143,7 +137,6 @@ public class CalendarBean implements Serializable {
         );
     }
 
-    // Helpers conversie
     private LocalDateTime toLocalDateTime(Date date) {
         if (date == null) return null;
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();

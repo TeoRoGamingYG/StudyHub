@@ -27,10 +27,6 @@ public class GradeImportService {
     private final CoursesRepository coursesRepository;
     private final GradesRepository gradesRepository;
 
-    /**
-     * Parsează CSV și returnează preview cu status per rând.
-     * Format CSV: nr_matricol,nume_curs,nota
-     */
     public List<GradeImportRow> parseAndValidate(InputStream inputStream) {
         List<GradeImportRow> rows = new ArrayList<>();
 
@@ -44,7 +40,6 @@ public class GradeImportService {
             while ((line = reader.readLine()) != null) {
                 rowNum++;
 
-                // Sari header
                 if (firstLine) {
                     firstLine = false;
                     if (line.toLowerCase().contains("matricol") ||
@@ -77,7 +72,6 @@ public class GradeImportService {
         row.setRowNumber(rowNum);
 
         try {
-            // Suportă separator , sau ;
             String[] parts = line.contains(";")
                     ? line.split(";", -1)
                     : line.split(",", -1);
@@ -106,14 +100,12 @@ public class GradeImportService {
     private void validateRow(GradeImportRow row) {
         if (row.getStatus() != null && row.getStatus().equals("ERROR")) return;
 
-        // Validare notă
         if (row.getGrade() == null || row.getGrade() < 1 || row.getGrade() > 10) {
             row.setStatus("ERROR");
             row.setErrorMessage("Nota trebuie să fie între 1 și 10");
             return;
         }
 
-        // Verifică student
         UsersEntity student = usersRepository
                 .findByRegistrationNumber(row.getRegistrationNumber());
         if (student == null) {
@@ -124,7 +116,6 @@ public class GradeImportService {
         }
         row.setStudentName(student.getFirstName() + " " + student.getLastName());
 
-        // Verifică curs
         List<CoursesEntity> courses = coursesRepository
                 .findByNameIgnoreCase(row.getCourseName());
         if (courses.isEmpty()) {
@@ -133,7 +124,6 @@ public class GradeImportService {
             return;
         }
 
-        // Verifică duplicat
         boolean exists = gradesRepository.existsByStudentRegistrationNumberAndCourseName(
                 row.getRegistrationNumber(), row.getCourseName()
         );
