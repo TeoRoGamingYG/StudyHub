@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 public class DashboardStats {
 
-    // Count-uri pentru Cards
     private long totalUsers;
     private long activeUsers;
     private long unconfirmedUsers;
@@ -22,7 +21,6 @@ public class DashboardStats {
     private long totalFiles;
     private long pendingContributorRequests;
 
-    // Liste pentru activitate recentă (pentru pasul următor)
     private List<GradesEntity> recentGrades;
     private List<UsersEntity> newestUsers;
     private List<FilesEntity> recentFiles;

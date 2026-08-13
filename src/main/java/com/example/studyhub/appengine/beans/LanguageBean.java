@@ -23,7 +23,6 @@ public class LanguageBean implements Serializable {
 
     public void changeLanguage(String lang) {
         this.language = lang;
-        // redirect la pagina curentă
         FacesContext context = FacesContext.getCurrentInstance();
         String currentPage = context.getViewRoot().getViewId();
         try {

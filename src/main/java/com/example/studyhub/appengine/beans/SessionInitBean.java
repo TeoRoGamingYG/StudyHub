@@ -21,7 +21,6 @@ public class SessionInitBean {
 
     @PostConstruct
     public void init() {
-        // Dacă sessionBean nu e populat, îl populăm din Security context
         if (sessionBean.getUserId() == null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated() &&

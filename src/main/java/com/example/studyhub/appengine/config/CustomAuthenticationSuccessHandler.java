@@ -30,16 +30,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         UsersEntity user = userService.findByEmail(email);
 
         if (user != null) {
-            // Populează SessionBean
             SessionBean sessionBean = getSessionBean(request);
             if (sessionBean != null) {
                 sessionBean.populateFromEntity(user);
             }
 
-            // Actualizează last login
             userService.updateLastLogin(email);
 
-            // Redirecționează în funcție de rol
             String redirectUrl;
             switch (user.getRole()) {
                 case "ADMIN":

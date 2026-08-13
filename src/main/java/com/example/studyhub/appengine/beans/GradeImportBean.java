@@ -56,7 +56,6 @@ public class GradeImportBean implements Serializable {
                     uploadedFile.getInputStream()
             );
 
-            // Calculează statistici preview
             importedCount = 0;
             errorCount = 0;
             duplicateCount = 0;

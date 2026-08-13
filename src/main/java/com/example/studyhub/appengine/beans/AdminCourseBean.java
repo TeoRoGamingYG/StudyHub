@@ -27,7 +27,6 @@ public class AdminCourseBean implements Serializable {
     private CoursesEntity selectedCourse;
     private boolean newCourse = false;
 
-    // Filtre
     private String filterSpecialization = "";
     private String filterFaculty = "";
     private Integer filterYear;
