@@ -48,4 +48,13 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
     @Query("SELECT DISTINCT u.faculty FROM UsersEntity u " +
             "WHERE u.faculty IS NOT NULL ORDER BY u.faculty")
     List<String> findDistinctFaculties();
+
+    List<UsersEntity> findByGroupName(String groupName);
+
+    @Query("""
+    SELECT DISTINCT g.student
+    FROM GradesEntity g
+    WHERE g.course.id = :courseId
+    """)
+    List<UsersEntity> findStudentsByCourseId(@Param("courseId") Long courseId);
 }

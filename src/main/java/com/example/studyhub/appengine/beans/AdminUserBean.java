@@ -11,6 +11,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,12 +24,18 @@ public class AdminUserBean implements Serializable {
     @Inject
     private AdminUserService adminUserService;
 
+    @Inject
+    private SessionBean sessionBean;
+
     private List<UsersEntity> users;
     private UsersEntity selectedUser;
 
     private String searchQuery = "";
     private String filterRole = "";
     private String filterFaculty = "";
+
+    private String tempPassword;
+    private String resetPasswordUserName;
 
     @PostConstruct
     public void init() {
@@ -47,10 +54,19 @@ public class AdminUserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             adminUserService.updateUser(selectedUser);
-            loadUsers();
+
+            if (selectedUser.getId().equals(sessionBean.getUserId())) {
+                UsersEntity updated = adminUserService.findById(selectedUser.getId());
+                sessionBean.populateFromEntity(updated);
+            }
+
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO,
                     "Utilizator actualizat cu succes!", null));
+
+            PrimeFaces.current().ajax().update("usersForm", "editUserForm");
+            PrimeFaces.current().executeScript("PF('editUserDialog').hide()");
+
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
@@ -58,14 +74,18 @@ public class AdminUserBean implements Serializable {
         }
     }
 
-    public void toggleActive(UsersEntity user) {
+    public void toggleActiveConfirmed() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            adminUserService.toggleActive(user.getId());
+            adminUserService.toggleActive(selectedUser.getId());
             loadUsers();
+
+            boolean newStatus = !Boolean.TRUE.equals(selectedUser.getActive());
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO,
-                    "Status utilizator modificat!", null));
+                    selectedUser.getFirstName() + " " + selectedUser.getLastName() +
+                            (newStatus ? " a fost activat." : " a fost dezactivat."), null));
+
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
@@ -73,13 +93,13 @@ public class AdminUserBean implements Serializable {
         }
     }
 
-    public void resetPassword(UsersEntity user) {
+    public void resetPasswordConfirmed() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            String tempPassword = adminUserService.resetPassword(user.getId());
-            context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO,
-                    "Parolă resetată! Parola temporară: " + tempPassword, null));
+            tempPassword = adminUserService.resetPassword(selectedUser.getId());
+            resetPasswordUserName = selectedUser.getFirstName()
+                    + " " + selectedUser.getLastName();
+
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
@@ -87,14 +107,26 @@ public class AdminUserBean implements Serializable {
         }
     }
 
-    public void deleteUser(UsersEntity user) {
+    public void deleteUserConfirmed() {
         FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selectedUser.getId().equals(sessionBean.getUserId())) {
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN,
+                    "Nu poți șterge propriul cont!", null));
+            return;
+        }
+
         try {
-            adminUserService.deleteUser(user.getId());
+            String name = selectedUser.getFirstName() + " " + selectedUser.getLastName();
+            adminUserService.deleteUser(selectedUser.getId());
             loadUsers();
+            selectedUser = null;
+
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO,
-                    "Utilizator șters!", null));
+                    "Utilizatorul " + name + " a fost șters.", null));
+
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,

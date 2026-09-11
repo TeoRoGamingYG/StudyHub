@@ -52,8 +52,16 @@ public class GradeImportBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             uploadedFile = event.getFile();
+
+            if (uploadedFile == null || uploadedFile.getContent().length == 0) {
+                context.addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR,
+                        "Fișierul este gol!", null));
+                return;
+            }
+
             previewRows = gradeImportService.parseAndValidate(
-                    uploadedFile.getInputStream()
+                    new java.io.ByteArrayInputStream(uploadedFile.getContent())
             );
 
             importedCount = 0;
@@ -68,13 +76,18 @@ public class GradeImportBean implements Serializable {
                 }
             }
 
-            previewReady = true;
+            previewReady = true;  // IMPORTANT
             importDone = false;
 
+//            log.info("Preview ready: {} rows, {} valid, {} errors, {} duplicates",
+//                    previewRows.size(), importedCount, errorCount, duplicateCount);
+
         } catch (Exception e) {
+//            log.error("Eroare upload: {}", e.getMessage(), e);
             context.addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR,
                     "Eroare la procesarea fișierului: " + e.getMessage(), null));
+            previewReady = false;
         }
     }
 

@@ -51,7 +51,8 @@
                     <h:form id="mainForm" enctype="multipart/form-data">
                         <p:messages globalOnly="true"
                                     styleClass="admin-messages"
-                                    showDetail="true"
+                                    showSummary="true"
+                                    showDetail="false"
                                     closable="true"/>
 
                         <div class="files-layout">
@@ -62,7 +63,7 @@
                                     <div class="admin-card-title">&#128218; #{msg['files.courses']}</div>
                                     <div class="course-list">
                                         <ui:repeat value="#{fileManagementBean.availableCourses}" var="course">
-                                            <div class="course-list-item">
+                                            <div class="course-list-item #{fileManagementBean.selectedCourseId == course.id ? 'selected' : ''}">
                                                 <p:commandLink styleClass="course-link"
                                                                actionListener="#{fileManagementBean.selectCourse(course.id)}"
                                                                ajax="true"
@@ -90,6 +91,23 @@
                                     <div class="admin-card" style="margin-bottom:1rem;">
                                         <div class="admin-card-title">&#128228; #{msg['files.upload.title']}</div>
                                         <div class="upload-row">
+
+                                            <div class="cal-field">
+                                                <label class="cal-label">
+                                                    #{msg['files.upload.type']}
+                                                </label>
+
+                                                <p:selectOneMenu id="fileTypeSelect"
+                                                                 value="#{fileManagementBean.selectedFileType}"
+                                                                 styleClass="admin-filter-select">
+                                                    <p:ajax event="change" process="@this"/>
+                                                    <f:selectItems value="#{fileManagementBean.fileTypes}"
+                                                                   var="type"
+                                                                   itemValue="#{type}"
+                                                                   itemLabel="#{type.label}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+
                                             <div class="upload-btn-area">
                                                 <p:fileUpload
                                                         mode="advanced"
@@ -103,6 +121,7 @@
                                                         cancelLabel="#{msg['files.upload.cancel']}"
                                                         invalidSizeMessage="#{msg['files.upload.invalidSize']}"/>
                                             </div>
+
                                         </div>
                                     </div>
                                 </h:panelGroup>
@@ -139,6 +158,12 @@
                                                                     #{doc.sizeFormatted}
                                                                     <h:panelGroup rendered="#{not empty doc.author}">
                                                                         · #{doc.author}
+                                                                    </h:panelGroup>
+                                                                    <h:panelGroup rendered="#{doc.type != null}">
+                                                                        <br/>
+                                                                        <span class="file-type-badge file-type-#{doc.type.name().toLowerCase()}">
+                                                                            #{doc.type.label}
+                                                                        </span>
                                                                     </h:panelGroup>
                                                                 </div>
                                                             </div>
@@ -252,23 +277,20 @@
                         </p:outputPanel>
 
                         <!-- CONFIRM DIALOG -->
-                        <p:confirmDialog
-                                global="true"
-                                widgetVar="confirmation"
-                                showEffect="fade"
-                                hideEffect="fade"
-                                styleClass="cal-confirm-dialog"
-                                width="400">
-                            <p:commandButton
-                                    value="#{msg['files.confirm.yes']}"
-                                    type="button"
-                                    styleClass="admin-confirm-yes-btn"
-                                    onclick="PF('confirmation').accept()"/>
-                            <p:commandButton
-                                    value="#{msg['files.confirm.cancel']}"
-                                    type="button"
-                                    styleClass="admin-cancel-btn"
-                                    onclick="PF('confirmation').reject()"/>
+                        <p:confirmDialog global="true"
+                                         showEffect="fade"
+                                         hideEffect="fade"
+                                         responsive="true"
+                                         styleClass="cal-confirm-dialog"
+                                         width="350">
+                            <p:commandButton value="#{msg['files.confirm.yes']}"
+                                             type="button"
+                                             styleClass="ui-confirmdialog-yes admin-confirm-yes-btn"
+                                             icon="pi pi-check" />
+                            <p:commandButton value="#{msg['files.confirm.cancel']}"
+                                             type="button"
+                                             styleClass="ui-confirmdialog-no admin-cancel-btn"
+                                             icon="pi pi-times" />
                         </p:confirmDialog>
 
                     </h:form>

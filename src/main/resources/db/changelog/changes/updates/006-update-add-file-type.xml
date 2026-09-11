@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+
+    <changeSet author="dev.team" id="20260824-add-file-type">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="files" columnName="type"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="files">
+            <column name="type" type="VARCHAR(30)" defaultValue="OTHER">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

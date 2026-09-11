@@ -41,4 +41,6 @@ public interface CoursesRepository extends JpaRepository<CoursesEntity, Long> {
     List<String> findDistinctFaculties();
 
     List<CoursesEntity> findByNameIgnoreCase(String name);
+
+    List<CoursesEntity> findBySpecializationAndStudyYearAndSemesterAndIsActiveTrue(String specialization, Integer studyYear, Integer semester);
 }

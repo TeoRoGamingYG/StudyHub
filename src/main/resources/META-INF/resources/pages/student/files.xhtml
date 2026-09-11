@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>#{msg['files.page.title']}</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="admin.css"/>
+        <h:outputStylesheet library="css" name="chat.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+            <ui:include src="/WEB-INF/templates/chat-panel.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>#{msg['files.title']}</h2>
+                        <span>#{msg['files.subtitle']}</span>
+                    </div>
+                    <div class="topbar-right">
+                        <ui:include src="/WEB-INF/templates/notifications-panel.xhtml"/>
+                        <div class="icon-btn chat-toggle-btn" onclick="toggleChat()" title="Chat">
+                            &#128172;
+                            <span class="dot chat-dot" id="chatNotifDot" style="display:none;"></span>
+                        </div>
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128100; #{msg['dp.profile']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128197; #{msg['dp.calendar']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128221; #{msg['dp.grades']}
+                                </h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
+                                              styleClass="dropdown-item">
+                                    &#128202; #{msg['dp.reports']}
+                                </h:outputLink>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">
+                                    &#128682; #{msg['dp.disconnect']}
+                                </h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content admin-content">
+                    <h:form id="mainForm" enctype="multipart/form-data">
+                        <p:messages globalOnly="true"
+                                    styleClass="admin-messages"
+                                    showSummary="true"
+                                    showDetail="false"
+                                    closable="true"/>
+
+                        <div class="files-layout">
+
+                            <!-- SIDEBAR CURSURI -->
+                            <div class="files-sidebar">
+                                <div class="admin-card" style="height:100%;">
+                                    <div class="admin-card-title">
+                                        &#128218; #{msg['files.courses']}
+                                    </div>
+                                    <div class="course-list">
+                                        <ui:repeat value="#{fileManagementBean.availableCourses}"
+                                                   var="course">
+                                            <div class="course-list-item #{fileManagementBean.selectedCourseId == course.id ? 'selected' : ''}">
+                                                <p:commandLink
+                                                        styleClass="course-link"
+                                                        actionListener="#{fileManagementBean.selectCourse(course.id)}"
+                                                        ajax="true"
+                                                        process="@this">
+                                                    <div class="course-list-icon">&#128218;</div>
+                                                    <div class="course-list-info">
+                                                        <div class="course-list-name">
+                                                            #{course.name}
+                                                        </div>
+                                                        <div class="course-list-meta">
+                                                            #{msg['files.course.year']} #{course.studyYear}
+                                                            · #{msg['files.course.semester']} #{course.semester}
+                                                        </div>
+                                                    </div>
+                                                </p:commandLink>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CONTINUT FISIERE -->
+                            <div class="files-main">
+
+                                <!-- UPLOAD - doar HIGHERSTUD -->
+                                <h:panelGroup rendered="#{fileManagementBean.canUpload()}">
+                                    <div class="admin-card" style="margin-bottom:1rem;">
+                                        <div class="admin-card-title">
+                                            &#128228; #{msg['files.upload.title']}
+                                        </div>
+                                        <div class="upload-row">
+                                            <div class="cal-field">
+                                                <label class="cal-label">
+                                                    #{msg['files.upload.type']}
+                                                </label>
+                                                <p:selectOneMenu
+                                                        id="fileTypeSelect"
+                                                        value="#{fileManagementBean.selectedFileType}"
+                                                        styleClass="admin-filter-select">
+                                                    <p:ajax event="change" process="@this"/>
+                                                    <f:selectItems
+                                                            value="#{fileManagementBean.fileTypes}"
+                                                            var="type"
+                                                            itemValue="#{type}"
+                                                            itemLabel="#{type.label}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="upload-btn-area">
+                                                <p:fileUpload
+                                                        mode="advanced"
+                                                        auto="false"
+                                                        multiple="false"
+                                                        listener="#{fileManagementBean.handleFileUpload}"
+                                                        update="@form"
+                                                        maxFileSize="52428800"
+                                                        chooseLabel="#{msg['files.upload.choose']}"
+                                                        uploadLabel="#{msg['files.upload.button']}"
+                                                        cancelLabel="#{msg['files.upload.cancel']}"
+                                                        invalidSizeMessage="#{msg['files.upload.invalidSize']}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+
+                                <!-- LISTA FISIERE -->
+                                <p:outputPanel id="filesContent">
+                                    <h:panelGroup rendered="#{fileManagementBean.selectedCourseId != null}">
+                                        <div class="admin-card">
+                                            <div class="admin-card-title">
+                                                &#128196; #{msg['files.courseFiles.title']}
+                                                <span style="color:var(--text-muted);
+                                                             font-size:0.8rem;
+                                                             font-weight:400;">
+                                                    #{fileManagementBean.documents.size()}
+                                                    #{msg['files.courseFiles.count']}
+                                                </span>
+                                            </div>
+
+                                            <h:panelGroup rendered="#{empty fileManagementBean.documents}">
+                                                <div class="coming-soon" style="padding:2rem;">
+                                                    <div class="icon">&#128196;</div>
+                                                    <h3>#{msg['files.empty.title']}</h3>
+                                                    <p>#{msg['files.empty.message']}</p>
+                                                </div>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup rendered="#{not empty fileManagementBean.documents}">
+                                                <div class="files-grid">
+                                                    <ui:repeat value="#{fileManagementBean.documents}"
+                                                               var="doc">
+                                                        <div class="file-card">
+                                                            <div class="file-card-icon">
+                                                                #{doc.fileIcon}
+                                                            </div>
+                                                            <div class="file-card-info">
+                                                                <div class="file-card-name"
+                                                                     title="#{doc.name}">
+                                                                    #{doc.name}
+                                                                </div>
+                                                                <div class="file-card-meta">
+                                                                    #{doc.sizeFormatted}
+                                                                    <h:panelGroup rendered="#{not empty doc.author}">
+                                                                        · #{doc.author}
+                                                                    </h:panelGroup>
+                                                                    <h:panelGroup rendered="#{doc.type != null}">
+                                                                        <br/>
+                                                                        <span class="file-type-badge file-type-#{doc.type.name().toLowerCase()}">
+                                                                            #{doc.type.label}
+                                                                        </span>
+                                                                    </h:panelGroup>
+                                                                </div>
+                                                            </div>
+                                                            <div class="file-card-actions">
+
+                                                                <!-- PREVIEW -->
+                                                                <p:commandButton
+                                                                        icon="pi pi-eye"
+                                                                        styleClass="action-btn edit-btn-sm"
+                                                                        title="#{msg['files.action.preview']}"
+                                                                        actionListener="#{fileManagementBean.previewDocument(doc)}"
+                                                                        oncomplete="PF('previewDialog').show()"
+                                                                        update="@form"
+                                                                        ajax="true"
+                                                                        process="@this"/>
+
+                                                                <!-- DOWNLOAD -->
+                                                                <p:commandButton
+                                                                        icon="pi pi-download"
+                                                                        styleClass="action-btn activate-btn-sm"
+                                                                        title="#{msg['files.action.download']}"
+                                                                        ajax="false"
+                                                                        onclick="window.open('#{request.contextPath}/api/files/preview?path=#{doc.path}&amp;inline=false', '_blank'); return false;"/>
+
+                                                                <!-- DELETE - doar HIGHERSTUD care a uploadat SAU admin -->
+                                                                <p:commandButton
+                                                                        icon="pi pi-trash"
+                                                                        styleClass="action-btn delete-btn-sm"
+                                                                        title="#{msg['files.action.delete']}"
+                                                                        rendered="#{fileManagementBean.canDelete(doc)}"
+                                                                        actionListener="#{fileManagementBean.setDocumentToDelete(doc)}"
+                                                                        oncomplete="PF('deleteFileDialog').show()"
+                                                                        update="deleteFileForm"
+                                                                        ajax="true"
+                                                                        process="@this"/>
+                                                            </div>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </h:panelGroup>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{fileManagementBean.selectedCourseId == null}">
+                                        <div class="admin-card">
+                                            <div class="coming-soon" style="padding:3rem;">
+                                                <div class="icon">&#128218;</div>
+                                                <h3>#{msg['files.selectCourse.title']}</h3>
+                                                <p>#{msg['files.selectCourse.message']}</p>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </p:outputPanel>
+                            </div>
+                        </div>
+
+                        <!-- PREVIEW PANEL -->
+                        <p:outputPanel id="previewPanel">
+                            <p:dialog widgetVar="previewDialog"
+                                      header="#{fileManagementBean.selectedDocument != null ?
+                                               fileManagementBean.selectedDocument.name :
+                                               msg['files.preview.title']}"
+                                      modal="true"
+                                      closable="true"
+                                      width="850"
+                                      height="620"
+                                      styleClass="cal-dialog preview-dialog">
+
+                                <h:panelGroup rendered="#{fileManagementBean.selectedDocument != null}">
+
+                                    <h:panelGroup rendered="#{fileManagementBean.previewPdf}">
+                                        <iframe
+                                                src="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=true"
+                                                style="width:100%; height:520px; border:none; border-radius:8px;"
+                                                title="#{msg['files.preview.pdf']}"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{fileManagementBean.previewImage}">
+                                        <div style="text-align:center; padding:1rem;">
+                                            <img
+                                                    src="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=true"
+                                                    style="max-width:100%; max-height:500px; border-radius:8px;"
+                                                    alt="#{fileManagementBean.selectedDocument.name}"/>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{!fileManagementBean.previewPdf and !fileManagementBean.previewImage}">
+                                        <div class="no-preview">
+                                            <div style="font-size:3rem; margin-bottom:1rem;">
+                                                #{fileManagementBean.selectedDocument.fileIcon}
+                                            </div>
+                                            <h3>#{msg['files.preview.unavailable']}</h3>
+                                            <p>#{msg['files.preview.unavailableMessage']}</p>
+                                            <p style="margin-top:0.5rem;">
+                                                <a href="#{request.contextPath}/api/files/preview?path=#{fileManagementBean.selectedDocument.path}&amp;inline=false"
+                                                   target="_blank"
+                                                   class="admin-card-link">
+                                                    &#11015; #{msg['files.preview.download']}
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </p:dialog>
+                        </p:outputPanel>
+
+                    </h:form>
+
+                    <!-- DIALOG STERGERE FISIER -->
+                    <h:form id="deleteFileForm">
+                        <p:dialog widgetVar="deleteFileDialog"
+                                  header="#{msg['files.confirm.header']}"
+                                  modal="true"
+                                  closable="false"
+                                  width="380"
+                                  styleClass="cal-dialog">
+                            <div class="delete-confirm-body">
+                                <div class="delete-confirm-icon">&#9888;</div>
+                                <p class="delete-confirm-text">
+                                    #{msg['files.confirm.delete']}
+                                    <strong>
+                                        #{fileManagementBean.documentToDelete != null ?
+                                                fileManagementBean.documentToDelete.name : ''}
+                                    </strong>?
+                                </p>
+                                <div class="delete-confirm-actions">
+                                    <p:commandButton
+                                            value="#{msg['files.confirm.yes']}"
+                                            styleClass="cal-delete-btn"
+                                            action="#{fileManagementBean.deleteSelectedDocument()}"
+                                            update="mainForm deleteFileForm"
+                                            oncomplete="PF('deleteFileDialog').hide()"
+                                            ajax="true"/>
+                                    <p:commandButton
+                                            value="#{msg['files.confirm.cancel']}"
+                                            styleClass="cal-cancel-btn"
+                                            onclick="PF('deleteFileDialog').hide(); return false;"
+                                            ajax="false"/>
+                                </div>
+                            </div>
+                        </p:dialog>
+                    </h:form>
+
+                </main>
+            </div>
+        </div>
+
+        <script>
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') &amp;&amp; !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>

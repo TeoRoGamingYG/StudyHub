@@ -11,45 +11,67 @@
     <aside class="sidebar">
         <div class="sidebar-logo">
             <h1>StudyHub</h1>
-            <span>Admin Panel</span>
+            <span>#{msg['sidebar.adminPanel']}</span>
         </div>
+
         <nav class="sidebar-nav">
-            <div class="nav-section-label">General</div>
+            <div class="nav-section-label">#{msg['sidebar.general']}</div>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/dashboard.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('dashboard') ? 'active' : ''}">
                 <span class="nav-icon">&#128200;</span>
-                Dashboard
+                #{msg['sidebar.dashboard']}
             </h:outputLink>
 
-            <div class="nav-section-label" style="margin-top:12px;">Gestionare</div>
+            <h:outputLink value="#{request.contextPath}/pages/admin/chat.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('chat') ? 'active' : ''}">
+                <span class="nav-icon">&#128172;</span>
+                #{msg['sidebar.chat']}
+            </h:outputLink>
+
+            <div class="nav-section-label" style="margin-top:12px;">
+                #{msg['sidebar.management']}
+            </div>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/users.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('users') ? 'active' : ''}">
                 <span class="nav-icon">&#128100;</span>
-                Utilizatori
+                #{msg['sidebar.users']}
             </h:outputLink>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/courses.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('courses') ? 'active' : ''}">
                 <span class="nav-icon">&#128218;</span>
-                Cursuri
+                #{msg['sidebar.courses.admin']}
             </h:outputLink>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/grades-import.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('grades-import') ? 'active' : ''}">
                 <span class="nav-icon">&#128202;</span>
-                Import Note
+                #{msg['sidebar.gradesImport']}
             </h:outputLink>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/files.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('files') ? 'active' : ''}">
                 <span class="nav-icon">&#128196;</span>
-                Fișiere
+                #{msg['sidebar.files.admin']}
             </h:outputLink>
+
+            <h:outputLink value="#{request.contextPath}/pages/admin/calendar.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('calendar') ? 'active' : ''}">
+                <span class="nav-icon">&#128197;</span>
+                Calendar
+            </h:outputLink>
+
             <h:outputLink value="#{request.contextPath}/pages/admin/contributors.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('contributors') ? 'active' : ''}">
                 <span class="nav-icon">&#127775;</span>
-                Cereri Contributor
+                #{msg['sidebar.contributorRequests']}
+
                 <h:panelGroup rendered="#{contributorBean.pendingCount > 0}">
-                    <span class="nav-badge" style="background: #f75f6e;">
-                        #{contributorBean.pendingCount}
-                    </span>
+            <span class="nav-badge" style="background: #f75f6e;">
+                #{contributorBean.pendingCount}
+            </span>
                 </h:panelGroup>
             </h:outputLink>
         </nav>

@@ -175,19 +175,19 @@
                         </div>
 
                         <p:confirmDialog global="true"
-                                         widgetVar="confirmation"
                                          showEffect="fade"
                                          hideEffect="fade"
+                                         responsive="true"
                                          styleClass="cal-confirm-dialog"
-                                         width="400">
-                            <p:commandButton value="#{msg['courses.confirm.yes']}"
+                                         width="350">
+                            <p:commandButton value="#{msg['files.confirm.yes']}"
                                              type="button"
-                                             styleClass="admin-confirm-yes-btn"
-                                             onclick="PF('confirmation').accept()"/>
-                            <p:commandButton value="#{msg['courses.confirm.cancel']}"
+                                             styleClass="ui-confirmdialog-yes admin-confirm-yes-btn"
+                                             icon="pi pi-check" />
+                            <p:commandButton value="#{msg['files.confirm.cancel']}"
                                              type="button"
-                                             styleClass="admin-cancel-btn"
-                                             onclick="PF('confirmation').reject()"/>
+                                             styleClass="ui-confirmdialog-no admin-cancel-btn"
+                                             icon="pi pi-times" />
                         </p:confirmDialog>
 
                     </h:form>
@@ -230,6 +230,12 @@
                                             <p:inputText value="#{adminCourseBean.selectedCourse.specialization}"
                                                          styleClass="cal-input"
                                                          placeholder="#{msg['courses.field.specializationPlaceholder']}"/>
+                                        </div>
+                                        <div class="cal-field" style="grid-column: span 2;">
+                                            <label class="cal-label">#{msg['courses.field.faculty']}</label>
+                                            <p:inputText value="#{adminCourseBean.selectedCourse.faculty}"
+                                                         styleClass="cal-input"
+                                                         placeholder="#{msg['courses.field.facultyPlaceholder']}"/>
                                         </div>
                                         <div class="cal-field">
                                             <label class="cal-label">#{msg['courses.field.studyYear']}</label>

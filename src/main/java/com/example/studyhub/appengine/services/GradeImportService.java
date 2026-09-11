@@ -26,6 +26,7 @@ public class GradeImportService {
     private final UsersRepository usersRepository;
     private final CoursesRepository coursesRepository;
     private final GradesRepository gradesRepository;
+    private final NotificationService notificationService;
 
     public List<GradeImportRow> parseAndValidate(InputStream inputStream) {
         List<GradeImportRow> rows = new ArrayList<>();
@@ -159,6 +160,15 @@ public class GradeImportService {
 
                 gradesRepository.save(grade);
                 imported++;
+
+                notificationService.notify(
+                        grade.getStudent().getId(),
+                        "Notă nouă introdusă",
+                        "Ai primit nota " + grade.getGrade() +
+                                " la cursul " + grade.getCourse().getName(),
+                        "GRADE",
+                        "/pages/student/note.xhtml"
+                );
 
             } catch (Exception e) {
                 row.setStatus("ERROR");

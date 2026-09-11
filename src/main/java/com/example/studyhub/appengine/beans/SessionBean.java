@@ -18,6 +18,7 @@ public class SessionBean implements Serializable {
     private String email;
     private String firstName;
     private String lastName;
+    private String groupName;
     private String role;
     private String faculty;
     private String specialization;
@@ -34,6 +35,7 @@ public class SessionBean implements Serializable {
         this.email = user.getEmail();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.groupName = user.getGroupName();
         this.role = user.getRole();
         this.faculty = user.getFaculty();
         this.specialization = user.getSpecialization();
@@ -55,6 +57,7 @@ public class SessionBean implements Serializable {
         email = null;
         firstName = null;
         lastName = null;
+        groupName = null;
         role = null;
         faculty = null;
         specialization = null;

@@ -1,5 +1,7 @@
 package com.example.studyhub.jpa.entities;
 
+import com.example.studyhub.appengine.enums.FileStatusEnum;
+import com.example.studyhub.appengine.enums.FileType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +39,11 @@ public class FilesEntity {
     @JoinColumn(name = "uploaded_by")
     private UsersEntity uploadedBy;
 
-    @Column(length = 20)
-    private String status = "OK";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private FileStatusEnum status = FileStatusEnum.OK;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private FileType type = FileType.OTHER;
 }

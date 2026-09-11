@@ -1,0 +1,239 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="jakarta.faces.facelets">
+
+    <!-- CHAT PANEL FLOTANT -->
+    <div class="chat-panel" id="chatPanel" style="display:none;">
+        <div class="chat-panel-header">
+            <div class="chat-panel-rooms">
+                <button class="chat-panel-room active" id="btn-announcements"
+                        onclick="switchPanelRoom('announcements', 'ANNOUNCEMENTS', 'Anunțuri')">
+                    &#128226; #{msg['chat.room.name']}
+                </button>
+                <button class="chat-panel-room" id="btn-group"
+                        onclick="switchPanelRoom('group_#{sessionBean.groupName}', 'GROUP', 'Grupa #{sessionBean.groupName}')"
+                        style="#{empty sessionBean.groupName ? 'display:none' : ''}">
+                    &#128101; #{msg['chat.group']} #{sessionBean.groupName}
+                </button>
+            </div>
+            <button class="chat-panel-close" onclick="toggleChat()">✕</button>
+        </div>
+
+        <div class="chat-panel-messages" id="panelMessages">
+            <div class="chat-loading">
+                <div class="chat-loading-dot"></div>
+                <div class="chat-loading-dot"></div>
+                <div class="chat-loading-dot"></div>
+            </div>
+        </div>
+
+        <div class="chat-panel-input">
+            <div class="chat-readonly" id="panelReadonly">
+                &#128274; #{msg['chat.readonly']}
+            </div>
+            <div class="chat-input-row" id="panelInputRow" style="display:none;">
+                <div class="chat-avatar-small">#{sessionBean.userInitials}</div>
+                <input type="text" id="panelInput" class="chat-input"
+                       placeholder="#{msg['chat.readonly.placeholder']}"
+                       onkeydown="if(event.key==='Enter'){ sendPanelMessage(); event.preventDefault(); }"/>
+                <button class="chat-send-btn" onclick="sendPanelMessage()">&#9654;</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sessionData"
+         data-user-id="#{sessionBean.userId}"
+         data-user-role="#{sessionBean.role}"
+         data-user-name="#{sessionBean.fullName}"
+         data-user-initials="#{sessionBean.userInitials}"
+         style="display:none;"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"/>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var sd = document.getElementById('sessionData');
+        var USER_ID = sd ? sd.dataset.userId : '';
+        var USER_ROLE = sd ? sd.dataset.userRole : '';
+        var USER_INITIALS = sd ? sd.dataset.userInitials : '';
+
+        var stompClient = null;
+        var currentPanelRoom = 'announcements';
+        var currentPanelRoomType = 'ANNOUNCEMENTS';
+        var currentPanelSub = null;
+        var chatOpen = false;
+
+        function connect() {
+            var socket = new SockJS('/ws-chat');
+            stompClient = Stomp.over(socket);
+            stompClient.debug = null;
+            stompClient.connect({}, function() {
+                loadPanelMessages('announcements');
+                subscribePanelRoom('announcements');
+            }, function() {
+                setTimeout(connect, 3000);
+            });
+        }
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            var panel = document.getElementById('chatPanel');
+            panel.style.display = chatOpen ? 'flex' : 'none';
+            if (chatOpen) scrollPanelToBottom();
+        }
+
+        function subscribePanelRoom(roomId) {
+            if (currentPanelSub) currentPanelSub.unsubscribe();
+            if (!stompClient || !stompClient.connected) return;
+            currentPanelSub = stompClient.subscribe('/topic/chat/' + roomId, function(msg) {
+                var data = JSON.parse(msg.body);
+                if (data.type === 'DELETE') {
+                    removePanelMessage(data.messageId);
+                } else {
+                    appendPanelMessage(data, true);
+                    if (!chatOpen) {
+                        var dot = document.getElementById('chatNotifDot');
+                        if (dot) dot.style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        function loadPanelMessages(roomId) {
+            fetch('/api/chat/messages?roomId=' + roomId + '&userId=' + USER_ID)
+                .then(function(r) { return r.json(); })
+                .then(function(messages) {
+                    var container = document.getElementById('panelMessages');
+                    container.innerHTML = '';
+                    if (messages.length === 0) {
+                        container.innerHTML = '<div class="chat-empty">Niciun mesaj încă.</div>';
+                        return;
+                    }
+                    messages.forEach(function(m) { appendPanelMessage(m, false); });
+                    scrollPanelToBottom();
+                });
+        }
+
+        function appendPanelMessage(msg, scroll) {
+            var container = document.getElementById('panelMessages');
+            var empty = container.querySelector('.chat-empty, .chat-loading');
+            if (empty) empty.remove();
+
+            var isOwn = String(msg.senderId) === String(USER_ID);
+            var isAdmin = msg.senderRole === 'ADMIN';
+
+            var div = document.createElement('div');
+            div.className = 'chat-message' +
+                (isOwn ? ' own' : '') +
+                (isAdmin ? ' admin-message' : '');
+            div.id = 'pmsg-' + msg.id;
+
+            var deleteBtn = msg.canDelete
+                ? '<button class="msg-delete-btn" onclick="deletePanelMessage(' + msg.id + ')">✕</button>'
+                : '';
+            var adminBadge = isAdmin
+                ? '<span class="msg-admin-badge">Admin</span>' : '';
+
+            div.innerHTML =
+                '<div class="msg-avatar">' + (msg.senderInitials || '?') + '</div>' +
+                '<div class="msg-body">' +
+                '<div class="msg-header">' +
+                '<span class="msg-sender">' + msg.senderName + '</span>' +
+                adminBadge +
+                '<span class="msg-time">' + msg.sentAt + '</span>' +
+                deleteBtn +
+                '</div>' +
+                '<div class="msg-content">' + escapeHtml(msg.content) + '</div>' +
+                '</div>';
+
+            container.appendChild(div);
+            if (scroll) scrollPanelToBottom();
+        }
+
+        function sendPanelMessage() {
+            var input = document.getElementById('panelInput');
+            var content = input.value.trim();
+            if (!content || !stompClient || !stompClient.connected) return;
+            if (currentPanelRoomType === 'ANNOUNCEMENTS' && USER_ROLE !== 'ADMIN') return;
+
+            stompClient.send('/app/chat.send', {}, JSON.stringify({
+                roomId: currentPanelRoom,
+                roomType: currentPanelRoomType,
+                content: content,
+                senderId: USER_ID
+            }));
+            input.value = '';
+        }
+
+        function deletePanelMessage(messageId) {
+            if (!stompClient || !stompClient.connected) return;
+            stompClient.send('/app/chat.delete', {}, JSON.stringify({
+                messageId: String(messageId),
+                requesterId: USER_ID,
+                roomId: currentPanelRoom
+            }));
+        }
+
+        function removePanelMessage(messageId) {
+            var el = document.getElementById('pmsg-' + messageId);
+            if (el) { el.classList.add('msg-deleted'); setTimeout(function() { el.remove(); }, 300); }
+        }
+
+        function switchPanelRoom(roomId, roomType, roomName) {
+            currentPanelRoom = roomId;
+            currentPanelRoomType = roomType;
+
+            document.querySelectorAll('.chat-panel-room').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            var btn = document.getElementById('btn-' + (roomType === 'ANNOUNCEMENTS' ? 'announcements' : 'group'));
+            if (btn) btn.classList.add('active');
+
+            var readonly = document.getElementById('panelReadonly');
+            var inputRow = document.getElementById('panelInputRow');
+            if (roomType === 'ANNOUNCEMENTS' && USER_ROLE !== 'ADMIN') {
+                readonly.style.display = 'flex';
+                inputRow.style.display = 'none';
+            } else {
+                readonly.style.display = 'none';
+                inputRow.style.display = 'flex';
+            }
+
+            loadPanelMessages(roomId);
+            subscribePanelRoom(roomId);
+        }
+
+        function scrollPanelToBottom() {
+            var c = document.getElementById('panelMessages');
+            if (c) c.scrollTop = c.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        window.addEventListener('load', function() {
+            connect();
+
+            var readonly = document.getElementById('panelReadonly');
+            var inputRow = document.getElementById('panelInputRow');
+            if (USER_ROLE === 'ADMIN') {
+                readonly.style.display = 'none';
+                inputRow.style.display = 'flex';
+            }
+
+            var panel = document.getElementById('chatPanel');
+            if (panel) {
+                panel.addEventListener('click', function() {
+                    var dot = document.getElementById('chatNotifDot');
+                    if (dot) dot.style.display = 'none';
+                });
+            }
+        });
+        //]]>
+    </script>
+
+</ui:composition>

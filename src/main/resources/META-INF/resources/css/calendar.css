@@ -250,9 +250,12 @@
 
 .cal-input,
 .cal-input.ui-inputtext,
-.cal-input .ui-inputtext {
+.cal-input .ui-inputtext,
+.cal-dialog input.ui-inputtext,
+.cal-dialog input.ui-inputfield {
     width: 100% !important;
     background: var(--bg-input) !important;
+    background-color: var(--bg-input) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: var(--radius-sm) !important;
     color: var(--text-primary) !important;
@@ -823,4 +826,46 @@
     gap: 0.75rem;
     justify-content: center;
     margin-top: 0.5rem;
+}
+
+/* ============================================================
+   PrimeFaces DatePicker - input dark theme
+   ============================================================ */
+
+.cal-dialog .ui-datepicker-input,
+.cal-dialog input.ui-inputtext,
+.cal-dialog input.ui-inputfield,
+.cal-dialog .cal-input input,
+.cal-dialog .cal-input.ui-inputtext {
+    background: var(--bg-input) !important;
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+}
+
+/* când input-ul este focusat */
+.cal-dialog .ui-datepicker-input:focus,
+.cal-dialog input.ui-inputtext:focus,
+.cal-dialog input.ui-inputfield:focus {
+    background: var(--bg-input) !important;
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    outline: none !important;
+}
+
+/* textul placeholder-ului */
+.cal-dialog input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* iconița DatePicker, dacă există */
+.cal-dialog .ui-datepicker-trigger {
+    background: var(--bg-input) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-subtle) !important;
 }

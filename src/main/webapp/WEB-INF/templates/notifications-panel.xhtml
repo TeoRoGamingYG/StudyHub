@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <h:form id="notifForm">
+
+        <!-- BUTON NOTIFICĂRI -->
+        <div class="notif-wrapper" style="position:relative;">
+            <p:commandButton
+                    styleClass="notif-btn"
+                    icon="pi pi-bell"
+                    oncomplete="toggleNotifPanel()"
+                    update="notifForm"
+                    action="#{notifBean.openPanel()}"
+                    ajax="true"
+                    title="Notificări">
+                <h:panelGroup rendered="#{notifBean.unreadCount > 0}">
+                    <span class="notif-badge">
+                        #{notifBean.unreadCount > 9 ? '9+' : notifBean.unreadCount}
+                    </span>
+                </h:panelGroup>
+            </p:commandButton>
+
+            <!-- DROPDOWN PANEL -->
+            <p:outputPanel id="notifPanel" styleClass="notif-panel" style="display:none;">
+
+                <div class="notif-panel-header">
+                    <span class="notif-panel-title">Notificări</span>
+                    <h:panelGroup rendered="#{notifBean.unreadCount > 0}">
+                        <p:commandButton
+                                value="Marchează toate citite"
+                                styleClass="notif-mark-all"
+                                action="#{notifBean.markAllRead()}"
+                                update="notifForm"
+                                ajax="true"/>
+                    </h:panelGroup>
+                </div>
+
+                <div class="notif-list">
+
+                    <h:panelGroup rendered="#{empty notifBean.notifications}">
+                        <div class="notif-empty">
+                            &#128276; Nicio notificare
+                        </div>
+                    </h:panelGroup>
+
+                    <ui:repeat value="#{notifBean.notifications}" var="notif" varStatus="vs">
+                        <h:panelGroup rendered="#{vs.index lt 10}">
+                            <h:panelGroup rendered="#{not empty notif.linkUrl}">
+                                <h:outputLink
+                                        value="#{request.contextPath}#{notif.linkUrl}"
+                                        styleClass="notif-item #{notif.isRead ? '' : 'unread'}"
+                                        style="text-decoration:none; display:flex;">
+                                    <div class="notif-icon">#{notifBean.getTypeIcon(notif.type)}</div>
+                                    <div class="notif-body">
+                                        <div class="notif-title">#{notif.title}</div>
+                                        <div class="notif-message">#{notif.message}</div>
+                                        <div class="notif-time">#{notifBean.getTimeAgo(notif.createdAt)}</div>
+                                    </div>
+                                    <h:panelGroup rendered="#{!notif.isRead}">
+                                        <div class="notif-unread-dot"></div>
+                                    </h:panelGroup>
+                                </h:outputLink>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{empty notif.linkUrl}">
+                                <div class="notif-item #{notif.isRead ? '' : 'unread'}">
+                                    <div class="notif-icon">#{notifBean.getTypeIcon(notif.type)}</div>
+                                    <div class="notif-body">
+                                        <div class="notif-title">#{notif.title}</div>
+                                        <div class="notif-message">#{notif.message}</div>
+                                        <div class="notif-time">#{notifBean.getTimeAgo(notif.createdAt)}</div>
+                                    </div>
+                                    <h:panelGroup rendered="#{!notif.isRead}">
+                                        <div class="notif-unread-dot"></div>
+                                    </h:panelGroup>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                </div>
+
+            </p:outputPanel>
+        </div>
+        <p:poll interval="30"
+                listener="#{notifBean.refreshCount()}"
+                update="notifForm"
+                global="false"/>
+    </h:form>
+
+    <script>
+        function toggleNotifPanel() {
+            var panel = document.querySelector('.notif-panel');
+            if (!panel) return;
+            var isVisible = panel.style.display !== 'none';
+            panel.style.display = isVisible ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.notif-wrapper')) {
+                var panel = document.querySelector('.notif-panel');
+                if (panel) panel.style.display = 'none';
+            }
+        });
+    </script>
+</ui:composition>
+</html>

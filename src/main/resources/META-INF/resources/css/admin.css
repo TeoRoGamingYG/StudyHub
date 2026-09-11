@@ -363,7 +363,16 @@
     font-family: 'DM Sans', sans-serif !important;
     font-size: 0.875rem !important;
     font-weight: 600 !important;
-    padding: 9px 18px !important;
+
+    height: 40px !important;
+    width: 120px !important;
+    padding: 9px 14px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+
     cursor: pointer !important;
     transition: all var(--transition) !important;
     white-space: nowrap !important;
@@ -383,6 +392,11 @@
     font-family: 'DM Sans', sans-serif !important;
     font-size: 0.875rem !important;
     padding: 9px 14px !important;
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
     cursor: pointer !important;
     transition: all var(--transition) !important;
     white-space: nowrap !important;
@@ -1018,4 +1032,448 @@
     font-family: 'Syne', sans-serif;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
+}
+
+/* ============================================================
+   FIX FILE UPLOAD - fundal întunecat
+   ============================================================ */
+
+.ui-fileupload {
+    background: transparent !important;
+    border: none !important;
+}
+
+.ui-fileupload .ui-fileupload-buttonbar {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    padding: 0.75rem !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+}
+
+.ui-fileupload .ui-fileupload-content {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-top: none !important;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
+    color: var(--text-secondary) !important;
+    padding: 1rem !important;
+    min-height: 80px !important;
+}
+
+.ui-fileupload .ui-fileupload-content .ui-fileupload-files {
+    color: var(--text-secondary) !important;
+}
+
+.ui-fileupload .ui-fileupload-content .ui-fileupload-row > div {
+    color: var(--text-secondary) !important;
+}
+
+/* Butoanele din fileupload */
+.ui-fileupload .ui-fileupload-buttonbar .ui-button,
+.ui-fileupload .ui-fileupload-choose {
+    background: var(--accent-primary) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    color: #fff !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+    transition: all var(--transition) !important;
+}
+
+.ui-fileupload .ui-fileupload-buttonbar .ui-button:hover {
+    background: var(--accent-hover) !important;
+}
+
+/* Butonul Upload */
+.ui-fileupload .ui-fileupload-buttonbar .ui-fileupload-upload {
+    background: var(--success) !important;
+}
+
+.ui-fileupload .ui-fileupload-buttonbar .ui-fileupload-upload:hover {
+    background: rgba(79,209,165,0.8) !important;
+}
+
+/* Butonul Cancel */
+.ui-fileupload .ui-fileupload-buttonbar .ui-fileupload-cancel {
+    background: transparent !important;
+    border: 1px solid var(--border-normal) !important;
+    color: var(--text-secondary) !important;
+}
+
+.ui-fileupload .ui-fileupload-buttonbar .ui-fileupload-cancel:hover {
+    border-color: var(--error) !important;
+    color: var(--error) !important;
+}
+
+/* Progres bar upload */
+.ui-fileupload .ui-progressbar {
+    background: var(--bg-base) !important;
+    border: 1px solid var(--border-subtle) !important;
+    height: 6px !important;
+    border-radius: 999px !important;
+}
+
+.ui-fileupload .ui-progressbar .ui-progressbar-value {
+    background: var(--accent-primary) !important;
+    border-radius: 999px !important;
+}
+
+/* Drag & drop zona */
+.ui-fileupload-content.ui-fileupload-highlight {
+    border-color: var(--accent-primary) !important;
+    background: var(--bg-input-focus) !important;
+}
+
+/* ============================================================
+   FIX SIDEBAR CURSURI - scroll + highlight selectat
+   ============================================================ */
+
+.files-sidebar {
+    height: calc(100vh - 160px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.files-sidebar .admin-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.files-sidebar .admin-card-title {
+    flex-shrink: 0;
+}
+
+/* Scroll pe lista de cursuri */
+.course-list {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 4px !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--border-normal) transparent !important;
+}
+
+.course-list::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.course-list::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.course-list::-webkit-scrollbar-thumb {
+    background: var(--border-normal) !important;
+    border-radius: 999px !important;
+}
+
+.course-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary) !important;
+}
+
+/* Item curs - normal */
+.course-list-item {
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid transparent !important;
+    transition: all var(--transition) !important;
+    margin-bottom: 2px !important;
+}
+
+.course-list-item:hover {
+    background: var(--bg-input) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Item curs - selectat */
+.course-list-item.selected {
+    background: var(--accent-glow) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+.course-list-item.selected .course-list-name {
+    color: var(--accent-primary) !important;
+}
+
+.course-list-item.selected .course-list-meta {
+    color: rgba(79,110,247,0.7) !important;
+}
+
+/* ============================================================
+   FIX SELECTONEMENU & INPUT - fundal întunecat
+   ============================================================ */
+
+/* SelectOneMenu - container principal */
+.ui-selectonemenu {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Label-ul afișat în dropdown */
+.ui-selectonemenu .ui-selectonemenu-label,
+.ui-selectonemenu-label.ui-inputfield {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.875rem !important;
+    padding: 9px 12px !important;
+}
+
+/* Săgeata din dreapta */
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    background: var(--bg-input) !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
+    color: var(--text-muted) !important;
+}
+
+/* Panoul cu opțiunile */
+.ui-selectonemenu-panel,
+.ui-selectonemenu-panel.ui-overlay-visible {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
+}
+
+/* Lista de opțiuni */
+.ui-selectonemenu-panel .ui-selectonemenu-items-wrapper {
+    background: var(--bg-card) !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-items {
+    background: var(--bg-card) !important;
+    padding: 4px !important;
+}
+
+/* Fiecare opțiune */
+.ui-selectonemenu-panel .ui-selectonemenu-item {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.875rem !important;
+    padding: 8px 12px !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition) !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-item:hover,
+.ui-selectonemenu-panel .ui-selectonemenu-item.ui-state-hover {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-item.ui-state-highlight {
+    background: var(--accent-glow) !important;
+    color: var(--accent-primary) !important;
+}
+
+/* Filter input din panel dacă există */
+.ui-selectonemenu-filter-container input {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 6px 10px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    width: 100% !important;
+}
+
+/* Input text căutare */
+.admin-filter-input.ui-inputtext,
+.admin-filter-input {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.875rem !important;
+    padding: 9px 12px !important;
+    width: 100% !important;
+    transition: all var(--transition) !important;
+}
+
+.admin-filter-input.ui-inputtext:focus,
+.admin-filter-input:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    outline: none !important;
+    background: var(--bg-input-focus) !important;
+}
+
+.admin-filter-input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Fix pentru state-uri PrimeFaces */
+.ui-widget-content {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.ui-state-default {
+    background: var(--bg-input) !important;
+    border-color: var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Hover state pe selectonemenu */
+.ui-selectonemenu:hover,
+.ui-selectonemenu.ui-state-hover {
+    border-color: var(--border-accent) !important;
+}
+
+/* Focus state */
+.ui-selectonemenu.ui-state-focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    outline: none !important;
+}
+
+/* ============================================================
+   FIX DIALOG
+   ============================================================ */
+
+.cal-dialog.ui-dialog {
+    background: var(--bg-panel) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    overflow: hidden !important;
+}
+
+.cal-dialog.ui-dialog .ui-dialog-titlebar {
+    background: var(--bg-card) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Syne', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.cal-dialog.ui-dialog .ui-dialog-title {
+    color: var(--text-primary) !important;
+}
+
+.cal-dialog.ui-dialog .ui-dialog-titlebar-close {
+    color: var(--text-muted) !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.cal-dialog.ui-dialog .ui-dialog-titlebar-close:hover {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+.cal-dialog.ui-dialog .ui-dialog-content {
+    background: var(--bg-panel) !important;
+    color: var(--text-primary) !important;
+    padding: 0 !important;
+}
+
+/* File type badges */
+.file-type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+}
+
+.file-type-curs {
+    background: rgba(79,110,247,0.12);
+    color: var(--accent-primary);
+}
+
+.file-type-seminar {
+    background: rgba(108,99,255,0.12);
+    color: #6c63ff;
+}
+
+.file-type-laborator {
+    background: rgba(79,209,165,0.12);
+    color: var(--success);
+}
+
+.file-type-examen {
+    background: rgba(247,95,110,0.12);
+    color: var(--error);
+}
+
+.file-type-proiect {
+    background: rgba(255,193,7,0.12);
+    color: #ffc107;
+}
+
+.file-type-altele {
+    background: rgba(124,133,168,0.12);
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   FIX CONFIRM DIALOG
+   ============================================================ */
+
+.cal-confirm-dialog.ui-dialog {
+    background: var(--bg-panel) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    overflow: hidden !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-titlebar {
+    background: var(--bg-card) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Syne', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-title {
+    color: var(--text-primary) !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-titlebar-close {
+    color: var(--text-muted) !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-titlebar-close:hover {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-content {
+    background: var(--bg-panel) !important;
+    color: var(--text-primary) !important;
+    padding: 1.25rem !important;
+}
+
+.cal-confirm-dialog.ui-dialog .ui-dialog-buttonpane {
+    background: var(--bg-card) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    margin-top: 0 !important;
+    padding: 0.75rem 1.25rem !important;
 }

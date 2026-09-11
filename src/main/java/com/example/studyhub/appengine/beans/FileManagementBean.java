@@ -2,9 +2,11 @@ package com.example.studyhub.appengine.beans;
 
 import com.example.studyhub.appengine.dto.OkmDocumentDTO;
 import com.example.studyhub.appengine.services.FileService;
+import com.example.studyhub.appengine.enums.FileType;
 import com.example.studyhub.appengine.services.OpenKMService;
 import com.example.studyhub.jpa.entities.CoursesEntity;
 import com.example.studyhub.jpa.repositories.CoursesRepository;
+import com.example.studyhub.jpa.repositories.FilesRepository;
 import com.example.studyhub.openkm.document.Document;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -24,7 +26,6 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Named("fileManagementBean")
 @ViewScoped
@@ -43,6 +44,9 @@ public class FileManagementBean implements Serializable {
     @Inject
     private CoursesRepository coursesRepository;
 
+    @Inject
+    private FilesRepository filesRepository;
+
     private List<CoursesEntity> availableCourses;
     private Long selectedCourseId;
 
@@ -53,17 +57,39 @@ public class FileManagementBean implements Serializable {
     private boolean previewPdf = false;
     private boolean previewImage = false;
 
+    private FileType selectedFileType = FileType.OTHER;
+
+    @Getter @Setter
+    private OkmDocumentDTO documentToDelete;
+
     @PostConstruct
     public void init() {
         loadCourses();
-        // Inițializează folderul de bază
         openKmService.createFolder(openKmService.getBaseFolder());
         openKmService.createFolder(openKmService.getBaseFolder() + "/cursuri");
+    }
+
+    public void deleteSelectedDocument() {
+        if (documentToDelete != null) {
+            deleteDocument(documentToDelete);
+            documentToDelete = null;
+        }
+    }
+
+    public boolean canDelete(OkmDocumentDTO doc) {
+        String role = sessionBean.getRole();
+        if ("ADMIN".equals(role)) return true;
+        if ("HIGHERSTUD".equals(role)) {
+            return doc.getUploadedById() != null &&
+                    doc.getUploadedById().equals(sessionBean.getUserId());
+        }
+        return false;
     }
 
     public void loadCourses() {
         availableCourses = coursesRepository.findAll().stream()
                 .filter(c -> Boolean.TRUE.equals(c.getIsActive()))
+                .sorted(java.util.Comparator.comparing(CoursesEntity::getName))
                 .toList();
     }
 
@@ -99,6 +125,15 @@ public class FileManagementBean implements Serializable {
             return;
         }
 
+        if (selectedFileType == null) {
+            context.addMessage(null,
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_WARN,
+                            "Selectează tipul fișierului!",
+                            null));
+            return;
+        }
+
         try {
             CoursesEntity course = coursesRepository
                     .findById(selectedCourseId)
@@ -112,6 +147,7 @@ public class FileManagementBean implements Serializable {
                     file.getContent(),
                     file.getFileName(),
                     file.getContentType(),
+                    selectedFileType,
                     sessionBean.getUserId(),
                     course
             );
@@ -123,6 +159,8 @@ public class FileManagementBean implements Serializable {
                             FacesMessage.SEVERITY_INFO,
                             "Fișier încărcat cu succes!",
                             null));
+
+            selectedFileType = FileType.OTHER;
 
         } catch (Exception e) {
             context.addMessage(null,
@@ -186,12 +224,17 @@ public class FileManagementBean implements Serializable {
     public void selectCourse(Long courseId) {
         this.selectedCourseId = courseId;
         loadDocuments();
+        PrimeFaces.current().ajax().update("mainForm:filesContent");
         PrimeFaces.current().ajax().update("mainForm");
     }
 
     public String getPreviewBase64() {
         if (previewContent == null) return null;
         return java.util.Base64.getEncoder().encodeToString(previewContent);
+    }
+
+    public List<FileType> getFileTypes() {
+        return List.of(FileType.values());
     }
 
     public boolean isAdmin() {
@@ -216,6 +259,18 @@ public class FileManagementBean implements Serializable {
             dto.setSize(document.getActualVersion().getSize());
             dto.setAuthor(document.getActualVersion().getAuthor());
         }
+
+        filesRepository.findByFilePath(document.getPath())
+                .ifPresent(f -> {
+                    if (f.getType() != null) {
+                        try {
+                            dto.setType(f.getType());
+                        } catch (IllegalArgumentException ignored) {}
+                    }
+                    if (f.getUploadedBy() != null) {
+                        dto.setUploadedById(f.getUploadedBy().getId());
+                    }
+                });
         return dto;
     }
 }

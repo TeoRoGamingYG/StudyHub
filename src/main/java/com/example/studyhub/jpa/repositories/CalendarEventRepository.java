@@ -12,4 +12,16 @@ public interface CalendarEventRepository extends JpaRepository<CalendarEventEnti
             "OR e.createdBy.id = :userId " +
             "ORDER BY e.startTime ASC")
     List<CalendarEventEntity> findVisibleEvents(@Param("userId") Long userId);
+
+    @Query("SELECT e FROM CalendarEventEntity e " +
+            "WHERE e.startTime >= :from " +
+            "AND (e.isPublic = true OR e.createdBy.id = :userId) " +
+            "AND e.startTime IS NOT NULL " +
+            "ORDER BY e.startTime ASC " +
+            "LIMIT :limit")
+    List<CalendarEventEntity> findUpcomingForUser(
+            @Param("userId") Long userId,
+            @Param("from") java.time.LocalDateTime from,
+            @Param("limit") int limit
+    );
 }
