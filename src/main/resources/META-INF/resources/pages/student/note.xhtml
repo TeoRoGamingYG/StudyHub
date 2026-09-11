@@ -10,11 +10,13 @@
     <h:head>
         <title>#{msg['grade.title']}</title>
         <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="chat.css"/>
     </h:head>
 
     <h:body>
         <div class="app">
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+            <ui:include src="/WEB-INF/templates/chat-panel.xhtml"/>
 
             <div class="main">
                 <header class="topbar">
@@ -23,8 +25,11 @@
                         <span>#{msg['grade.view']}</span>
                     </div>
                     <div class="topbar-right">
-                        <div class="icon-btn">&#128276;<span class="dot"></span></div>
-                        <div class="icon-btn">&#128269;</div>
+                        <ui:include src="/WEB-INF/templates/notifications-panel.xhtml"/>
+                        <div class="icon-btn chat-toggle-btn" onclick="toggleChat()" title="Chat">
+                            &#128172;
+                            <span class="dot chat-dot" id="chatNotifDot" style="display:none;"></span>
+                        </div>
                         <div style="position:relative;">
                             <div class="profile-btn" onclick="toggleDropdown()">
                                 <div class="avatar">#{sessionBean.userInitials}</div>

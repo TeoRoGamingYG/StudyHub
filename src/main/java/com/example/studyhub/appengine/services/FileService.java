@@ -1,5 +1,7 @@
 package com.example.studyhub.appengine.services;
 
+import com.example.studyhub.appengine.enums.FileStatusEnum;
+import com.example.studyhub.appengine.enums.FileType;
 import com.example.studyhub.jpa.entities.CourseUploadEntity;
 import com.example.studyhub.jpa.entities.FilesEntity;
 import com.example.studyhub.jpa.entities.UsersEntity;
@@ -7,7 +9,10 @@ import com.example.studyhub.jpa.entities.CoursesEntity;
 import com.example.studyhub.jpa.repositories.CourseUploadRepository;
 import com.example.studyhub.jpa.repositories.FilesRepository;
 import com.example.studyhub.jpa.repositories.UsersRepository;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +26,16 @@ public class FileService {
     private final FilesRepository filesRepository;
     private final CourseUploadRepository courseUploadRepository;
     private final UsersRepository usersRepository;
+    private final NotificationService notificationService;
+
+    private static final Logger log =
+            LoggerFactory.getLogger(FileService.class);
 
     @Transactional
     public void uploadFile(byte[] content,
                            String fileName,
                            String mimeType,
+                           FileType type,
                            Long uploaderId,
                            CoursesEntity course) {
 
@@ -61,19 +71,33 @@ public class FileService {
         file.setMimeType(mimeType);
         file.setUploadedBy(uploader);
         file.setUploadedAt(LocalDateTime.now());
-        file.setStatus("OK");
+        file.setStatus(FileStatusEnum.OK);
+        file.setType(type);
 
         filesRepository.save(file);
 
         if (course != null && uploader != null) {
-
             CourseUploadEntity upload = new CourseUploadEntity();
             upload.setCourse(course);
             upload.setStudent(uploader);
             upload.setFile(file);
             upload.setUploadedAt(LocalDateTime.now());
-
             courseUploadRepository.save(upload);
+
+            try {
+                usersRepository.findStudentsByCourseId(course.getId()).stream()
+                        .filter(u -> !u.getId().equals(uploaderId))
+                        .forEach(u -> notificationService.notify(
+                                u.getId(),
+                                "Material nou la " + course.getName(),
+                                "A fost adăugat: " + fileName,
+                                "FILE",
+                                "/pages/student/cursuri.xhtml"
+                        ));
+                
+            } catch (Exception e) {
+                log.warn("Eroare trimitere notificări upload: {}", e.getMessage());
+            }
         }
     }
 
@@ -94,5 +118,9 @@ public class FileService {
         }
 
         filesRepository.deleteById(fileId);
+    }
+
+    public byte[] downloadFile(String filePath) throws Exception {
+        return openKmService.downloadDocument(filePath);
     }
 }

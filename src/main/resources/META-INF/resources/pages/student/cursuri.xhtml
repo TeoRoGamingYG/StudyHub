@@ -3,17 +3,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
 
 <f:view locale="#{languageBean.currentLocale}">
     <h:head>
         <title>#{msg['course.title']}</title>
         <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="chat.css"/>
     </h:head>
 
     <h:body>
         <div class="app">
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+            <ui:include src="/WEB-INF/templates/chat-panel.xhtml"/>
 
             <div class="main">
                 <!-- TOPBAR -->
@@ -23,8 +26,11 @@
                         <span>#{msg['course.view']}</span>
                     </div>
                     <div class="topbar-right">
-                        <div class="icon-btn">&#128276;<span class="dot"></span></div>
-                        <div class="icon-btn">&#128269;</div>
+                        <ui:include src="/WEB-INF/templates/notifications-panel.xhtml"/>
+                        <div class="icon-btn chat-toggle-btn" onclick="toggleChat()" title="Chat">
+                            &#128172;
+                            <span class="dot chat-dot" id="chatNotifDot" style="display:none;"></span>
+                        </div>
                         <div style="position:relative;">
                             <div class="profile-btn" onclick="toggleDropdown()">
                                 <div class="avatar">#{sessionBean.userInitials}</div>
@@ -66,44 +72,137 @@
                         <h3>#{msg['course.sub']}</h3>
                         <span class="courses-meta">
                             #{sessionBean.faculty} · #{sessionBean.specialization} ·
-                            #{msg['course.year']} #{sessionBean.studyYear} · #{msg['course.semester']} #{sessionBean.semester}
+                            #{msg['course.year']} #{sessionBean.studyYear} ·
+                            #{msg['course.semester']} #{sessionBean.semester}
                         </span>
                     </div>
 
-                    <div class="courses-grid">
-                        <ui:repeat value="#{courseBean.courses}" var="course">
-                            <div class="course-card">
-                                <div class="course-card-header">
-                                    <div class="course-icon">&#128218;</div>
-                                    <div class="course-credits">#{course.credits} #{msg['course.credits']}</div>
+                    <div class="courses-layout">
+
+                        <!-- GRID CURSURI -->
+                        <div class="courses-grid">
+                            <ui:repeat value="#{courseBean.courses}" var="course">
+                                <p:commandLink
+                                        styleClass="course-card #{courseBean.selectedCourseId == course.id ? 'selected' : ''}"
+                                        actionListener="#{courseBean.selectCourse(course.id)}"
+                                        update="courseMaterials"
+                                        process="@this"
+                                        ajax="true">
+
+                                    <div class="course-card-header">
+                                        <div class="course-icon">&#128218;</div>
+                                        <div class="course-credits">
+                                            #{course.credits} #{msg['course.credits']}
+                                        </div>
+                                    </div>
+                                    <div class="course-card-body">
+                                        <h4 class="course-name">#{course.name}</h4>
+                                        <div class="course-info-row">
+                                            <span class="course-label">#{msg['course.teacher']}</span>
+                                            <span class="course-value">
+                                                #{course.professor != null ?
+                                                course.professor.fullName : msg['course.unassigned']}
+                                            </span>
+                                        </div>
+                                        <div class="course-info-row">
+                                            <span class="course-label">#{msg['course.semester']}</span>
+                                            <span class="course-value">#{course.semester}</span>
+                                        </div>
+                                    </div>
+                                    <div class="course-card-footer">
+                                        <span class="course-status active">#{msg['course.active']}</span>
+                                    </div>
+                                </p:commandLink>
+                            </ui:repeat>
+
+                            <h:panelGroup rendered="#{empty courseBean.courses}">
+                                <div class="coming-soon">
+                                    <div class="icon">&#128218;</div>
+                                    <h3>#{msg['course.feedback1']}</h3>
+                                    <p>#{msg['course.feedback2']}</p>
                                 </div>
-                                <div class="course-card-body">
-                                    <h4 class="course-name">#{course.name}</h4>
-                                    <div class="course-info-row">
-                                        <span class="course-label">#{msg['course.teacher']}</span>
-                                        <span class="course-value">
-                                            #{course.professor != null ?
-                                            course.professor.fullName : 'Nealocat'}
+                            </h:panelGroup>
+                        </div>
+
+                        <!-- MATERIALE CURS -->
+                        <p:outputPanel id="courseMaterials" styleClass="course-materials-panel">
+
+                            <h:panelGroup rendered="#{courseBean.selectedCourseId == null}">
+                                <div class="coming-soon" style="padding:3rem;">
+                                    <div class="icon">&#128218;</div>
+                                    <h3>#{msg['course.selectCourse']}</h3>
+                                    <p>#{msg['course.selectCourse.hint']}</p>
+                                </div>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{courseBean.selectedCourseId != null}">
+                                <div class="course-materials">
+                                    <div class="course-materials-header">
+                                        <h3>#{courseBean.selectedCourse.name}</h3>
+                                        <span class="courses-meta">
+                                            #{courseBean.documents.size()} #{msg['course.materials.count']}
                                         </span>
                                     </div>
-                                    <div class="course-info-row">
-                                        <span class="course-label">#{msg['course.semester']}</span>
-                                        <span class="course-value">#{course.semester}</span>
-                                    </div>
-                                </div>
-                                <div class="course-card-footer">
-                                    <span class="course-status active">#{msg['course.active']}</span>
-                                </div>
-                            </div>
-                        </ui:repeat>
 
-                        <h:panelGroup rendered="#{empty courseBean.courses}">
-                            <div class="coming-soon">
-                                <div class="icon">&#128218;</div>
-                                <h3>#{msg['course.feedback1']}</h3>
-                                <p>#{msg['course.feedback2']}</p>
-                            </div>
-                        </h:panelGroup>
+                                    <!-- Afișează fiecare tip de fișier -->
+                                    <ui:repeat value="#{courseBean.allFileTypes}" var="fileType">
+                                        <h:panelGroup rendered="#{courseBean.hasDocumentsByType(fileType)}">
+                                            <div class="material-category">
+                                                <h4 class="material-category-title">
+                                                    <span class="material-category-icon">&#128196;</span>
+                                                    #{courseBean.getFileTypeLabel(fileType)}
+                                                </h4>
+                                                <div class="materials-list">
+                                                    <ui:repeat value="#{courseBean.getDocumentsByType(fileType)}"
+                                                               var="doc">
+                                                        <div class="material-item">
+                                                            <div class="material-icon">
+                                                                #{doc.fileIcon}
+                                                            </div>
+                                                            <div class="material-info">
+                                                                <div class="material-name">#{doc.name}</div>
+                                                                <div class="material-meta">
+                                                                    #{doc.sizeFormatted}
+                                                                    <h:panelGroup rendered="#{not empty doc.author}">
+                                                                        · #{doc.author}
+                                                                    </h:panelGroup>
+                                                                </div>
+                                                            </div>
+                                                            <div class="material-actions">
+                                                                <h:outputLink
+                                                                        value="#{request.contextPath}/api/files/preview?path=#{doc.path}&amp;inline=true"
+                                                                        target="_blank"
+                                                                        styleClass="material-action"
+                                                                        title="#{msg['files.action.preview']}">
+                                                                    <i class="pi pi-eye"></i>
+                                                                </h:outputLink>
+                                                                <h:outputLink
+                                                                        value="#{request.contextPath}/api/files/preview?path=#{doc.path}&amp;inline=false"
+                                                                        target="_blank"
+                                                                        styleClass="material-action"
+                                                                        title="#{msg['files.action.download']}">
+                                                                    <i class="pi pi-download"></i>
+                                                                </h:outputLink>
+                                                            </div>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </div>
+                                        </h:panelGroup>
+                                    </ui:repeat>
+
+                                    <!-- Niciun fișier -->
+                                    <h:panelGroup rendered="#{empty courseBean.documents}">
+                                        <div class="coming-soon" style="padding:2rem;">
+                                            <div class="icon">&#128196;</div>
+                                            <h3>#{msg['course.noMaterials']}</h3>
+                                            <p>#{msg['course.noMaterials.hint']}</p>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </h:panelGroup>
+                        </p:outputPanel>
+
                     </div>
                 </main>
             </div>

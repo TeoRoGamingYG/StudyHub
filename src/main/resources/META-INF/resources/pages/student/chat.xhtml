@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{languageBean.currentLocale}">
+    <h:head>
+        <title>Chat - StudyHub</title>
+        <f:loadBundle basename="messages" var="msg"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+        <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="chat.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="app">
+            <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+
+            <div class="main">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <h2>Chat</h2>
+                        <span>#{msg['chat.title']}</span>
+                    </div>
+                    <div class="topbar-right">
+                        <ui:include src="/WEB-INF/templates/notifications-panel.xhtml"/>
+                        <div style="position:relative;">
+                            <div class="profile-btn" onclick="toggleDropdown()">
+                                <div class="avatar">#{sessionBean.userInitials}</div>
+                                <span>#{sessionBean.firstName}</span>
+                                <span class="chevron">&#9660;</span>
+                            </div>
+                            <div class="dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="d-name">#{sessionBean.fullName}</div>
+                                    <div class="d-email">#{sessionBean.email}</div>
+                                </div>
+                                <h:outputLink value="#{request.contextPath}/pages/student/profil.xhtml"
+                                              styleClass="dropdown-item">&#128100; #{msg['dp.profile']}</h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/calendar.xhtml"
+                                              styleClass="dropdown-item">&#128197; #{msg['dp.calendar']}</h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/note.xhtml"
+                                              styleClass="dropdown-item">&#128221; #{msg['dp.grades']}</h:outputLink>
+                                <h:outputLink value="#{request.contextPath}/pages/student/rapoarte.xhtml"
+                                              styleClass="dropdown-item">&#128202; #{msg['dp.reports']}</h:outputLink>
+                                <div class="dropdown-sep"></div>
+                                <h:outputLink value="#{request.contextPath}/logout"
+                                              styleClass="dropdown-item danger">&#128682; #{msg['dp.disconnect']}</h:outputLink>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="content chat-content">
+                    <div class="chat-layout">
+
+                        <!-- SIDEBAR ROOMS -->
+                        <div class="chat-rooms">
+                            <div class="chat-rooms-header">#{msg['chat.room.header']}</div>
+
+                            <!-- Anunțuri -->
+                            <div class="chat-room-item active" id="room-announcements"
+                                 onclick="switchRoom('announcements', 'ANNOUNCEMENTS', 'Anunțuri')">
+                                <div class="chat-room-icon">&#128226;</div>
+                                <div class="chat-room-info">
+                                    <div class="chat-room-name">#{msg['chat.room.name']}</div>
+                                    <div class="chat-room-sub">#{msg['chat.room.sub']}</div>
+                                </div>
+                            </div>
+
+                            <!-- Grupă -->
+                            <h:panelGroup rendered="#{not empty sessionBean.groupName}">
+                                <div class="chat-room-item"
+                                     id="room-group_#{sessionBean.groupName}"
+                                     onclick="switchRoom('group_#{sessionBean.groupName}', 'GROUP', 'Grupa #{sessionBean.groupName}')">
+                                    <div class="chat-room-icon">&#128101;</div>
+                                    <div class="chat-room-info">
+                                        <div class="chat-room-name">
+                                            Grupa #{sessionBean.groupName}
+                                        </div>
+                                        <div class="chat-room-sub">#{msg['chat.mates']}</div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+
+                        <!-- CHAT AREA -->
+                        <div class="chat-area">
+                            <div class="chat-header">
+                                <div class="chat-header-icon">&#128226;</div>
+                                <div>
+                                    <div class="chat-header-name" id="chatRoomName">
+                                        #{msg['chat.room.name']}
+                                    </div>
+                                    <div class="chat-header-sub" id="chatRoomSub">
+                                        #{msg['chat.admin']}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MESAJE -->
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="chat-loading">
+                                    <div class="chat-loading-dot"></div>
+                                    <div class="chat-loading-dot"></div>
+                                    <div class="chat-loading-dot"></div>
+                                </div>
+                            </div>
+
+                            <!-- INPUT -->
+                            <div class="chat-input-area" id="chatInputArea">
+                                <div class="chat-readonly" id="chatReadonly" style="display:none;">
+                                    &#128274; #{msg['chat.readonly']}
+                                </div>
+                                <div class="chat-input-row" id="chatInputRow">
+                                    <div class="chat-avatar-small">
+                                        #{sessionBean.userInitials}
+                                    </div>
+                                    <input type="text"
+                                           id="chatInput"
+                                           class="chat-input"
+                                           placeholder="#{msg['chat.readonly.placeholder']}"
+                                           onkeydown="if(event.key==='Enter' &amp;&amp; !event.shiftKey) { sendMessage(); event.preventDefault(); }"/>
+                                    <button class="chat-send-btn" onclick="sendMessage()">
+                                        &#9654;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Date sesiune pentru JS -->
+        <div id="sessionData"
+             data-user-id="#{sessionBean.userId}"
+             data-user-role="#{sessionBean.role}"
+             data-user-name="#{sessionBean.fullName}"
+             data-user-initials="#{sessionBean.userInitials}"
+             style="display:none;"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            var MESSAGES = {
+                announcementsTitle: "#{msg['chat.announcements']}",
+                announcementsSub: "#{msg['chat.sub.announcements']}",
+                groupSub: "#{msg['chat.sub.group']}",
+                noMess: "#{msg['chat.nomess']}",
+            };
+
+            var sd = document.getElementById('sessionData');
+            var USER_ID = sd ? sd.dataset.userId : '';
+            var USER_ROLE = sd ? sd.dataset.userRole : '';
+            var USER_INITIALS = sd ? sd.dataset.userInitials : '';
+
+            var stompClient = null;
+            var currentRoom = 'announcements';
+            var currentRoomType = 'ANNOUNCEMENTS';
+            var currentSub = null;
+
+            function connect() {
+                var socket = new SockJS('/ws-chat');
+                stompClient = Stomp.over(socket);
+                stompClient.debug = null;
+                stompClient.connect({}, function() {
+                    loadMessages('announcements');
+                    subscribeRoom('announcements');
+                }, function() {
+                    setTimeout(connect, 3000);
+                });
+            }
+
+            function subscribeRoom(roomId) {
+                if (currentSub) currentSub.unsubscribe();
+                if (!stompClient || !stompClient.connected) return;
+                currentSub = stompClient.subscribe('/topic/chat/' + roomId, function(msg) {
+                    var data = JSON.parse(msg.body);
+                    if (data.type === 'DELETE') {
+                        removeMessage(data.messageId);
+                    } else {
+                        appendMessage(data, true);
+                    }
+                });
+            }
+
+            function loadMessages(roomId) {
+                fetch('/api/chat/messages?roomId=' + roomId + '&userId=' + USER_ID)
+                    .then(function(r) { return r.json(); })
+                    .then(function(messages) {
+                        var container = document.getElementById('chatMessages');
+                        container.innerHTML = '';
+                        if (messages.length === 0) {
+                            container.innerHTML = '<div class="chat-empty">Niciun mesaj încă. Fii primul care scrie!</div>';
+                            return;
+                        }
+                        messages.forEach(function(m) { appendMessage(m, false); });
+                        scrollToBottom();
+                    });
+            }
+
+            function appendMessage(msg, scroll) {
+                var container = document.getElementById('chatMessages');
+                var empty = container.querySelector('.chat-empty, .chat-loading');
+                if (empty) empty.remove();
+
+                var isOwn = String(msg.senderId) === String(USER_ID);
+                var isAdmin = msg.senderRole === 'ADMIN';
+
+                var div = document.createElement('div');
+                div.className = 'chat-message' +
+                    (isOwn ? ' own' : '') +
+                    (isAdmin ? ' admin-message' : '');
+                div.id = 'msg-' + msg.id;
+
+                var deleteBtn = msg.canDelete
+                    ? '<button class="msg-delete-btn" onclick="deleteMessage(' + msg.id + ')" title="Șterge">✕</button>'
+                    : '';
+                var adminBadge = isAdmin
+                    ? '<span class="msg-admin-badge">Admin</span>' : '';
+
+                div.innerHTML =
+                    '<div class="msg-avatar">' + (msg.senderInitials || '?') + '</div>' +
+                    '<div class="msg-body">' +
+                    '<div class="msg-header">' +
+                    '<span class="msg-sender">' + msg.senderName + '</span>' +
+                    adminBadge +
+                    '<span class="msg-time">' + msg.sentAt + '</span>' +
+                    deleteBtn +
+                    '</div>' +
+                    '<div class="msg-content">' + escapeHtml(msg.content) + '</div>' +
+                    '</div>';
+
+                container.appendChild(div);
+                if (scroll) scrollToBottom();
+            }
+
+            function sendMessage() {
+                var input = document.getElementById('chatInput');
+                var content = input.value.trim();
+                if (!content || !stompClient || !stompClient.connected) return;
+                if (currentRoomType === 'ANNOUNCEMENTS' && USER_ROLE !== 'ADMIN') return;
+
+                stompClient.send('/app/chat.send', {}, JSON.stringify({
+                    roomId: currentRoom,
+                    roomType: currentRoomType,
+                    content: content,
+                    senderId: USER_ID
+                }));
+                input.value = '';
+            }
+
+            function deleteMessage(messageId) {
+                if (!stompClient || !stompClient.connected) return;
+                stompClient.send('/app/chat.delete', {}, JSON.stringify({
+                    messageId: String(messageId),
+                    requesterId: USER_ID,
+                    roomId: currentRoom
+                }));
+            }
+
+            function removeMessage(messageId) {
+                var el = document.getElementById('msg-' + messageId);
+                if (el) { el.classList.add('msg-deleted'); setTimeout(function() { el.remove(); }, 300); }
+            }
+
+            function switchRoom(roomId, roomType, roomName) {
+                currentRoom = roomId;
+                currentRoomType = roomType;
+
+                document.querySelectorAll('.chat-room-item').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                var roomEl = document.getElementById('room-' + roomId);
+                if (roomEl) roomEl.classList.add('active');
+
+                document.getElementById('chatRoomName').textContent = roomName;
+                document.getElementById('chatRoomSub').textContent =
+                    (roomType === 'ANNOUNCEMENTS' ? MESSAGES.announcementsSub : MESSAGES.groupSub);
+
+                var readonly = document.getElementById('chatReadonly');
+                var inputRow = document.getElementById('chatInputRow');
+                if (roomType === 'ANNOUNCEMENTS' && USER_ROLE !== 'ADMIN') {
+                    readonly.style.display = 'flex';
+                    inputRow.style.display = 'none';
+                } else {
+                    readonly.style.display = 'none';
+                    inputRow.style.display = 'flex';
+                }
+
+                loadMessages(roomId);
+                subscribeRoom(roomId);
+            }
+
+            function scrollToBottom() {
+                var c = document.getElementById('chatMessages');
+                if (c) c.scrollTop = c.scrollHeight;
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                return text.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            }
+
+            function toggleDropdown() {
+                document.getElementById('profileDropdown').classList.toggle('open');
+            }
+
+            function closeDropdown() {
+                document.getElementById('profileDropdown').classList.remove('open');
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-btn') && !e.target.closest('.dropdown')) {
+                    closeDropdown();
+                }
+            });
+
+            window.addEventListener('load', function() {
+                connect();
+
+                var readonly = document.getElementById('chatReadonly');
+                var inputRow = document.getElementById('chatInputRow');
+                if (USER_ROLE !== 'ADMIN') {
+                    readonly.style.display = 'flex';
+                    inputRow.style.display = 'none';
+                }
+            });
+            //]]>
+        </script>
+    </h:body>
+</f:view>
+</html>

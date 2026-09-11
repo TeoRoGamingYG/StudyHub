@@ -10,11 +10,13 @@
     <h:head>
         <title>#{msg['profile.title']}</title>
         <h:outputStylesheet library="css" name="for-you.css"/>
+        <h:outputStylesheet library="css" name="chat.css"/>
     </h:head>
 
     <h:body>
         <div class="app">
             <ui:include src="/WEB-INF/templates/sidebar.xhtml"/>
+            <ui:include src="/WEB-INF/templates/chat-panel.xhtml"/>
 
             <div class="main">
                 <header class="topbar">
@@ -23,8 +25,11 @@
                         <span>#{msg['profile.view']}</span>
                     </div>
                     <div class="topbar-right">
-                        <div class="icon-btn">&#128276;<span class="dot"></span></div>
-                        <div class="icon-btn">&#128269;</div>
+                        <ui:include src="/WEB-INF/templates/notifications-panel.xhtml"/>
+                        <div class="icon-btn chat-toggle-btn" onclick="toggleChat()" title="Chat">
+                            &#128172;
+                            <span class="dot chat-dot" id="chatNotifDot" style="display:none;"></span>
+                        </div>
                         <div style="position:relative;">
                             <div class="profile-btn" onclick="toggleDropdown()">
                                 <div class="avatar">#{sessionBean.userInitials}</div>
@@ -106,21 +111,22 @@
                         </div>
                         <div class="info-card">
                             <h4>#{msg['profile.academic.stats']}</h4>
-                            <div class="info-row">
-                                <span class="label">#{msg['profile.hours']}</span>
-                                <span class="value">#{sessionBean.totalHours}h</span>
-                            </div>
+
                             <div class="info-row">
                                 <span class="label">#{msg['profile.general.average']}</span>
-                                <span class="value" style="color:#43e97b">#{sessionBean.averageGrade}</span>
+                                <span class="value" style="color:#43e97b">#{gradeBean.averageFormatted}</span>
+                            </div>
+<!--                            <div class="info-row">-->
+<!--                                <span class="label">Streak</span>-->
+<!--                                <span class="value" style="color:#ffc107">🔥 #{sessionBean.streakDays} #{msg['profile.days']}</span>-->
+<!--                            </div>-->
+                            <div class="info-row">
+                                <span class="label">#{msg['grade.creditp']}</span>
+                                <span class="value">#{gradeBean.totalCreditPoints}</span>
                             </div>
                             <div class="info-row">
-                                <span class="label">Streak</span>
-                                <span class="value" style="color:#ffc107">🔥 #{sessionBean.streakDays} #{msg['profile.days']}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">#{msg['profile.credit.points']}</span>
-                                <span class="value">#{sessionBean.creditPoints}</span>
+                                <span class="label">#{msg['grade.credits']}</span>
+                                <span class="value">#{gradeBean.totalCredits}</span>
                             </div>
                         </div>
                     </div>

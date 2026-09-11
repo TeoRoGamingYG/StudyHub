@@ -37,6 +37,12 @@ public class SecurityConfig {
                                 "/resources/**",
                                 "/error"
                         ).permitAll()
+                        .requestMatchers("/ws-chat/**", "/api/chat/**").permitAll()
+                        .requestMatchers("/pages/student/chat.xhtml")
+                        .hasAnyAuthority("STUDENT", "HIGHERSTUD", "ADMIN",
+                                "ROLE_STUDENT", "ROLE_HIGHERSTUD", "ROLE_ADMIN")
+                        .requestMatchers("/pages/student/files.xhtml")
+                        .hasAnyAuthority("HIGHERSTUD", "ADMIN", "ROLE_HIGHERSTUD", "ROLE_ADMIN")
                         // Rute admin
                         .requestMatchers("/pages/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
                         // Rute student
@@ -60,7 +66,10 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                 )
                 .authenticationProvider(authenticationProvider())
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                );
 
         return http.build();
     }

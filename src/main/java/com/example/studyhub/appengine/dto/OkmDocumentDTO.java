@@ -1,5 +1,6 @@
 package com.example.studyhub.appengine.dto;
 
+import com.example.studyhub.appengine.enums.FileType;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ public class OkmDocumentDTO {
     private LocalDateTime created;
     private LocalDateTime lastModified;
     private String author;
+    private FileType type;
+    private Long uploadedById;
 
     public String getSizeFormatted() {
         if (size == null) return "—";

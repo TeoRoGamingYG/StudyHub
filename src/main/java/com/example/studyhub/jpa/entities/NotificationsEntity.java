@@ -36,4 +36,7 @@ public class NotificationsEntity {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "link_url", length = 255)
+    private String linkUrl;
 }

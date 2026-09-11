@@ -87,6 +87,7 @@
                         </div>
 
                         <!-- UPLOAD -->
+                        <!-- UPLOAD -->
                         <h:panelGroup rendered="#{!gradeImportBean.previewReady and !gradeImportBean.importDone}">
                             <div class="admin-card">
                                 <div class="admin-card-title">
@@ -97,10 +98,11 @@
                                     <p:fileUpload
                                             listener="#{gradeImportBean.handleFileUpload}"
                                             mode="advanced"
-                                            auto="true"
+                                            auto="false"
                                             allowTypes="/(\.|\/)(csv)$/"
                                             maxFileSize="5000000"
                                             update="importForm"
+                                            process="@form"
                                             styleClass="grade-upload"
                                             chooseLabel="#{msg['gradesImport.upload.choose']}"
                                             uploadLabel="#{msg['gradesImport.upload.button']}"
@@ -108,6 +110,11 @@
                                             invalidFileMessage="#{msg['gradesImport.upload.invalidFile']}"
                                             invalidSizeMessage="#{msg['gradesImport.upload.invalidSize']}"/>
                                 </div>
+
+                                <p style="color:var(--text-muted); font-size:0.8rem;
+                                    text-align:center; margin-top:0.75rem;">
+                                    &#9432; #{msg['gradesImport.upload.hint']}
+                                </p>
                             </div>
                         </h:panelGroup>
 

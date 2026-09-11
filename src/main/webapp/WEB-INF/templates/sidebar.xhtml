@@ -21,6 +21,11 @@
                 <span class="nav-icon">&#127968;</span>
                 #{msg['sidebar.foryou']}
             </h:outputLink>
+            <h:outputLink value="#{request.contextPath}/pages/student/chat.xhtml"
+                          styleClass="nav-item #{request.requestURI.contains('chat') ? 'active' : ''}">
+                <span class="nav-icon">&#128172;</span>
+                Chat
+            </h:outputLink>
             <h:outputLink value="#{request.contextPath}/pages/student/cursuri.xhtml"
                           styleClass="nav-item #{request.requestURI.contains('cursuri') ? 'active' : ''}">
                 <span class="nav-icon">&#128218;</span>
@@ -43,6 +48,18 @@
                 <span class="nav-icon">&#128202;</span>
                 #{msg['sidebar.reports']}
             </h:outputLink>
+
+            <!-- SECTIUNE CONTRIBUTOR - doar HIGHERSTUD si ADMIN -->
+            <h:panelGroup rendered="#{sessionBean.role eq 'HIGHERSTUD' or sessionBean.role eq 'ADMIN'}">
+                <div class="nav-section-label" style="margin-top:12px;">
+                    #{msg['sidebar.contributor']}
+                </div>
+                <h:outputLink value="#{request.contextPath}/pages/student/files.xhtml"
+                              styleClass="nav-item #{request.requestURI.contains('files') ? 'active' : ''}">
+                    <span class="nav-icon">&#128196;</span>
+                    #{msg['sidebar.files']}
+                </h:outputLink>
+            </h:panelGroup>
         </nav>
 
         <!-- LANGUAGE SWITCHER -->
